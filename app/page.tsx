@@ -125,19 +125,19 @@ export default async function Home() {
                                     />
                                 </div>
                             </CardContent>
-                            <div className="flex items-start justify-between gap-4 px-2 pb-2">
-                                <div>
-                                    <h3 className="text-lg font-medium text-[#1e293b] sm:text-xl">
+                            <div className="flex items-start justify-between gap-3 px-2 pb-2 sm:gap-4">
+                                <div className="min-w-0 flex-1">
+                                    <h3 className="line-clamp-2 text-base font-medium text-[#1e293b] sm:text-xl">
                                         {product.name}
                                     </h3>
                                     <Badge
                                         variant="ghost"
-                                        className="h-auto px-0 text-xs font-semibold uppercase tracking-[0.12em] text-[#94a3b8]"
+                                        className="h-auto max-w-full truncate px-0 text-xs font-semibold uppercase tracking-[0.12em] text-[#94a3b8]"
                                     >
                                         {product.note}
                                     </Badge>
                                 </div>
-                                <p className="pt-1 text-lg font-semibold text-primary">
+                                <p className="shrink-0 whitespace-nowrap pt-1 text-base font-semibold text-primary sm:text-lg">
                                     {product.price}
                                 </p>
                             </div>

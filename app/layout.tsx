@@ -1,3 +1,4 @@
+import { NavigationLoadingIndicator } from "@/components/navigation-loading-indicator";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -35,6 +36,7 @@ export default function RootLayout({
             )}
         >
             <body className="min-h-full flex flex-col">
+                <NavigationLoadingIndicator />
                 <ScrollReveal />
                 <SiteHeader />
                 <main className="relative flex-1 overflow-x-clip pt-16 lg:pt-20">
