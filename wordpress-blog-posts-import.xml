@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0"
+  xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:wp="http://wordpress.org/export/1.2/"
+>
+<channel>
+  <title><![CDATA[Diensa by Ansah]]></title>
+  <link><![CDATA[https://diensabyansah.com]]></link>
+  <description><![CDATA[Blog import]]></description>
+  <pubDate>Sun, 05 Apr 2026 09:00:00 +0000</pubDate>
+  <language><![CDATA[en-US]]></language>
+  <wp:wxr_version>1.2</wp:wxr_version>
+  <wp:base_site_url><![CDATA[https://diensabyansah.com]]></wp:base_site_url>
+  <wp:base_blog_url><![CDATA[https://diensabyansah.com]]></wp:base_blog_url>
+  <wp:author><wp:author_id>1</wp:author_id><wp:author_login><![CDATA[admin]]></wp:author_login><wp:author_email><![CDATA[admin@diensabyansah.com]]></wp:author_email><wp:author_display_name><![CDATA[admin]]></wp:author_display_name><wp:author_first_name><![CDATA[]]></wp:author_first_name><wp:author_last_name><![CDATA[]]></wp:author_last_name></wp:author>
+  <wp:category><wp:term_id>0</wp:term_id><wp:category_nicename><![CDATA[brand]]></wp:category_nicename><wp:category_parent><![CDATA[]]></wp:category_parent><wp:cat_name><![CDATA[Brand]]></wp:cat_name></wp:category>
+  <wp:category><wp:term_id>0</wp:term_id><wp:category_nicename><![CDATA[business]]></wp:category_nicename><wp:category_parent><![CDATA[]]></wp:category_parent><wp:cat_name><![CDATA[Business]]></wp:cat_name></wp:category>
+  <wp:category><wp:term_id>0</wp:term_id><wp:category_nicename><![CDATA[commerce]]></wp:category_nicename><wp:category_parent><![CDATA[]]></wp:category_parent><wp:cat_name><![CDATA[Commerce]]></wp:cat_name></wp:category>
+  <wp:category><wp:term_id>0</wp:term_id><wp:category_nicename><![CDATA[craft-and-innovation]]></wp:category_nicename><wp:category_parent><![CDATA[]]></wp:category_parent><wp:cat_name><![CDATA[Craft & Innovation]]></wp:cat_name></wp:category>
+  <wp:category><wp:term_id>0</wp:term_id><wp:category_nicename><![CDATA[design-and-climate]]></wp:category_nicename><wp:category_parent><![CDATA[]]></wp:category_parent><wp:cat_name><![CDATA[Design & Climate]]></wp:cat_name></wp:category>
+  <wp:category><wp:term_id>0</wp:term_id><wp:category_nicename><![CDATA[heritage]]></wp:category_nicename><wp:category_parent><![CDATA[]]></wp:category_parent><wp:cat_name><![CDATA[Heritage]]></wp:cat_name></wp:category>
+  <wp:category><wp:term_id>0</wp:term_id><wp:category_nicename><![CDATA[manufacturing]]></wp:category_nicename><wp:category_parent><![CDATA[]]></wp:category_parent><wp:cat_name><![CDATA[Manufacturing]]></wp:cat_name></wp:category>
+  <wp:category><wp:term_id>0</wp:term_id><wp:category_nicename><![CDATA[operations]]></wp:category_nicename><wp:category_parent><![CDATA[]]></wp:category_parent><wp:cat_name><![CDATA[Operations]]></wp:cat_name></wp:category>
+  <wp:category><wp:term_id>0</wp:term_id><wp:category_nicename><![CDATA[style-direction]]></wp:category_nicename><wp:category_parent><![CDATA[]]></wp:category_parent><wp:cat_name><![CDATA[Style Direction]]></wp:cat_name></wp:category>
+  <wp:category><wp:term_id>0</wp:term_id><wp:category_nicename><![CDATA[sustainability]]></wp:category_nicename><wp:category_parent><![CDATA[]]></wp:category_parent><wp:cat_name><![CDATA[Sustainability]]></wp:cat_name></wp:category>
+  <wp:tag><wp:term_id>1</wp:term_id><wp:tag_slug><![CDATA[adire]]></wp:tag_slug><wp:tag_name><![CDATA[adire]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>2</wp:term_id><wp:tag_slug><![CDATA[african-design]]></wp:tag_slug><wp:tag_name><![CDATA[african design]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>3</wp:term_id><wp:tag_slug><![CDATA[african-luxury]]></wp:tag_slug><wp:tag_name><![CDATA[african luxury]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>4</wp:term_id><wp:tag_slug><![CDATA[artisan-economy]]></wp:tag_slug><wp:tag_name><![CDATA[artisan economy]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>5</wp:term_id><wp:tag_slug><![CDATA[atelier]]></wp:tag_slug><wp:tag_name><![CDATA[atelier]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>6</wp:term_id><wp:tag_slug><![CDATA[brand-strategy]]></wp:tag_slug><wp:tag_name><![CDATA[brand strategy]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>7</wp:term_id><wp:tag_slug><![CDATA[breathable-fabrics]]></wp:tag_slug><wp:tag_name><![CDATA[breathable fabrics]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>8</wp:term_id><wp:tag_slug><![CDATA[collection-planning]]></wp:tag_slug><wp:tag_name><![CDATA[collection planning]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>9</wp:term_id><wp:tag_slug><![CDATA[conversion]]></wp:tag_slug><wp:tag_name><![CDATA[conversion]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>10</wp:term_id><wp:tag_slug><![CDATA[craftsmanship]]></wp:tag_slug><wp:tag_name><![CDATA[craftsmanship]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>11</wp:term_id><wp:tag_slug><![CDATA[design-sprint]]></wp:tag_slug><wp:tag_name><![CDATA[design sprint]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>12</wp:term_id><wp:tag_slug><![CDATA[diensa-by-ansah]]></wp:tag_slug><wp:tag_name><![CDATA[diensa by ansah]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>13</wp:term_id><wp:tag_slug><![CDATA[ecommerce]]></wp:tag_slug><wp:tag_name><![CDATA[ecommerce]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>14</wp:term_id><wp:tag_slug><![CDATA[ethical-sourcing]]></wp:tag_slug><wp:tag_name><![CDATA[ethical sourcing]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>15</wp:term_id><wp:tag_slug><![CDATA[fashion-process]]></wp:tag_slug><wp:tag_name><![CDATA[fashion process]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>16</wp:term_id><wp:tag_slug><![CDATA[growth]]></wp:tag_slug><wp:tag_name><![CDATA[growth]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>17</wp:term_id><wp:tag_slug><![CDATA[indigo]]></wp:tag_slug><wp:tag_name><![CDATA[indigo]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>18</wp:term_id><wp:tag_slug><![CDATA[luxury-fashion]]></wp:tag_slug><wp:tag_name><![CDATA[luxury fashion]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>19</wp:term_id><wp:tag_slug><![CDATA[luxury-wear]]></wp:tag_slug><wp:tag_name><![CDATA[luxury wear]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>20</wp:term_id><wp:tag_slug><![CDATA[materials]]></wp:tag_slug><wp:tag_name><![CDATA[materials]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>21</wp:term_id><wp:tag_slug><![CDATA[product-copy]]></wp:tag_slug><wp:tag_name><![CDATA[product copy]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>22</wp:term_id><wp:tag_slug><![CDATA[production]]></wp:tag_slug><wp:tag_name><![CDATA[production]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>23</wp:term_id><wp:tag_slug><![CDATA[quality-control]]></wp:tag_slug><wp:tag_name><![CDATA[quality control]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>24</wp:term_id><wp:tag_slug><![CDATA[silhouette]]></wp:tag_slug><wp:tag_name><![CDATA[silhouette]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>25</wp:term_id><wp:tag_slug><![CDATA[sustainable-fashion]]></wp:tag_slug><wp:tag_name><![CDATA[sustainable fashion]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>26</wp:term_id><wp:tag_slug><![CDATA[tailoring]]></wp:tag_slug><wp:tag_name><![CDATA[tailoring]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>27</wp:term_id><wp:tag_slug><![CDATA[textile-heritage]]></wp:tag_slug><wp:tag_name><![CDATA[textile heritage]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>28</wp:term_id><wp:tag_slug><![CDATA[tropical-fashion]]></wp:tag_slug><wp:tag_name><![CDATA[tropical fashion]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>29</wp:term_id><wp:tag_slug><![CDATA[west-african-fashion]]></wp:tag_slug><wp:tag_name><![CDATA[west african fashion]]></wp:tag_name></wp:tag>
+  <wp:tag><wp:term_id>30</wp:term_id><wp:tag_slug><![CDATA[womenswear]]></wp:tag_slug><wp:tag_name><![CDATA[womenswear]]></wp:tag_name></wp:tag>
+  <item>
+    <title><![CDATA[Industrial Indigo: The New Luxury Standard]]></title>
+    <link><![CDATA[https://diensabyansah.com/industrial-indigo-new-luxury-standard/]]></link>
+    <pubDate>Sun, 05 Apr 2026 09:00:00 +0000</pubDate>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <guid isPermaLink="false"><![CDATA[https://diensabyansah.com/industrial-indigo-new-luxury-standard/]]></guid>
+    <description></description>
+    <content:encoded><![CDATA[<p>Luxury is being redefined by process, not just appearance. At Diensa by Ansah, industrial consistency and hand-dyed craft now sit in the same design language.</p><p>Our teams begin with precise pattern engineering, then layer artisan dye narratives that carry memory, symbolism, and regional identity. The outcome is refined, scalable, and deeply cultural.</p><p>This is the future of premium fashion in Africa: quality measured both by technical discipline and by the meaning woven into every piece.</p>]]></content:encoded>
+    <excerpt:encoded><![CDATA[How industrial methods and hand-dyed heritage fabrics now define a new era of African luxury.]]></excerpt:encoded>
+    <wp:post_id>10001</wp:post_id>
+    <wp:post_date><![CDATA[2026-04-05 09:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-04-05 09:00:00]]></wp:post_date_gmt>
+    <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[industrial-indigo-new-luxury-standard]]></wp:post_name>
+    <wp:status><![CDATA[publish]]></wp:status>
+    <wp:post_parent>0</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[post]]></wp:post_type>
+    <wp:post_password></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <category domain="category" nicename="craft-and-innovation"><![CDATA[Craft & Innovation]]></category>
+    <category domain="post_tag" nicename="indigo"><![CDATA[indigo]]></category>
+    <category domain="post_tag" nicename="luxury-fashion"><![CDATA[luxury fashion]]></category>
+    <category domain="post_tag" nicename="african-design"><![CDATA[african design]]></category>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_ext_url]]></wp:meta_key><wp:meta_value><![CDATA[https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=1400&q=80]]></wp:meta_value></wp:postmeta>
+  </item>
+  <item>
+    <title><![CDATA[Why Adire Still Matters in 2026]]></title>
+    <link><![CDATA[https://diensabyansah.com/why-adire-still-matters-2026/]]></link>
+    <pubDate>Mon, 06 Apr 2026 09:00:00 +0000</pubDate>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <guid isPermaLink="false"><![CDATA[https://diensabyansah.com/why-adire-still-matters-2026/]]></guid>
+    <description></description>
+    <content:encoded><![CDATA[<p>Adire is not a trend; it is a system of storytelling through dye. In 2026, its relevance is stronger than ever because designers are pairing heritage motifs with modern structure.</p><p>At our atelier, we treat Adire as both archive and blueprint. We preserve artisanal techniques while integrating performance fabrics, cleaner construction, and contemporary fit standards.</p><p>The result is clothing that feels current without disconnecting from origin. That balance is exactly why Adire continues to shape global conversations about identity and style.</p>]]></content:encoded>
+    <excerpt:encoded><![CDATA[Adire remains relevant because it evolves with modern tailoring while preserving cultural integrity.]]></excerpt:encoded>
+    <wp:post_id>10002</wp:post_id>
+    <wp:post_date><![CDATA[2026-04-06 09:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-04-06 09:00:00]]></wp:post_date_gmt>
+    <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[why-adire-still-matters-2026]]></wp:post_name>
+    <wp:status><![CDATA[publish]]></wp:status>
+    <wp:post_parent>0</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[post]]></wp:post_type>
+    <wp:post_password></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <category domain="category" nicename="heritage"><![CDATA[Heritage]]></category>
+    <category domain="post_tag" nicename="adire"><![CDATA[adire]]></category>
+    <category domain="post_tag" nicename="textile-heritage"><![CDATA[textile heritage]]></category>
+    <category domain="post_tag" nicename="west-african-fashion"><![CDATA[west african fashion]]></category>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_ext_url]]></wp:meta_key><wp:meta_value><![CDATA[https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1400&q=80]]></wp:meta_value></wp:postmeta>
+  </item>
+  <item>
+    <title><![CDATA[Inside Our Douala Production Workflow]]></title>
+    <link><![CDATA[https://diensabyansah.com/inside-our-douala-production-workflow/]]></link>
+    <pubDate>Tue, 07 Apr 2026 09:00:00 +0000</pubDate>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <guid isPermaLink="false"><![CDATA[https://diensabyansah.com/inside-our-douala-production-workflow/]]></guid>
+    <description></description>
+    <content:encoded><![CDATA[<p>Every garment begins with digital pattern drafting, where fit, proportion, and movement are modeled before cutting starts. This stage reduces waste and improves precision.</p><p>After cutting, materials move to artisan finishing where signature details are applied by hand. This includes embroidery accents, trims, and selective surface treatments.</p><p>Final quality control combines visual checks and wear simulation. By the time a piece reaches customers, it has passed both engineering standards and craft standards.</p>]]></content:encoded>
+    <excerpt:encoded><![CDATA[A behind-the-scenes look at how Diensa pieces move from sketch to finished garment.]]></excerpt:encoded>
+    <wp:post_id>10003</wp:post_id>
+    <wp:post_date><![CDATA[2026-04-07 09:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-04-07 09:00:00]]></wp:post_date_gmt>
+    <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[inside-our-douala-production-workflow]]></wp:post_name>
+    <wp:status><![CDATA[publish]]></wp:status>
+    <wp:post_parent>0</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[post]]></wp:post_type>
+    <wp:post_password></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <category domain="category" nicename="manufacturing"><![CDATA[Manufacturing]]></category>
+    <category domain="post_tag" nicename="atelier"><![CDATA[atelier]]></category>
+    <category domain="post_tag" nicename="production"><![CDATA[production]]></category>
+    <category domain="post_tag" nicename="quality-control"><![CDATA[quality control]]></category>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_ext_url]]></wp:meta_key><wp:meta_value><![CDATA[https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1400&q=80]]></wp:meta_value></wp:postmeta>
+  </item>
+  <item>
+    <title><![CDATA[The Rise of Structured Feminine Silhouettes]]></title>
+    <link><![CDATA[https://diensabyansah.com/rise-of-structured-feminine-silhouettes/]]></link>
+    <pubDate>Wed, 08 Apr 2026 09:00:00 +0000</pubDate>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <guid isPermaLink="false"><![CDATA[https://diensabyansah.com/rise-of-structured-feminine-silhouettes/]]></guid>
+    <description></description>
+    <content:encoded><![CDATA[<p>Today’s women’s tailoring is moving toward intentional structure—defined shoulders, sculpted waists, and balanced volume. This does not remove softness; it frames it.</p><p>Our design direction uses measured construction to support movement rather than restrict it. We combine support fabrics with flowing layers to create confidence in motion.</p><p>The appeal is clear: pieces that communicate authority while remaining elegant, breathable, and wearable from morning meetings to evening events.</p>]]></content:encoded>
+    <excerpt:encoded><![CDATA[How stronger lines and softer drape are shaping a powerful new womenswear identity.]]></excerpt:encoded>
+    <wp:post_id>10004</wp:post_id>
+    <wp:post_date><![CDATA[2026-04-08 09:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-04-08 09:00:00]]></wp:post_date_gmt>
+    <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[rise-of-structured-feminine-silhouettes]]></wp:post_name>
+    <wp:status><![CDATA[publish]]></wp:status>
+    <wp:post_parent>0</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[post]]></wp:post_type>
+    <wp:post_password></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <category domain="category" nicename="style-direction"><![CDATA[Style Direction]]></category>
+    <category domain="post_tag" nicename="womenswear"><![CDATA[womenswear]]></category>
+    <category domain="post_tag" nicename="tailoring"><![CDATA[tailoring]]></category>
+    <category domain="post_tag" nicename="silhouette"><![CDATA[silhouette]]></category>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_ext_url]]></wp:meta_key><wp:meta_value><![CDATA[https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1400&q=80]]></wp:meta_value></wp:postmeta>
+  </item>
+  <item>
+    <title><![CDATA[From Concept to Collection: 6-Week Sprint]]></title>
+    <link><![CDATA[https://diensabyansah.com/from-concept-to-collection-6-week-sprint/]]></link>
+    <pubDate>Thu, 09 Apr 2026 09:00:00 +0000</pubDate>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <guid isPermaLink="false"><![CDATA[https://diensabyansah.com/from-concept-to-collection-6-week-sprint/]]></guid>
+    <description></description>
+    <content:encoded><![CDATA[<p>Week 1 starts with theme definition, reference mapping, and technical constraints. Clear direction at this stage prevents expensive redesigns later.</p><p>Weeks 2 to 4 are dedicated to prototyping, fit revisions, and material finalization. We test each piece for comfort, durability, and style coherence.</p><p>Weeks 5 and 6 focus on pre-production and launch readiness. With disciplined checkpoints, a six-week sprint can produce a collection that feels deliberate—not rushed.</p>]]></content:encoded>
+    <excerpt:encoded><![CDATA[A practical timeline showing how a focused team can launch a refined capsule quickly.]]></excerpt:encoded>
+    <wp:post_id>10005</wp:post_id>
+    <wp:post_date><![CDATA[2026-04-09 09:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-04-09 09:00:00]]></wp:post_date_gmt>
+    <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[from-concept-to-collection-6-week-sprint]]></wp:post_name>
+    <wp:status><![CDATA[publish]]></wp:status>
+    <wp:post_parent>0</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[post]]></wp:post_type>
+    <wp:post_password></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <category domain="category" nicename="operations"><![CDATA[Operations]]></category>
+    <category domain="post_tag" nicename="collection-planning"><![CDATA[collection planning]]></category>
+    <category domain="post_tag" nicename="fashion-process"><![CDATA[fashion process]]></category>
+    <category domain="post_tag" nicename="design-sprint"><![CDATA[design sprint]]></category>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_ext_url]]></wp:meta_key><wp:meta_value><![CDATA[https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1400&q=80]]></wp:meta_value></wp:postmeta>
+  </item>
+  <item>
+    <title><![CDATA[Sustainable Fabric Choices That Actually Scale]]></title>
+    <link><![CDATA[https://diensabyansah.com/sustainable-fabric-choices-that-actually-scale/]]></link>
+    <pubDate>Fri, 10 Apr 2026 09:00:00 +0000</pubDate>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <guid isPermaLink="false"><![CDATA[https://diensabyansah.com/sustainable-fabric-choices-that-actually-scale/]]></guid>
+    <description></description>
+    <content:encoded><![CDATA[<p>Many sustainable initiatives fail because they ignore supply realities. We prioritize fabrics that can be sourced responsibly and replenished consistently.</p><p>Our material strategy focuses on traceable cotton blends, low-impact dye processes, and predictable lead times. This supports both environmental goals and delivery commitments.</p><p>True sustainability in fashion is operational. It is built into sourcing calendars, production planning, and long-term supplier relationships.</p>]]></content:encoded>
+    <excerpt:encoded><![CDATA[Sustainability works best when material choices are both ethical and production-ready.]]></excerpt:encoded>
+    <wp:post_id>10006</wp:post_id>
+    <wp:post_date><![CDATA[2026-04-10 09:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-04-10 09:00:00]]></wp:post_date_gmt>
+    <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[sustainable-fabric-choices-that-actually-scale]]></wp:post_name>
+    <wp:status><![CDATA[publish]]></wp:status>
+    <wp:post_parent>0</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[post]]></wp:post_type>
+    <wp:post_password></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <category domain="category" nicename="sustainability"><![CDATA[Sustainability]]></category>
+    <category domain="post_tag" nicename="ethical-sourcing"><![CDATA[ethical sourcing]]></category>
+    <category domain="post_tag" nicename="sustainable-fashion"><![CDATA[sustainable fashion]]></category>
+    <category domain="post_tag" nicename="materials"><![CDATA[materials]]></category>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_ext_url]]></wp:meta_key><wp:meta_value><![CDATA[https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1400&q=80]]></wp:meta_value></wp:postmeta>
+  </item>
+  <item>
+    <title><![CDATA[Designing for Heat: Luxury in Tropical Climates]]></title>
+    <link><![CDATA[https://diensabyansah.com/designing-for-heat-luxury-in-tropical-climates/]]></link>
+    <pubDate>Sat, 11 Apr 2026 09:00:00 +0000</pubDate>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <guid isPermaLink="false"><![CDATA[https://diensabyansah.com/designing-for-heat-luxury-in-tropical-climates/]]></guid>
+    <description></description>
+    <content:encoded><![CDATA[<p>Tropical luxury is about engineering comfort without sacrificing elegance. Fabric weight, seam placement, and ventilation zones become core design decisions.</p><p>We prioritize breathable fibers and looser air channels while preserving sharp visual lines. Strategic paneling keeps garments polished and practical in warm conditions.</p><p>The result is clothing designed for real climates and real movement—an approach that should become standard in global fashion design.</p>]]></content:encoded>
+    <excerpt:encoded><![CDATA[Breathable luxury requires smarter cuts, lighter layers, and climate-aware materials.]]></excerpt:encoded>
+    <wp:post_id>10007</wp:post_id>
+    <wp:post_date><![CDATA[2026-04-11 09:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-04-11 09:00:00]]></wp:post_date_gmt>
+    <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[designing-for-heat-luxury-in-tropical-climates]]></wp:post_name>
+    <wp:status><![CDATA[publish]]></wp:status>
+    <wp:post_parent>0</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[post]]></wp:post_type>
+    <wp:post_password></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <category domain="category" nicename="design-and-climate"><![CDATA[Design & Climate]]></category>
+    <category domain="post_tag" nicename="tropical-fashion"><![CDATA[tropical fashion]]></category>
+    <category domain="post_tag" nicename="breathable-fabrics"><![CDATA[breathable fabrics]]></category>
+    <category domain="post_tag" nicename="luxury-wear"><![CDATA[luxury wear]]></category>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_ext_url]]></wp:meta_key><wp:meta_value><![CDATA[https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1400&q=80]]></wp:meta_value></wp:postmeta>
+  </item>
+  <item>
+    <title><![CDATA[How We Build Signature Product Notes]]></title>
+    <link><![CDATA[https://diensabyansah.com/how-we-build-signature-product-notes/]]></link>
+    <pubDate>Sun, 12 Apr 2026 09:00:00 +0000</pubDate>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <guid isPermaLink="false"><![CDATA[https://diensabyansah.com/how-we-build-signature-product-notes/]]></guid>
+    <description></description>
+    <content:encoded><![CDATA[<p>Strong product notes explain value in one glance. We focus on construction, material, and intended wear context—then keep language precise.</p><p>Each note starts with what makes the piece distinct, followed by one practical benefit. This gives customers confidence and reduces uncertainty before purchase.</p><p>Great product copy is concise, truthful, and visual. It should feel like guidance from a stylist, not marketing noise.</p>]]></content:encoded>
+    <excerpt:encoded><![CDATA[A simple framework for writing product notes that sell quality, not hype.]]></excerpt:encoded>
+    <wp:post_id>10008</wp:post_id>
+    <wp:post_date><![CDATA[2026-04-12 09:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-04-12 09:00:00]]></wp:post_date_gmt>
+    <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[how-we-build-signature-product-notes]]></wp:post_name>
+    <wp:status><![CDATA[publish]]></wp:status>
+    <wp:post_parent>0</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[post]]></wp:post_type>
+    <wp:post_password></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <category domain="category" nicename="commerce"><![CDATA[Commerce]]></category>
+    <category domain="post_tag" nicename="product-copy"><![CDATA[product copy]]></category>
+    <category domain="post_tag" nicename="ecommerce"><![CDATA[ecommerce]]></category>
+    <category domain="post_tag" nicename="conversion"><![CDATA[conversion]]></category>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_ext_url]]></wp:meta_key><wp:meta_value><![CDATA[https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1400&q=80]]></wp:meta_value></wp:postmeta>
+  </item>
+  <item>
+    <title><![CDATA[The Business Case for Artisan Collaboration]]></title>
+    <link><![CDATA[https://diensabyansah.com/business-case-for-artisan-collaboration/]]></link>
+    <pubDate>Mon, 13 Apr 2026 09:00:00 +0000</pubDate>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <guid isPermaLink="false"><![CDATA[https://diensabyansah.com/business-case-for-artisan-collaboration/]]></guid>
+    <description></description>
+    <content:encoded><![CDATA[<p>Artisan collaboration is often viewed as cultural branding, but it is also strong business strategy. It introduces craftsmanship that machine-only workflows cannot replicate.</p><p>These details become product differentiators, improving perceived value and reducing direct price competition. Customers remember texture, finish, and story.</p><p>When collaboration is structured fairly—with training, visibility, and consistent payment—it creates durable ecosystems that strengthen both brand and community.</p>]]></content:encoded>
+    <excerpt:encoded><![CDATA[Collaborating with artisans improves product quality, brand distinction, and long-term loyalty.]]></excerpt:encoded>
+    <wp:post_id>10009</wp:post_id>
+    <wp:post_date><![CDATA[2026-04-13 09:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-04-13 09:00:00]]></wp:post_date_gmt>
+    <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[business-case-for-artisan-collaboration]]></wp:post_name>
+    <wp:status><![CDATA[publish]]></wp:status>
+    <wp:post_parent>0</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[post]]></wp:post_type>
+    <wp:post_password></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <category domain="category" nicename="business"><![CDATA[Business]]></category>
+    <category domain="post_tag" nicename="artisan-economy"><![CDATA[artisan economy]]></category>
+    <category domain="post_tag" nicename="brand-strategy"><![CDATA[brand strategy]]></category>
+    <category domain="post_tag" nicename="craftsmanship"><![CDATA[craftsmanship]]></category>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_ext_url]]></wp:meta_key><wp:meta_value><![CDATA[https://images.unsplash.com/photo-1548126032-079a0fb0099d?auto=format&fit=crop&w=1400&q=80]]></wp:meta_value></wp:postmeta>
+  </item>
+  <item>
+    <title><![CDATA[What’s Next for Diensa by Ansah]]></title>
+    <link><![CDATA[https://diensabyansah.com/whats-next-for-diensa-by-ansah/]]></link>
+    <pubDate>Tue, 14 Apr 2026 09:00:00 +0000</pubDate>
+    <dc:creator><![CDATA[admin]]></dc:creator>
+    <guid isPermaLink="false"><![CDATA[https://diensabyansah.com/whats-next-for-diensa-by-ansah/]]></guid>
+    <description></description>
+    <content:encoded><![CDATA[<p>The next phase of Diensa by Ansah is focused on intentional growth. We are expanding collections, improving lead times, and deepening product consistency across categories.</p><p>At the same time, we are investing in editorial storytelling to document process, people, and craft. This helps customers connect with the value behind every garment.</p><p>As partnerships expand, our core remains unchanged: build modern African luxury with discipline, dignity, and long-term impact.</p>]]></content:encoded>
+    <excerpt:encoded><![CDATA[Our next chapter centers on scale, storytelling, and global partnerships rooted in African excellence.]]></excerpt:encoded>
+    <wp:post_id>10010</wp:post_id>
+    <wp:post_date><![CDATA[2026-04-14 09:00:00]]></wp:post_date>
+    <wp:post_date_gmt><![CDATA[2026-04-14 09:00:00]]></wp:post_date_gmt>
+    <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+    <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+    <wp:post_name><![CDATA[whats-next-for-diensa-by-ansah]]></wp:post_name>
+    <wp:status><![CDATA[publish]]></wp:status>
+    <wp:post_parent>0</wp:post_parent>
+    <wp:menu_order>0</wp:menu_order>
+    <wp:post_type><![CDATA[post]]></wp:post_type>
+    <wp:post_password></wp:post_password>
+    <wp:is_sticky>0</wp:is_sticky>
+    <category domain="category" nicename="brand"><![CDATA[Brand]]></category>
+    <category domain="post_tag" nicename="diensa-by-ansah"><![CDATA[diensa by ansah]]></category>
+    <category domain="post_tag" nicename="growth"><![CDATA[growth]]></category>
+    <category domain="post_tag" nicename="african-luxury"><![CDATA[african luxury]]></category>
+    <wp:postmeta><wp:meta_key><![CDATA[_thumbnail_ext_url]]></wp:meta_key><wp:meta_value><![CDATA[https://images.unsplash.com/photo-1484515991647-c5760fcec7a6?auto=format&fit=crop&w=1400&q=80]]></wp:meta_value></wp:postmeta>
+  </item>
+</channel>
+</rss>
