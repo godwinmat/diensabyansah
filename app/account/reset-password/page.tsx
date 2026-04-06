@@ -5,9 +5,25 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeSlash } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 export default function ResetPasswordPage() {
+    return (
+        <Suspense
+            fallback={
+                <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+                    <div className="w-full max-w-md rounded-md border border-gray-200 bg-white p-6 text-center text-sm text-gray-600">
+                        Loading reset password page...
+                    </div>
+                </div>
+            }
+        >
+            <ResetPasswordContent />
+        </Suspense>
+    );
+}
+
+function ResetPasswordContent() {
     const searchParams = useSearchParams();
     const initialEmail = searchParams.get("email") || "";
 
