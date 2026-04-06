@@ -70,24 +70,24 @@ const clients = [
 export default function TestimonialsPage() {
     return (
         <div className="bg-[#f4f4f3]">
-            <section className="mx-auto grid w-full max-w-screen gap-8 px-5 py-6 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:px-10 lg:py-8 reveal-up">
+            <section className="mx-auto grid w-full max-w-screen gap-6 px-3 sm:px-5 py-5 sm:gap-8 sm:py-6 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:px-10 lg:py-8 reveal-up">
                 <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
                         Testimonials
                     </p>
-                    <h1 className="mt-3 text-7xl font-light leading-[0.94] tracking-tight text-[#374151] md:text-8xl">
+                    <h1 className="mt-3 text-4xl font-light leading-[0.94] tracking-tight text-[#374151] sm:text-6xl md:text-8xl">
                         Voices of
                         <br />
                         Excellence
                     </h1>
-                    <p className="mt-5 max-w-xl text-xl leading-9 text-[#64748b]">
+                    <p className="mt-4 max-w-xl text-base leading-7 text-[#64748b] sm:mt-5 sm:text-xl sm:leading-9">
                         A legacy of refined craftsmanship and modern heritage,
                         told through the experiences of our global partners and
                         private clientele. Discover the standard of Diensa.
                     </p>
                     <Button
                         asChild
-                        className="mt-8 inline-flex h-12 items-center rounded-none bg-primary px-8 text-sm font-semibold uppercase tracking-[0.16em] text-white shadow-sm"
+                        className="mt-7 inline-flex h-12 w-full items-center rounded-none bg-primary px-8 text-[11px] font-semibold uppercase tracking-[0.16em] text-white shadow-sm sm:mt-8 sm:w-auto sm:text-sm"
                     >
                         <Link href="/products">Explore the Collection →</Link>
                     </Button>
@@ -104,16 +104,16 @@ export default function TestimonialsPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-5 py-6 lg:px-10 lg:py-8 reveal-up">
+            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 py-5 sm:py-6 lg:px-10 lg:py-8 reveal-up">
                 <div className="mb-5 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
                             Video Stories
                         </p>
-                        <h2 className="mt-2 text-6xl font-semibold leading-none text-[#1e293b]">
+                        <h2 className="mt-2 text-3xl font-semibold leading-none text-[#1e293b] sm:text-5xl lg:text-6xl">
                             In Motion
                         </h2>
-                        <p className="mt-2 text-lg text-[#7c8da0]">
+                        <p className="mt-2 text-base text-[#7c8da0] sm:text-lg">
                             Authentic voices from our global network, sharing
                             their Diensa experience in their own words.
                         </p>
@@ -138,7 +138,7 @@ export default function TestimonialsPage() {
                                 alt={video.title}
                                 width={920}
                                 height={520}
-                                className="h-64 w-full object-cover"
+                                className="h-56 w-full object-cover sm:h-64"
                             />
                             <div className="absolute inset-0 bg-black/30" />
                             <div className="absolute inset-0 flex items-center justify-center">
@@ -159,9 +159,9 @@ export default function TestimonialsPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-5 py-6 lg:px-10 lg:py-8 reveal-up">
+            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 py-6 lg:px-10 lg:py-8 reveal-up">
                 <Card className="glass-panel hover-lift gap-0 rounded-lg border-[#dfe4e9] bg-[#f8f8f7]/86 py-0 shadow-none">
-                    <CardContent className="px-5 py-8 lg:px-8 lg:py-10">
+                    <CardContent className="px-3 sm:px-5 py-8 lg:px-8 lg:py-10">
                         <h2 className="text-3xl font-light text-[#6b7280] md:text-5xl">
                             Institutional Partners
                         </h2>
@@ -226,13 +226,13 @@ export default function TestimonialsPage() {
                 </Card>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-5 py-8 lg:px-10 lg:py-10 reveal-up">
+            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 py-6 sm:py-8 lg:px-10 lg:py-10 reveal-up">
                 <div className="mb-6 flex items-end justify-between gap-4">
                     <div>
-                        <h2 className="text-5xl font-semibold leading-none text-[#1e293b]">
+                        <h2 className="text-3xl font-semibold leading-none text-[#1e293b] sm:text-4xl lg:text-5xl">
                             Private Clientele
                         </h2>
-                        <p className="mt-2 text-lg text-[#7c8da0]">
+                        <p className="mt-2 text-base text-[#7c8da0] sm:text-lg">
                             Personal stories of fit, fabric, and finesse.
                         </p>
                     </div>
@@ -276,13 +276,13 @@ export default function TestimonialsPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-5 pb-12 pt-6 lg:px-10 lg:pb-14 reveal-up">
+            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 pb-12 pt-6 lg:px-10 lg:pb-14 reveal-up">
                 <div className="glass-panel hover-lift rounded-lg bg-linear-to-r from-[#3a3521] via-[#5b4d23] to-[#6f6325] px-6 py-16 text-center text-white lg:px-10">
                     <p className="text-3xl text-primary">✎</p>
-                    <h2 className="mt-3 text-6xl font-semibold">
+                    <h2 className="mt-3 text-3xl font-semibold sm:text-5xl lg:text-6xl">
                         Share Your Experience
                     </h2>
-                    <p className="mx-auto mt-4 max-w-3xl text-xl leading-8 text-white/85">
+                    <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-white/85 sm:text-xl sm:leading-8">
                         Your voice contributes to our heritage. We invite our
                         private clientele to share their journey with our latest
                         collections.

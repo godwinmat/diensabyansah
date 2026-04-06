@@ -14,6 +14,16 @@ export type WooCommerceProduct = {
     permalink?: string;
 };
 
+export type WooCommerceCollection = {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    image: string;
+    productCount: number;
+    featured: boolean;
+};
+
 type WooCommerceRecord = Record<string, unknown> & {
     id?: number | string;
     slug?: string;
@@ -33,6 +43,15 @@ type WooCommerceRecord = Record<string, unknown> & {
         currency_symbol?: string;
         currency_minor_unit?: number;
     };
+};
+
+type WooCommerceCategoryRecord = Record<string, unknown> & {
+    id?: number | string;
+    name?: string;
+    slug?: string;
+    description?: string;
+    count?: number;
+    image?: Record<string, unknown> | null;
 };
 
 const DEFAULT_IMAGE =
@@ -215,6 +234,28 @@ function mapProduct(record: WooCommerceRecord): WooCommerceProduct {
     };
 }
 
+function mapCollection(
+    record: WooCommerceCategoryRecord,
+): WooCommerceCollection {
+    const rawDescription = String(record.description ?? "");
+    const imageSource =
+        (record.image?.src as string | undefined) ||
+        (record.image?.url as string | undefined) ||
+        DEFAULT_IMAGE;
+
+    return {
+        id: Number(record.id ?? 0),
+        name: String(record.name ?? "Uncategorized"),
+        slug: String(record.slug ?? "uncategorized"),
+        description: stripHtml(rawDescription),
+        image: imageSource,
+        productCount: Number(record.count ?? 0),
+        featured: /\[featured\]|#featured|featured\s*:\s*true/i.test(
+            rawDescription,
+        ),
+    };
+}
+
 async function fetchPaginatedProducts(
     path: string,
     init?: RequestInit,
@@ -289,6 +330,65 @@ async function fetchStoreProducts() {
     return fetchPaginatedProducts("/wc/store/v1/products").catch(() => []);
 }
 
+async function fetchCollections(path: string, init?: RequestInit) {
+    const wordpressUrl = process.env.WORDPRESS_API_URL?.replace(/\/$/, "");
+
+    if (!wordpressUrl) {
+        return [] as WooCommerceCollection[];
+    }
+
+    const requestUrl = new URL(`${wordpressUrl}${path}`);
+    requestUrl.searchParams.set("per_page", "100");
+
+    const response = await fetch(requestUrl, {
+        cache: "no-store",
+        ...init,
+        headers: {
+            "Content-Type": "application/json",
+            ...(init?.headers ?? {}),
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(
+            `WooCommerce category request failed with status ${response.status}`,
+        );
+    }
+
+    const payload = (await response.json().catch(() => [])) as unknown;
+
+    if (!Array.isArray(payload)) {
+        return [];
+    }
+
+    return payload.map((record) =>
+        mapCollection(record as WooCommerceCategoryRecord),
+    );
+}
+
+async function fetchAuthenticatedCollections() {
+    const consumerKey = process.env.WOOCOMMERCE_CONSUMER_KEY?.trim();
+    const consumerSecret = process.env.WOOCOMMERCE_CONSUMER_SECRET?.trim();
+
+    if (!consumerKey || !consumerSecret) {
+        return [];
+    }
+
+    const authorization = `Basic ${Buffer.from(
+        `${consumerKey}:${consumerSecret}`,
+    ).toString("base64")}`;
+
+    return fetchCollections("/wc/v3/products/categories", {
+        headers: {
+            Authorization: authorization,
+        },
+    }).catch(() => []);
+}
+
+async function fetchStoreCollections() {
+    return fetchCollections("/wc/store/v1/products/categories").catch(() => []);
+}
+
 export async function getWooCommerceProducts() {
     const authenticatedProducts = await fetchAuthenticatedProducts();
 
@@ -297,6 +397,16 @@ export async function getWooCommerceProducts() {
     }
 
     return fetchStoreProducts();
+}
+
+export async function getWooCommerceCollections() {
+    const authenticatedCollections = await fetchAuthenticatedCollections();
+
+    if (authenticatedCollections.length > 0) {
+        return authenticatedCollections;
+    }
+
+    return fetchStoreCollections();
 }
 
 export async function getWooCommerceProductById(id: string) {

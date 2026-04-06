@@ -76,11 +76,12 @@ export default async function ProductDetailPage({
                                     priority
                                     sizes="(min-width: 1024px) 56vw, 100vw"
                                     className="object-cover"
+                                    unoptimized
                                 />
                             </div>
 
                             {thumbImages.length > 0 ? (
-                                <div className="mt-3 grid grid-cols-4 gap-3">
+                                <div className="mt-3 grid grid-cols-4 gap-2 sm:gap-3">
                                     {thumbImages.map((image, index) => (
                                         <div
                                             key={`${image}-${index}`}
@@ -92,6 +93,7 @@ export default async function ProductDetailPage({
                                                 fill
                                                 sizes="(min-width: 1024px) 14vw, 25vw"
                                                 className="object-cover"
+                                                unoptimized
                                             />
                                         </div>
                                     ))}
@@ -101,26 +103,20 @@ export default async function ProductDetailPage({
                     ) : null}
 
                     <div className="reveal-up">
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
+                        {/* <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
                             Shop / Tailoring / Blazers
-                        </p>
-                        <h1 className="mt-2 text-5xl font-semibold leading-[1.02] tracking-tight text-[#1e293b] lg:text-7xl">
+                        </p> */}
+                        <h1 className="mt-0 text-4xl sm:text-5xl font-semibold leading-[1.02] tracking-tight text-[#1e293b] lg:text-7xl">
                             {product.name}
                         </h1>
 
-                        <div className="mt-4 flex items-center gap-3">
-                            <p className="text-3xl font-semibold text-primary">
+                        <div className="mt-3 flex items-center gap-3">
+                            <p className="text-2xl sm:text-3xl font-semibold text-primary">
                                 {product.price}
                             </p>
-                            <Badge
-                                variant="outline"
-                                className="h-auto rounded-none border-[#d9cf98] text-[9px] uppercase tracking-[0.12em] text-[#7c6f2c]"
-                            >
-                                Limited Edition
-                            </Badge>
                         </div>
 
-                        <p className="mt-5 max-w-xl text-lg leading-8 text-[#64748b]">
+                        <p className="mt-3 max-w-xl text-lg leading-8 text-[#64748b]">
                             {product.description}
                         </p>
 
@@ -193,7 +189,7 @@ export default async function ProductDetailPage({
             <section className="mx-auto w-full max-w-7xl px-5 py-10 lg:px-10 lg:py-14 reveal-up">
                 <div className="grid gap-10 border-t border-[#e4e7ea] pt-10 lg:grid-cols-[1fr_1fr] lg:items-center">
                     <div>
-                        <h2 className="text-5xl font-semibold tracking-tight text-[#1e293b]">
+                        <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-[#1e293b]">
                             The Story of the Fabric
                         </h2>
                         <p className="mt-5 max-w-2xl text-lg leading-9 text-[#64748b]">
@@ -242,7 +238,7 @@ export default async function ProductDetailPage({
             </section>
 
             <section className="mx-auto w-full max-w-7xl px-5 py-8 text-center lg:px-10 lg:py-12 reveal-up">
-                <h2 className="text-5xl font-semibold text-[#1e293b]">
+                <h2 className="text-4xl sm:text-5xl font-semibold text-[#1e293b]">
                     Manufacturing Excellence
                 </h2>
                 <p className="mx-auto mt-4 max-w-4xl text-lg leading-8 text-[#64748b]">

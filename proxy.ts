@@ -56,9 +56,9 @@ export function proxy(request: NextRequest) {
         pathname.startsWith("/blog/");
 
     const isProtectedPage =
-        pathname === "/products" || pathname.startsWith("/products/");
-
-    const isCartPage = pathname === "/cart";
+        pathname === "/products" ||
+        pathname.startsWith("/products/") ||
+        pathname === "/cart";
 
     const isLoggedOutOnlyPage =
         pathname === "/account" ||
@@ -79,7 +79,7 @@ export function proxy(request: NextRequest) {
         return NextResponse.redirect(redirectUrl);
     }
 
-    if (isPublicPage || isProtectedPage || isLoggedOutOnlyPage || isCartPage) {
+    if (isPublicPage || isProtectedPage || isLoggedOutOnlyPage) {
         return NextResponse.next();
     }
 

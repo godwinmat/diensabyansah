@@ -9,31 +9,31 @@ import Image from "next/image";
 export default function ContactPage() {
     return (
         <div className="bg-[#f4f4f3]">
-            <section className="mx-auto w-full max-w-screen px-5 pb-8 pt-6 lg:px-10 lg:pb-10 lg:pt-8 reveal-up">
+            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 pb-8 pt-6 lg:px-10 lg:pb-10 lg:pt-8 reveal-up">
                 <div className="image-zoom relative overflow-hidden rounded-lg">
                     <Image
                         src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=80"
                         alt="Modern concierge desk"
                         width={1800}
                         height={540}
-                        className="h-84 w-full object-cover"
+                        className="h-64 w-full object-cover sm:h-72 lg:h-84"
                         priority
                     />
                     <div className="absolute inset-0 bg-[#0f2138]/48" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                        <h1 className="text-7xl font-light tracking-tight text-white md:text-8xl">
+                        <h1 className="text-4xl font-light tracking-tight text-white sm:text-5xl md:text-7xl lg:text-8xl">
                             Get in Touch
                         </h1>
                     </div>
                 </div>
             </section>
 
-            <section className="mx-auto grid w-full max-w-screen gap-8 px-5 pb-16 lg:grid-cols-[1.05fr_1fr] lg:px-10 lg:pb-20 reveal-up">
-                <form className="glass-panel hover-lift min-w-0 rounded-xl bg-white/70 p-6 pt-4 md:p-8">
-                    <h2 className="text-4xl font-semibold text-[#1e293b] md:text-5xl">
+            <section className="mx-auto grid w-full max-w-screen gap-6 px-3 sm:px-5 pb-12 sm:gap-8 sm:pb-16 lg:grid-cols-[1.05fr_1fr] lg:px-10 lg:pb-20 reveal-up">
+                <form className="glass-panel hover-lift min-w-0 rounded-xl bg-white/70 p-3 pt-4 sm:p-6 md:p-8">
+                    <h2 className="text-3xl font-semibold text-[#1e293b] sm:text-4xl md:text-5xl">
                         Inquiry
                     </h2>
-                    <p className="mt-3 max-w-xl text-base leading-7 text-[#7c8da0] md:text-xl md:leading-9">
+                    <p className="mt-3 max-w-xl text-sm leading-6 text-[#7c8da0] sm:text-base sm:leading-7 md:text-xl md:leading-9">
                         Whether you are a private client seeking a bespoke piece
                         or a global partner, our team is dedicated to providing
                         an unparalleled experience.
@@ -44,7 +44,7 @@ export default function ContactPage() {
                             First Name
                             <Input
                                 defaultValue="Jean"
-                                className="mt-2 h-11 w-full border-b border-[#dce4ed] bg-transparent text-lg text-[#64748b] outline-none"
+                                className="mt-2 h-11 w-full border-b border-[#dce4ed] bg-transparent text-base text-[#64748b] outline-none sm:text-lg"
                                 type="text"
                             />
                         </label>
@@ -52,7 +52,7 @@ export default function ContactPage() {
                             Last Name
                             <Input
                                 defaultValue="Ansah"
-                                className="mt-2 h-11 w-full border-b border-[#dce4ed] bg-transparent text-lg text-[#64748b] outline-none"
+                                className="mt-2 h-11 w-full border-b border-[#dce4ed] bg-transparent text-base text-[#64748b] outline-none sm:text-lg"
                                 type="text"
                             />
                         </label>
@@ -62,7 +62,7 @@ export default function ContactPage() {
                         Email Address
                         <Input
                             defaultValue="contact@diensa.com"
-                            className="mt-2 h-11 w-full border-b border-[#dce4ed] bg-transparent text-lg text-[#64748b] outline-none"
+                            className="mt-2 h-11 w-full border-b border-[#dce4ed] bg-transparent text-base text-[#64748b] outline-none sm:text-lg"
                             type="email"
                         />
                     </label>
@@ -71,13 +71,13 @@ export default function ContactPage() {
                         Message
                         <Textarea
                             defaultValue="How can we assist you today?"
-                            className="mt-2 min-h-24 w-full border-b border-[#dce4ed] bg-transparent py-2 text-lg text-[#64748b] outline-none"
+                            className="mt-2 min-h-24 w-full border-b border-[#dce4ed] bg-transparent py-2 text-base text-[#64748b] outline-none sm:text-lg"
                         />
                     </label>
 
                     <Button
                         type="submit"
-                        className="mt-10 inline-flex h-12 w-full items-center justify-center rounded-sm bg-[#0f1b34] px-8 text-sm font-semibold uppercase tracking-[0.14em] text-white"
+                        className="mt-8 inline-flex h-12 w-full items-center justify-center rounded-sm bg-[#0f1b34] px-8 text-[11px] font-semibold uppercase tracking-[0.14em] text-white sm:mt-10 sm:text-sm"
                     >
                         Send Message ▸
                     </Button>
@@ -85,12 +85,12 @@ export default function ContactPage() {
 
                 <div className="min-w-0 space-y-4">
                     <Card className="glass-panel hover-lift gap-0 rounded-lg bg-[#f8fafc]/88 py-0 shadow-none ring-1 ring-[#e2e8f0]">
-                        <CardContent className="p-8">
-                            <h3 className="border-l-2 border-primary pl-4 text-5xl font-semibold leading-none text-[#1e293b]">
+                        <CardContent className="p-5 sm:p-6 md:p-8">
+                            <h3 className="border-l-2 border-primary pl-4 text-3xl font-semibold leading-none text-[#1e293b] sm:text-4xl md:text-5xl">
                                 Douala Headquarters
                             </h3>
 
-                            <div className="mt-7 space-y-7">
+                            <div className="mt-6 space-y-6 sm:mt-7 sm:space-y-7">
                                 <div className="flex items-start gap-3">
                                     <MapPin
                                         size={18}
@@ -103,7 +103,7 @@ export default function ContactPage() {
                                         >
                                             Location
                                         </Badge>
-                                        <p className="mt-2 text-lg leading-8 text-[#64748b]">
+                                        <p className="mt-2 text-base leading-7 text-[#64748b] sm:text-lg sm:leading-8">
                                             Avenue de l&apos;Indépendance,
                                             Bonanjo
                                             <br />
@@ -126,7 +126,7 @@ export default function ContactPage() {
                                         >
                                             Business Hours
                                         </Badge>
-                                        <p className="mt-2 text-lg leading-8 text-[#64748b]">
+                                        <p className="mt-2 text-base leading-7 text-[#64748b] sm:text-lg sm:leading-8">
                                             Mon -
                                             Fri:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00
                                             AM - 06:00 PM
@@ -152,7 +152,7 @@ export default function ContactPage() {
                                         >
                                             Contact Details
                                         </Badge>
-                                        <p className="mt-2 text-lg leading-8 text-[#64748b]">
+                                        <p className="mt-2 text-base leading-7 text-[#64748b] sm:text-lg sm:leading-8">
                                             Concierge: +237 233 44 55 66
                                             <br />
                                             General: hello@diensa-ansah.cm
@@ -169,7 +169,7 @@ export default function ContactPage() {
                             width="600"
                             height="450"
                             loading="lazy"
-                            className="w-full"
+                            className="h-72 w-full sm:h-96"
                         />
                     </div>
                 </div>

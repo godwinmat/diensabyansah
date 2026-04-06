@@ -49,14 +49,39 @@ export default async function ProductsPage({
             ? `${products.length}`
             : `${filteredProducts.length} of ${products.length}`;
 
+    // Get random collection with products and its most recent product
+    const collectionsWithProducts = collectionOptions.filter(
+        (collection) =>
+            products.filter((p) => p.collections.includes(collection)).length >
+            0,
+    );
+    const randomCollection =
+        collectionsWithProducts.length > 0
+            ? collectionsWithProducts[
+                  Math.floor(Math.random() * collectionsWithProducts.length)
+              ]
+            : null;
+    const heroProduct = randomCollection
+        ? products
+              .filter((p) => p.collections.includes(randomCollection))
+              .sort(
+                  (a, b) =>
+                      (parseInt(String(b.id)) || 0) -
+                      (parseInt(String(a.id)) || 0),
+              )[0]
+        : null;
+    const heroImage =
+        heroProduct?.image ||
+        "https://images.unsplash.com/photo-1615212814093-4f4c0ca0d7f5?auto=format&fit=crop&w=1800&q=80";
+
     return (
         <div className="bg-white">
-            <section className="mx-auto w-full max-w-screen px-5 pb-8 pt-6 lg:px-10 lg:pt-8 reveal-up">
+            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 pb-8 pt-6 lg:px-10 lg:pt-8 reveal-up">
                 <div className="image-zoom relative overflow-hidden rounded-xl">
                     <div className="relative h-[32svh] min-h-64">
                         <Image
-                            src="https://images.unsplash.com/photo-1615212814093-4f4c0ca0d7f5?auto=format&fit=crop&w=1800&q=80"
-                            alt="Diensa collection"
+                            src={heroImage}
+                            alt={randomCollection || "Diensa collection"}
                             fill
                             priority
                             sizes="100vw"
@@ -64,12 +89,13 @@ export default async function ProductsPage({
                         />
                     </div>
                     <div className="absolute inset-0 bg-[#0f2138]/55" />
-                    <div className="absolute inset-x-6 bottom-6 text-white lg:inset-x-10 lg:bottom-10">
+                    <div className="absolute inset-x-3 sm:inset-x-6 text-white lg:inset-x-10 bottom-10">
                         <Badge className="h-auto bg-primary px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-[#1f2937]">
                             New Season
                         </Badge>
                         <h1 className="mt-3 text-5xl font-semibold tracking-tight lg:text-6xl">
-                            2026 Industrial Indigo Series
+                            {randomCollection ||
+                                "2026 Industrial Indigo Series"}
                         </h1>
                         <p className="mt-3 max-w-3xl text-sm text-white/85 lg:text-base">
                             A curated selection of structural silhouettes and
@@ -79,8 +105,8 @@ export default async function ProductsPage({
                 </div>
             </section>
 
-            <section className="mx-auto grid w-full max-w-375 gap-8 px-5 pb-16 lg:grid-cols-[260px_1fr] lg:px-10 lg:pb-20 reveal-up">
-                <aside className="glass-panel h-fit rounded-xl bg-white/70 p-5">
+            <section className="mx-auto grid w-full max-w-375 gap-8 px-3 sm:px-5 pb-16 lg:grid-cols-[260px_1fr] lg:px-10 lg:pb-20 reveal-up">
+                <aside className="glass-panel h-fit rounded-xl bg-white/70 p-4 sm:p-5">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
                         Filters
                     </p>
@@ -224,8 +250,8 @@ export default async function ProductsPage({
                                                 />
                                             </span>
                                         </div>
-                                        <CardContent className="space-y-1 px-0 pb-1">
-                                            <div className="flex items-start justify-between gap-3">
+                                        <CardContent className="space-y-1 px-0 py-2">
+                                            <div className="flex items-center justify-between gap-3">
                                                 <h3 className="text-[16px] font-semibold text-[#1e293b] transition-colors group-hover:text-primary">
                                                     {product.name}
                                                 </h3>

@@ -40,7 +40,7 @@ const gallery = [
 export default function AboutPage() {
     return (
         <div className="bg-white">
-            <section className="mx-auto w-full max-w-screen px-5 pt-6 lg:px-10 lg:pt-8 reveal-up">
+            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 pt-6 lg:px-10 lg:pt-8 reveal-up">
                 <div className="relative overflow-hidden rounded-xl image-zoom">
                     <div className="relative h-[36svh] min-h-72">
                         <Image
@@ -66,7 +66,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto grid w-full max-w-screen gap-8 px-5 py-14 lg:grid-cols-[1.1fr_1fr] lg:px-10 lg:py-16 reveal-up">
+            <section className="mx-auto grid w-full max-w-screen gap-8 px-3 sm:px-5 py-14 lg:grid-cols-[1.1fr_1fr] lg:px-10 lg:py-16 reveal-up">
                 <div>
                     <h2 className="text-4xl font-bold leading-[1.05] tracking-tight text-[#0f172a] lg:text-6xl">
                         Made-in-Africa:
@@ -118,7 +118,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-5 py-10 lg:px-10 lg:py-12 reveal-up">
+            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
                 <h3 className="pb-4 text-3xl font-semibold text-[#0f172a]">
                     Core Pillars
                 </h3>
@@ -159,8 +159,8 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-5 py-10 lg:px-10 lg:py-12 reveal-up">
-                <div className="glass-panel hover-lift relative overflow-hidden rounded-2xl bg-[#f7f5ee]/88 px-8 py-10 lg:px-14 lg:py-14">
+            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
+                <div className="glass-panel hover-lift relative overflow-hidden rounded-2xl bg-[#f7f5ee]/88 px-3 sm:px-8 py-10 lg:px-14 lg:py-14">
                     <div className="absolute -right-6 -top-14 text-[16rem] font-black leading-none text-[#ece9dd]">
                         DA
                     </div>
@@ -188,7 +188,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-5 py-10 lg:px-10 lg:py-12 reveal-up">
+            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {gallery.map((image, index) => (
                         <div
@@ -207,7 +207,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-5 pb-16 pt-8 lg:px-10 lg:pb-20 lg:pt-10 reveal-up">
+            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 pb-16 pt-8 lg:px-10 lg:pb-20 lg:pt-10 reveal-up">
                 <div className="pt-12 text-center">
                     <Separator className="mb-12 bg-[#e2e8f0]" />
                     <h3 className="text-5xl font-semibold tracking-tight text-[#0f172a]">

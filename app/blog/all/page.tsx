@@ -32,7 +32,7 @@ export default async function BlogAllPage({ searchParams }: BlogAllPageProps) {
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
                             Blog
                         </p>
-                        <h1 className="mt-2 font-heading text-5xl italic text-[#1e293b]">
+                        <h1 className="mt-2 font-heading text-4xl italic text-[#1e293b] sm:text-5xl">
                             All Stories
                         </h1>
                     </div>

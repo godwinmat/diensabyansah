@@ -18,7 +18,7 @@ import { useEffect, useRef, useState } from "react";
 
 const navigation = [
     { href: "/products", label: "Shop" },
-    // { href: "/collections", label: "Collections" },
+    { href: "/collections", label: "Collections" },
     { href: "/about", label: "About Diensa" },
     { href: "/testimonials", label: "Testimonials" },
     { href: "/blog", label: "Blog" },
@@ -41,6 +41,11 @@ export function SiteHeader() {
 
     useEffect(() => {
         const syncCartCount = async () => {
+            if (!isAuthenticated) {
+                setCartCount(0);
+                return;
+            }
+
             try {
                 const response = await fetch("/api/cart", {
                     method: "GET",
@@ -84,7 +89,7 @@ export function SiteHeader() {
         return () => {
             window.removeEventListener(CART_UPDATED_EVENT, onCartUpdated);
         };
-    }, [pathname]);
+    }, [isAuthenticated, pathname]);
 
     useEffect(() => {
         const checkSession = async () => {
@@ -284,35 +289,39 @@ export function SiteHeader() {
                             )
                         ) : null}
 
-                        <Button
-                            asChild
-                            variant="ghost"
-                            size="icon-sm"
-                            className="relative text-[#111827] hover:text-primary"
-                        >
-                            <Link href="/cart" aria-label="Cart">
-                                <ShoppingBag size={24} weight="regular" />
-                                <Badge className="absolute -right-2 -top-2 h-5 min-w-5 rounded-full bg-primary px-1 text-[10px] font-semibold text-[#1f2937] hover:bg-primary">
-                                    {cartCount}
-                                </Badge>
-                            </Link>
-                        </Button>
+                        {authChecked && isAuthenticated ? (
+                            <Button
+                                asChild
+                                variant="ghost"
+                                size="icon-sm"
+                                className="relative text-[#111827] hover:text-primary"
+                            >
+                                <Link href="/cart" aria-label="Cart">
+                                    <ShoppingBag size={24} weight="regular" />
+                                    <Badge className="absolute -right-2 -top-2 h-5 min-w-5 rounded-full bg-primary px-1 text-[10px] font-semibold text-[#1f2937] hover:bg-primary">
+                                        {cartCount}
+                                    </Badge>
+                                </Link>
+                            </Button>
+                        ) : null}
                     </div>
 
                     <div className="ml-auto flex items-center gap-3 md:hidden">
-                        <Button
-                            asChild
-                            variant="ghost"
-                            size="icon-sm"
-                            className="relative text-[#111827]"
-                        >
-                            <Link href="/cart" aria-label="Cart">
-                                <ShoppingBag size={22} weight="regular" />
-                                <Badge className="absolute -right-2 -top-2 h-4 min-w-4 rounded-full bg-primary px-1 text-[9px] font-semibold text-[#1f2937] hover:bg-primary">
-                                    {cartCount}
-                                </Badge>
-                            </Link>
-                        </Button>
+                        {authChecked && isAuthenticated ? (
+                            <Button
+                                asChild
+                                variant="ghost"
+                                size="icon-sm"
+                                className="relative text-[#111827]"
+                            >
+                                <Link href="/cart" aria-label="Cart">
+                                    <ShoppingBag size={22} weight="regular" />
+                                    <Badge className="absolute -right-2 -top-2 h-4 min-w-4 rounded-full bg-primary px-1 text-[9px] font-semibold text-[#1f2937] hover:bg-primary">
+                                        {cartCount}
+                                    </Badge>
+                                </Link>
+                            </Button>
+                        ) : null}
 
                         <Button
                             asChild
