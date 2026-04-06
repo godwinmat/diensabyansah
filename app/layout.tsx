@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 
 const playfairDisplayHeading = Playfair_Display({
@@ -36,7 +37,9 @@ export default function RootLayout({
             )}
         >
             <body className="min-h-full flex flex-col">
-                <NavigationLoadingIndicator />
+                <Suspense fallback={null}>
+                    <NavigationLoadingIndicator />
+                </Suspense>
                 <ScrollReveal />
                 <SiteHeader />
                 <main className="relative flex-1 overflow-x-clip pt-16 lg:pt-20">
