@@ -1,4 +1,8 @@
 import {
+    getSnapshotFromWooCart,
+    saveUserCartSnapshotFromAuthToken,
+} from "@/lib/woocommerce-customer-cart-sync";
+import {
     extractErrorMessage,
     getForwardableWooCookieHeader,
     WC_CART_TOKEN_COOKIE,
@@ -41,6 +45,7 @@ function attachCartSessionCookies(
 async function loadSession(request: NextRequest) {
     let cartToken = request.cookies.get(WC_CART_TOKEN_COOKIE)?.value;
     let nonce = request.cookies.get(WC_STORE_NONCE_COOKIE)?.value;
+    const authToken = request.cookies.get("auth_token")?.value;
     const cookieHeader = getForwardableWooCookieHeader(
         request.headers.get("cookie"),
     );
@@ -50,13 +55,14 @@ async function loadSession(request: NextRequest) {
             path: "/cart",
             method: "GET",
             cookieHeader,
+            authToken,
         });
 
         cartToken = bootstrap.cartToken ?? cartToken;
         nonce = bootstrap.nonce ?? nonce;
     }
 
-    return { cartToken, nonce, cookieHeader };
+    return { cartToken, nonce, cookieHeader, authToken };
 }
 
 async function executeAction(
@@ -73,6 +79,7 @@ async function executeAction(
         cartToken: session.cartToken,
         nonce: session.nonce,
         cookieHeader: session.cookieHeader,
+        authToken: session.authToken,
     });
 
     if (!result.ok && (result.status === 401 || result.status === 403)) {
@@ -81,6 +88,7 @@ async function executeAction(
             method: "GET",
             cartToken: result.cartToken ?? session.cartToken,
             cookieHeader: session.cookieHeader,
+            authToken: session.authToken,
         });
 
         result = await wooStoreRequest({
@@ -90,6 +98,7 @@ async function executeAction(
             cartToken: refreshedSession.cartToken ?? session.cartToken,
             nonce: refreshedSession.nonce ?? session.nonce,
             cookieHeader: session.cookieHeader,
+            authToken: session.authToken,
         });
     }
 
@@ -113,6 +122,13 @@ async function executeAction(
         result.nonce,
         result.setCookieHeaders,
     );
+
+    if (result.ok && session.authToken) {
+        await saveUserCartSnapshotFromAuthToken({
+            authToken: session.authToken,
+            snapshot: getSnapshotFromWooCart(result.data),
+        });
+    }
 
     return response;
 }

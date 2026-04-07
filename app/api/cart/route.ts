@@ -1,4 +1,10 @@
 import {
+    getSnapshotFromWooCart,
+    hydrateWooSessionCartFromSnapshot,
+    loadUserCartSnapshotFromAuthToken,
+    saveUserCartSnapshotFromAuthToken,
+} from "@/lib/woocommerce-customer-cart-sync";
+import {
     extractErrorMessage,
     getForwardableWooCookieHeader,
     WC_CART_TOKEN_COOKIE,
@@ -41,6 +47,7 @@ function attachCartSessionCookies(
 export async function GET(request: NextRequest) {
     const cartToken = request.cookies.get(WC_CART_TOKEN_COOKIE)?.value;
     const nonce = request.cookies.get(WC_STORE_NONCE_COOKIE)?.value;
+    const authToken = request.cookies.get("auth_token")?.value;
     const cookieHeader = getForwardableWooCookieHeader(
         request.headers.get("cookie"),
     );
@@ -51,30 +58,74 @@ export async function GET(request: NextRequest) {
         cartToken,
         nonce,
         cookieHeader,
+        authToken,
     });
 
+    let finalCartResult = cartResult;
+
+    if (authToken && cartResult.ok) {
+        const currentSnapshot = getSnapshotFromWooCart(cartResult.data);
+
+        if (currentSnapshot.length === 0) {
+            const storedSnapshot =
+                await loadUserCartSnapshotFromAuthToken(authToken);
+
+            if (storedSnapshot.length > 0) {
+                const hydratedSession = await hydrateWooSessionCartFromSnapshot(
+                    {
+                        snapshot: storedSnapshot,
+                        cartToken: cartResult.cartToken,
+                        nonce: cartResult.nonce,
+                        cookieHeader,
+                        authToken,
+                    },
+                );
+
+                finalCartResult = await wooStoreRequest({
+                    path: "/cart",
+                    method: "GET",
+                    cartToken:
+                        hydratedSession.cartToken ??
+                        cartResult.cartToken ??
+                        undefined,
+                    nonce:
+                        hydratedSession.nonce ?? cartResult.nonce ?? undefined,
+                    cookieHeader,
+                    authToken,
+                });
+            }
+        } else {
+            await saveUserCartSnapshotFromAuthToken({
+                authToken,
+                snapshot: currentSnapshot,
+            });
+        }
+    }
+
     const response = NextResponse.json(
-        cartResult.ok
+        finalCartResult.ok
             ? {
                   success: true,
-                  cart: cartResult.data,
+                  cart: finalCartResult.data,
               }
             : {
                   success: false,
                   message: extractErrorMessage(
-                      cartResult.data,
+                      finalCartResult.data,
                       "Failed to fetch cart",
                   ),
                   cart: null,
               },
-        { status: cartResult.ok ? 200 : cartResult.status || 500 },
+        {
+            status: finalCartResult.ok ? 200 : finalCartResult.status || 500,
+        },
     );
 
     attachCartSessionCookies(
         response,
-        cartResult.cartToken,
-        cartResult.nonce,
-        cartResult.setCookieHeaders,
+        finalCartResult.cartToken,
+        finalCartResult.nonce,
+        finalCartResult.setCookieHeaders,
     );
 
     return response;

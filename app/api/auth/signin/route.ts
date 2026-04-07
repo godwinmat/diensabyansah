@@ -1,3 +1,7 @@
+import {
+    WC_CART_TOKEN_COOKIE,
+    WC_STORE_NONCE_COOKIE,
+} from "@/lib/woocommerce-store-cart";
 import { NextResponse } from "next/server";
 
 type SigninBody = {
@@ -72,6 +76,22 @@ export async function POST(request: Request) {
         sameSite: "lax",
         path: "/",
         maxAge: 60 * 60 * 24 * 7,
+    });
+
+    response.cookies.set(WC_CART_TOKEN_COOKIE, "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 0,
+    });
+
+    response.cookies.set(WC_STORE_NONCE_COOKIE, "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 0,
     });
 
     return response;

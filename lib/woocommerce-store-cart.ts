@@ -21,6 +21,7 @@ export async function wooStoreRequest(options: {
     cartToken?: string;
     nonce?: string;
     cookieHeader?: string;
+    authToken?: string;
 }): Promise<WooStoreResult> {
     const wordpressApiUrl = getWordPressApiUrl();
 
@@ -49,6 +50,10 @@ export async function wooStoreRequest(options: {
 
     if (options.cookieHeader) {
         headers.Cookie = options.cookieHeader;
+    }
+
+    if (options.authToken) {
+        headers.Authorization = `Bearer ${options.authToken}`;
     }
 
     const response = await fetch(

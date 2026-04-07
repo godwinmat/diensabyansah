@@ -9,6 +9,7 @@ import {
     List,
     MagnifyingGlass,
     ShoppingBag,
+    SignIn,
     User,
     X,
 } from "@phosphor-icons/react/dist/ssr";
@@ -282,8 +283,8 @@ export function SiteHeader() {
                                     size="icon-sm"
                                     className="text-[#111827] hover:text-primary"
                                 >
-                                    <Link href="/account" aria-label="Account">
-                                        <User size={24} weight="regular" />
+                                    <Link href="/account" aria-label="Login">
+                                        <SignIn size={24} weight="regular" />
                                     </Link>
                                 </Button>
                             )
@@ -360,6 +361,19 @@ export function SiteHeader() {
                     </div>
 
                     <nav className="flex flex-col gap-1">
+                        <Link
+                            href="/"
+                            onClick={closeMobileMenu}
+                            className={cn(
+                                "rounded-md px-2 py-2 text-sm font-medium uppercase tracking-[0.08em] transition-colors",
+                                pathname === "/"
+                                    ? "bg-[#f8fafc] text-primary"
+                                    : "text-[#111827] hover:bg-[#f8fafc] hover:text-primary",
+                            )}
+                        >
+                            Home
+                        </Link>
+
                         {navigation.map((item) => (
                             <Link
                                 key={item.href}
@@ -378,6 +392,20 @@ export function SiteHeader() {
                     </nav>
 
                     <div className="mt-auto grid gap-3 pt-6">
+                        {authChecked && isAuthenticated ? (
+                            <div className="rounded-md border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2">
+                                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#94a3b8]">
+                                    Signed in as
+                                </p>
+                                <p className="mt-1 text-sm font-semibold text-[#111827]">
+                                    {user?.name || "Signed-in user"}
+                                </p>
+                                <p className="truncate text-xs text-[#64748b]">
+                                    {user?.email || "No email available"}
+                                </p>
+                            </div>
+                        ) : null}
+
                         {authChecked ? (
                             isAuthenticated ? (
                                 <Button
@@ -401,7 +429,7 @@ export function SiteHeader() {
                                         href="/account"
                                         onClick={closeMobileMenu}
                                     >
-                                        Account
+                                        Login
                                     </Link>
                                 </Button>
                             )
