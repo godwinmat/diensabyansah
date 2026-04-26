@@ -1,14 +1,14 @@
 import { Separator } from "@/components/ui/separator";
+import { getWooCommerceCollections } from "@/lib/woocommerce";
 import { At, GlobeSimple, ShareNetwork } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
-const collections = [
-    "Indigo Series",
-    "Industrial Line",
-    "Heritage Accents",
-    "Limited Archives",
+const company = [
+    { label: "Our Story", href: "/about" },
+    { label: "Manufacturing", href: "/about" },
+    { label: "Sustainability", href: "/about" },
+    { label: "Contact", href: "/contact" },
 ];
-const company = ["Our Story", "Manufacturing", "Sustainability", "Contact"];
 const support = [
     "Shipping & Returns",
     "Size Guide",
@@ -16,10 +16,19 @@ const support = [
     "Care Instructions",
 ];
 
-export function SiteFooter() {
+export async function SiteFooter() {
+    const collections = (await getWooCommerceCollections())
+        .filter((collection) => collection.productCount > 0)
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .slice(0, 4)
+        .map((collection) => ({
+            label: collection.name,
+            href: `/products?collection=${encodeURIComponent(collection.name)}`,
+        }));
+
     return (
         <footer className="mt-auto border-t border-border bg-[#f8fafc]/95">
-            <div className="mx-auto w-full max-w-screen px-5 py-14 lg:px-10 lg:py-20">
+            <div className="mx-auto w-full max-w-7xl px-5 py-14 lg:px-10 lg:py-20">
                 <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
                     <div className="space-y-6">
                         <div className="flex items-center gap-3">
@@ -36,23 +45,23 @@ export function SiteFooter() {
                         </p>
                         <div className="flex items-center gap-5 text-[#0f172a]">
                             <Link
-                                href="#"
-                                aria-label="Website"
-                                className="transition-all duration-300 hover:-translate-y-0.5 hover:text-primary"
+                                href="/"
+                                aria-label="Homepage"
+                                className="grid h-10 w-10 place-items-center rounded-full border border-[#dbe2ea] bg-white transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary"
                             >
                                 <GlobeSimple size={26} weight="fill" />
                             </Link>
                             <Link
-                                href="#"
+                                href="mailto:info@diensabyansah.cm"
                                 aria-label="Email"
-                                className="transition-all duration-300 hover:-translate-y-0.5 hover:text-primary"
+                                className="grid h-10 w-10 place-items-center rounded-full border border-[#dbe2ea] bg-white transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary"
                             >
                                 <At size={26} weight="bold" />
                             </Link>
                             <Link
-                                href="#"
-                                aria-label="Share"
-                                className="transition-all duration-300 hover:-translate-y-0.5 hover:text-primary"
+                                href="/contact"
+                                aria-label="Contact"
+                                className="grid h-10 w-10 place-items-center rounded-full border border-[#dbe2ea] bg-white transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary"
                             >
                                 <ShareNetwork size={26} weight="fill" />
                             </Link>
@@ -67,7 +76,7 @@ export function SiteFooter() {
                 <Separator className="mt-16 bg-[#dbe2ea]" />
                 <div className="pt-7 text-xs font-medium uppercase tracking-[0.2em] text-[#334155] md:flex md:items-center md:justify-between">
                     <p>© 2026 Diensa by Ansah. All rights reserved.</p>
-                    <div className="flex flex-wrap items-center gap-8">
+                    <div className="mt-4 flex flex-wrap items-center gap-8 md:mt-0">
                         <p>Designed for excellence</p>
                         <p>Crafted in Cameroon</p>
                     </div>
@@ -79,7 +88,7 @@ export function SiteFooter() {
 
 type FooterColumnProps = {
     title: string;
-    items: string[];
+    items: Array<string | { label: string; href: string }>;
 };
 
 function FooterColumn({ title, items }: FooterColumnProps) {
@@ -90,12 +99,12 @@ function FooterColumn({ title, items }: FooterColumnProps) {
             </h3>
             <ul className="space-y-3">
                 {items.map((item) => (
-                    <li key={item}>
+                    <li key={typeof item === "string" ? item : item.label}>
                         <Link
-                            href="#"
+                            href={typeof item === "string" ? "#" : item.href}
                             className="text-lg text-[#64748b] transition-all duration-300 hover:translate-x-1 hover:text-primary"
                         >
-                            {item}
+                            {typeof item === "string" ? item : item.label}
                         </Link>
                     </li>
                 ))}

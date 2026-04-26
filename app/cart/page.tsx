@@ -5,8 +5,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { CART_UPDATED_EVENT } from "@/lib/cart";
 import {
+    ArrowRight,
     CreditCard,
     DeviceMobile,
+    Minus,
+    Plus,
     ShieldCheck,
     X,
 } from "@phosphor-icons/react/dist/ssr";
@@ -65,8 +68,6 @@ type WooCart = {
     }>;
 };
 
-const shipping = 0;
-
 const money = (
     value: number,
     currencyCode = "USD",
@@ -103,6 +104,7 @@ export default function CartPage() {
     const [loading, setLoading] = useState(true);
     const [mutatingKey, setMutatingKey] = useState<string | null>(null);
     const [error, setError] = useState("");
+    const [checkoutLoading, setCheckoutLoading] = useState(false);
 
     useEffect(() => {
         const loadCart = async () => {
@@ -212,29 +214,82 @@ export default function CartPage() {
         void mutateItem({ key }, "DELETE");
     };
 
-    const checkoutUrl = "https://diensabyansah.com/checkout";
     const isCheckoutDisabled = cartItems.length === 0;
+
+    const handleCheckout = async () => {
+        if (isCheckoutDisabled) {
+            return;
+        }
+
+        setCheckoutLoading(true);
+        setError("");
+
+        try {
+            const response = await fetch("/api/cart/checkout", {
+                method: "POST",
+            });
+
+            const data = (await response.json().catch(() => null)) as {
+                success?: boolean;
+                checkoutUrl?: string;
+                message?: string;
+            } | null;
+
+            console.log("[cart] Checkout response:", { ok: response.ok, data });
+
+            if (!response.ok || !data?.success || !data.checkoutUrl) {
+                const errorMsg = data?.message || "Unable to prepare checkout";
+                console.error("[cart] Checkout failed:", errorMsg);
+                setError(errorMsg);
+                throw new Error(errorMsg);
+            }
+
+            console.log("[cart] Redirecting to:", data.checkoutUrl);
+            window.location.href = data.checkoutUrl;
+        } catch (err) {
+            const errorMsg =
+                err instanceof Error ? err.message : "Checkout failed";
+            setError(errorMsg);
+            console.error("[cart] Error:", errorMsg);
+        } finally {
+            setCheckoutLoading(false);
+        }
+    };
 
     return (
         <div className="bg-[#f4f4f3]">
-            <section className="mx-auto w-full max-w-screen px-5 pb-14 pt-8 md:px-8 lg:px-16 lg:pb-20 xl:px-24 2xl:px-36 reveal-up">
-                <h1 className="text-5xl font-semibold tracking-tight text-[#1e293b]">
-                    Your Bag
-                </h1>
-                <p className="mt-2 text-sm text-[#94a3b8]">
-                    Review your selections from the latest collection.
-                </p>
+            <section className="mx-auto w-full max-w-6xl px-5 pb-14 pt-8 md:px-8 lg:px-10 lg:pb-20 reveal-up">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary">
+                            Checkout
+                        </p>
+                        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-[#1e293b]">
+                            Your Bag
+                        </h1>
+                        <p className="mt-2 text-sm text-[#94a3b8]">
+                            Review your selections from the latest collection.
+                        </p>
+                    </div>
+
+                    <div className="rounded-xl border border-[#e2e8f0] bg-white/80 px-4 py-3 text-sm text-[#64748b] shadow-[0_10px_30px_-24px_rgba(15,23,42,0.45)]">
+                        <span className="font-semibold text-[#1e293b]">
+                            {cartItems.length}
+                        </span>{" "}
+                        {cartItems.length === 1 ? "piece" : "pieces"} selected
+                    </div>
+                </div>
 
                 <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_350px] lg:items-start">
                     <div className="space-y-5">
                         {loading ? (
-                            <div className="rounded-sm border border-[#e2e8f0] bg-white p-8 text-center text-sm text-[#64748b]">
+                            <div className="rounded-2xl border border-[#e2e8f0] bg-white p-10 text-center text-sm text-[#64748b] shadow-[0_16px_40px_-28px_rgba(15,23,42,0.4)]">
                                 Loading your cart...
                             </div>
                         ) : null}
 
                         {!loading && error ? (
-                            <div className="rounded-sm border border-red-200 bg-red-50 p-8 text-center">
+                            <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center">
                                 <p className="text-xl font-semibold text-red-700">
                                     Couldn’t load cart
                                 </p>
@@ -245,7 +300,7 @@ export default function CartPage() {
                         ) : null}
 
                         {!loading && !error && cartItems.length === 0 ? (
-                            <div className="rounded-sm border border-[#e2e8f0] bg-white p-8 text-center">
+                            <div className="rounded-2xl border border-[#e2e8f0] bg-white p-10 text-center shadow-[0_16px_40px_-28px_rgba(15,23,42,0.4)]">
                                 <p className="text-xl font-semibold text-[#1e293b]">
                                     Your cart is empty
                                 </p>
@@ -253,13 +308,25 @@ export default function CartPage() {
                                     Add products from the collection to see them
                                     here.
                                 </p>
+                                <Button
+                                    asChild
+                                    className="mt-6 h-11 rounded-sm bg-primary px-6 text-sm font-semibold uppercase tracking-[0.14em] text-[#1f2937] hover:bg-primary/90"
+                                >
+                                    <Link href="/products">
+                                        Continue Shopping
+                                        <ArrowRight size={16} weight="bold" />
+                                    </Link>
+                                </Button>
                             </div>
                         ) : null}
 
                         {cartItems.map((item, index) => (
-                            <article key={item.key}>
+                            <article
+                                key={item.key}
+                                className="rounded-2xl border border-[#e2e8f0] bg-white/90 p-4 shadow-[0_16px_40px_-28px_rgba(15,23,42,0.4)] sm:p-5"
+                            >
                                 <div className="grid gap-5 sm:grid-cols-[120px_1fr_auto] sm:items-start">
-                                    <div className="relative h-36 w-28 overflow-hidden rounded-sm bg-white">
+                                    <div className="relative h-36 w-28 overflow-hidden rounded-xl bg-[#f8fafc]">
                                         <Image
                                             src={
                                                 item.images?.[0]?.src ||
@@ -273,7 +340,7 @@ export default function CartPage() {
                                     </div>
 
                                     <div>
-                                        <h2 className="mt-1 text-3xl font-semibold text-[#1e293b]">
+                                        <h2 className="mt-1 text-2xl font-semibold text-[#1e293b] sm:text-3xl">
                                             {item.name}
                                         </h2>
                                         <p className="mt-1 text-base text-[#64748b]">
@@ -309,10 +376,10 @@ export default function CartPage() {
                                             <span>Qty: {item.quantity}</span>
                                         </div>
 
-                                        <div className="mt-4 inline-flex items-center rounded-sm border border-[#e2e8f0] bg-white px-1">
+                                        <div className="mt-4 inline-flex items-center rounded-full border border-[#dce4ed] bg-[#f8fafc] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
                                             <button
                                                 type="button"
-                                                className="h-8 w-8 text-[#94a3b8]"
+                                                className="grid h-9 w-9 place-items-center rounded-full text-[#64748b] transition-colors hover:bg-white hover:text-[#1e293b]"
                                                 onClick={() =>
                                                     decreaseQty(
                                                         item.key,
@@ -324,14 +391,17 @@ export default function CartPage() {
                                                 }
                                                 aria-label={`Decrease quantity for ${item.name}`}
                                             >
-                                                -
+                                                <Minus
+                                                    size={14}
+                                                    weight="bold"
+                                                />
                                             </button>
-                                            <span className="w-8 text-center text-sm font-semibold text-[#334155]">
+                                            <span className="w-10 text-center text-sm font-semibold text-[#334155]">
                                                 {item.quantity}
                                             </span>
                                             <button
                                                 type="button"
-                                                className="h-8 w-8 text-primary"
+                                                className="grid h-9 w-9 place-items-center rounded-full text-primary transition-colors hover:bg-white"
                                                 onClick={() =>
                                                     increaseQty(
                                                         item.key,
@@ -343,7 +413,10 @@ export default function CartPage() {
                                                 }
                                                 aria-label={`Increase quantity for ${item.name}`}
                                             >
-                                                +
+                                                <Plus
+                                                    size={14}
+                                                    weight="bold"
+                                                />
                                             </button>
                                         </div>
                                     </div>
@@ -351,7 +424,7 @@ export default function CartPage() {
                                     <div className="flex items-start gap-4 sm:flex-col sm:items-end">
                                         <button
                                             type="button"
-                                            className="text-[#94a3b8] transition-colors hover:text-[#334155]"
+                                            className="grid h-9 w-9 place-items-center rounded-full border border-[#e2e8f0] bg-white text-[#94a3b8] transition-colors hover:text-[#334155]"
                                             onClick={() => removeItem(item.key)}
                                             disabled={mutatingKey === item.key}
                                             aria-label={`Remove ${item.name} from cart`}
@@ -377,17 +450,21 @@ export default function CartPage() {
                                 </div>
 
                                 {index !== cartItems.length - 1 && (
-                                    <Separator className="mt-6 bg-[#e2e8f0]" />
+                                    <Separator className="mt-6 bg-transparent" />
                                 )}
                             </article>
                         ))}
                     </div>
 
-                    <Card className="glass-panel gap-0 rounded-xl bg-white/85 py-0 shadow-none ring-1 ring-[#e2e8f0]">
-                        <CardContent className="p-6">
-                            <h3 className="text-3xl uppercase font-semibold text-[#1e293b]">
+                    <Card className="sticky top-8 gap-0 rounded-2xl border border-[#e2e8f0] bg-white/90 py-0 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.45)]">
+                        <CardContent className="p-6 sm:p-7">
+                            <h3 className="text-3xl font-semibold text-[#1e293b]">
                                 Order Summary
                             </h3>
+                            <p className="mt-2 text-sm text-[#94a3b8]">
+                                Final pricing and shipping are confirmed during
+                                checkout.
+                            </p>
 
                             <div className="mt-6 space-y-4 text-base text-[#64748b]">
                                 <div className="flex items-center justify-between gap-3">
@@ -439,16 +516,14 @@ export default function CartPage() {
                                 </Button>
                             ) : (
                                 <Button
-                                    asChild
+                                    type="button"
+                                    onClick={handleCheckout}
+                                    disabled={checkoutLoading}
                                     className="mt-6 h-12 w-full rounded-sm bg-primary text-sm font-semibold uppercase tracking-[0.14em] text-[#1f2937] hover:bg-primary/90"
                                 >
-                                    <Link
-                                        href={checkoutUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        Proceed to Checkout
-                                    </Link>
+                                    {checkoutLoading
+                                        ? "Preparing Checkout..."
+                                        : "Proceed to Checkout"}
                                 </Button>
                             )}
 
@@ -457,13 +532,19 @@ export default function CartPage() {
                                     Accepted Payment Methods
                                 </p>
                                 <div className="mt-3 flex items-center gap-3 text-[#334155]">
-                                    <CreditCard size={18} />
-                                    <DeviceMobile size={18} />
-                                    <ShieldCheck size={18} />
+                                    <div className="grid h-10 w-10 place-items-center rounded-xl border border-[#e2e8f0] bg-[#f8fafc]">
+                                        <CreditCard size={18} />
+                                    </div>
+                                    <div className="grid h-10 w-10 place-items-center rounded-xl border border-[#e2e8f0] bg-[#f8fafc]">
+                                        <DeviceMobile size={18} />
+                                    </div>
+                                    <div className="grid h-10 w-10 place-items-center rounded-xl border border-[#e2e8f0] bg-[#f8fafc]">
+                                        <ShieldCheck size={18} />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="mt-5 rounded-sm border border-[#eaeef3] bg-[#f8fafc] p-3">
+                            <div className="mt-5 rounded-xl border border-[#eaeef3] bg-[#f8fafc] p-4">
                                 <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#475569]">
                                     Authenticity Guaranteed
                                 </p>

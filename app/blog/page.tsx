@@ -54,26 +54,32 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
     return (
         <div className="bg-[#f4f4f3]">
-            <section className="relative overflow-hidden reveal-up">
-                <div className="image-zoom relative h-[56svh] min-h-120">
-                    <Image
-                        src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1700&q=80"
-                        alt="Fashion editorial model"
-                        fill
-                        sizes="100vw"
-                        priority
-                        className="object-cover"
-                    />
-                </div>
-                <div className="absolute inset-0 bg-[#243447]/52" />
+            <section className="mx-auto w-full max-w-7xl px-3 pb-8 pt-6 sm:px-5 lg:px-10 lg:pt-8 reveal-up">
+                <div className="relative overflow-hidden rounded-2xl shadow-[0_18px_60px_-30px_rgba(15,23,42,0.45)]">
+                    <div className="image-zoom relative h-[56svh] min-h-120">
+                        <Image
+                            src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1700&q=80"
+                            alt="Fashion editorial model"
+                            fill
+                            sizes="100vw"
+                            priority
+                            className="object-cover"
+                        />
+                    </div>
+                    <div className="absolute inset-0 bg-[#243447]/52" />
 
-                <div className="absolute inset-0 flex flex-col items-center justify-end px-5 pb-16 text-center lg:pb-20">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.38em] text-primary">
-                        Established in Accra
-                    </p>
-                    <h1 className="mt-2 max-w-3xl font-heading text-4xl font-medium leading-[1.04] text-[#0f172a] sm:text-5xl md:text-7xl">
-                        The Journal &amp; Collective
-                    </h1>
+                    <div className="absolute inset-0 flex flex-col items-center justify-end px-5 pb-14 text-center lg:pb-18">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.38em] text-primary">
+                            Established in Accra
+                        </p>
+                        <h1 className="mt-2 max-w-3xl font-heading text-4xl font-medium leading-[1.04] text-white sm:text-5xl md:text-7xl">
+                            The Journal &amp; Collective
+                        </h1>
+                        <p className="mt-4 max-w-2xl text-sm leading-6 text-white/80 sm:text-base sm:leading-7">
+                            Editorial stories, manufacturing notes, and cultural
+                            conversations from the world of Diensa.
+                        </p>
+                    </div>
                 </div>
             </section>
 
@@ -127,47 +133,46 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                     {posts.map((post) => (
                         <Card
                             key={post.slug}
-                            className="hover-lift gap-5 rounded-none bg-transparent p-2 py-2 shadow-none ring-0"
+                            className="group gap-0 overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white py-0 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.45)]"
                         >
-                            <div className="image-zoom relative h-100 overflow-hidden">
-                                <Image
-                                    src={post.image}
-                                    alt={post.title}
-                                    fill
-                                    sizes="(min-width: 1024px) 31vw, 100vw"
-                                    className="object-cover"
-                                />
-                            </div>
-                            <CardContent className="space-y-3 px-2 pb-2">
-                                <Badge
-                                    variant="ghost"
-                                    className="h-auto px-0 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary"
-                                >
-                                    {post.categories[0] || "Journal"}
-                                </Badge>
-                                <h3 className="font-heading text-3xl sm:text-4xl md:text-5xl leading-tight text-[#1e293b]">
-                                    {post.title}
-                                </h3>
-                                <p className="text-base leading-7 text-[#6b7280]">
-                                    {post.excerpt}
-                                </p>
-                                <Button
-                                    asChild
-                                    variant="link"
-                                    className="h-auto p-0 text-sm font-semibold text-[#111827] no-underline hover:no-underline"
-                                >
-                                    <Link href={`/blog/${post.slug}`}>
+                            <Link
+                                href={`/blog/${post.slug}`}
+                                className="block"
+                            >
+                                <div className="image-zoom relative h-100 overflow-hidden rounded-t-2xl bg-[#f8fafc]">
+                                    <Image
+                                        src={post.image}
+                                        alt={post.title}
+                                        fill
+                                        sizes="(min-width: 1024px) 31vw, 100vw"
+                                        className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                                    />
+                                </div>
+                                <CardContent className="space-y-3 px-4 pb-4 pt-4">
+                                    <Badge
+                                        variant="ghost"
+                                        className="h-auto px-0 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary"
+                                    >
+                                        {post.categories[0] || "Journal"}
+                                    </Badge>
+                                    <h3 className="font-heading text-3xl leading-tight text-[#1e293b]">
+                                        {post.title}
+                                    </h3>
+                                    <p className="text-base leading-7 text-[#6b7280]">
+                                        {post.excerpt}
+                                    </p>
+                                    <p className="text-sm font-semibold text-[#111827]">
                                         Read Story
-                                    </Link>
-                                </Button>
-                            </CardContent>
+                                    </p>
+                                </CardContent>
+                            </Link>
                         </Card>
                     ))}
                 </div>
             </section>
 
             <section className="border-y border-[#eceff3] bg-[#f7f7f6] py-14 sm:py-16 lg:py-20 reveal-up">
-                <div className="mx-auto w-full max-w-screen px-5 lg:px-10">
+                <div className="mx-auto w-full max-w-7xl px-5 lg:px-10">
                     <h2 className="font-heading text-3xl italic text-[#1e293b] sm:text-4xl lg:text-5xl">
                         Global Events &amp; Exhibitions
                     </h2>
@@ -223,29 +228,31 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-5 py-16 text-center sm:py-20 lg:px-10 lg:py-28 reveal-up">
-                <h2 className="font-heading text-2xl italic leading-tight text-[#1e293b] sm:text-3xl md:text-5xl lg:text-7xl">
-                    Join the Inner Collective
-                </h2>
-                <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-[#7c8da0] sm:mt-5 sm:text-lg sm:leading-8">
-                    Gain access to limited edition archival drops, private
-                    showroom events, and deep dives into the manufacturing of
-                    our luxury collections.
-                </p>
+            <section className="mx-auto w-full max-w-7xl px-5 py-16 text-center sm:py-20 lg:px-10 lg:py-24 reveal-up">
+                <div className="rounded-2xl border border-[#e2e8f0] bg-[#fcfcfb] px-5 py-14 shadow-[0_18px_60px_-36px_rgba(15,23,42,0.32)] sm:px-8">
+                    <h2 className="font-heading text-2xl italic leading-tight text-[#1e293b] sm:text-3xl md:text-5xl lg:text-7xl">
+                        Join the Inner Collective
+                    </h2>
+                    <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-[#7c8da0] sm:mt-5 sm:text-lg sm:leading-8">
+                        Gain access to limited edition archival drops, private
+                        showroom events, and deep dives into the manufacturing
+                        of our luxury collections.
+                    </p>
 
-                <form className="mx-auto mt-8 flex w-full max-w-xl flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center sm:justify-center">
-                    <Input
-                        type="email"
-                        placeholder="Your email address"
-                        className="h-11 w-full flex-1 rounded-none border-[#dbe1e7] bg-transparent text-sm text-[#334155]"
-                    />
-                    <Button
-                        type="submit"
-                        className="h-11 w-full rounded-none bg-primary px-8 text-[11px] font-semibold uppercase tracking-[0.22em] text-white sm:w-auto"
-                    >
-                        Subscribe
-                    </Button>
-                </form>
+                    <form className="mx-auto mt-8 flex w-full max-w-xl flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center sm:justify-center">
+                        <Input
+                            type="email"
+                            placeholder="Your email address"
+                            className="h-11 w-full flex-1 rounded-xl border-[#dbe1e7] bg-white text-sm text-[#334155]"
+                        />
+                        <Button
+                            type="submit"
+                            className="h-11 w-full rounded-sm bg-primary px-8 text-[11px] font-semibold uppercase tracking-[0.22em] text-white sm:w-auto"
+                        >
+                            Subscribe
+                        </Button>
+                    </form>
+                </div>
             </section>
 
             <section className="h-16" />

@@ -45,8 +45,8 @@ export default async function ProductDetailPage({
     const productSizes = product.sizes;
     const galleryImages = product.galleryImages;
     const hasGalleryImages = galleryImages.length > 0;
-    const mainImage = galleryImages[0] ?? "";
-    const thumbImages = galleryImages.slice(1);
+    const mainImage = galleryImages[0] ?? product.image ?? "";
+    const thumbImages = galleryImages.slice(1, 5);
 
     return (
         <article className="bg-[#f4f4f3]">
@@ -68,7 +68,7 @@ export default async function ProductDetailPage({
                 >
                     {hasGalleryImages ? (
                         <div>
-                            <div className="image-zoom relative h-[70svh] min-h-110 overflow-hidden rounded-sm bg-[#efefef]">
+                            <div className="image-zoom relative h-[70svh] min-h-110 overflow-hidden rounded-2xl bg-[#efefef] shadow-[0_18px_60px_rgba(15,23,42,0.08)]">
                                 <Image
                                     src={mainImage}
                                     alt={product.name}
@@ -85,7 +85,7 @@ export default async function ProductDetailPage({
                                     {thumbImages.map((image, index) => (
                                         <div
                                             key={`${image}-${index}`}
-                                            className="image-zoom relative h-28 overflow-hidden rounded-sm bg-[#efefef]"
+                                            className="image-zoom relative h-28 overflow-hidden rounded-xl bg-[#efefef] shadow-[0_10px_30px_rgba(15,23,42,0.05)]"
                                         >
                                             <Image
                                                 src={image}
@@ -103,52 +103,71 @@ export default async function ProductDetailPage({
                     ) : null}
 
                     <div className="reveal-up">
-                        {/* <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
-                            Shop / Tailoring / Blazers
-                        </p> */}
-                        <h1 className="mt-0 text-4xl sm:text-5xl font-semibold leading-[1.02] tracking-tight text-[#1e293b] lg:text-7xl">
-                            {product.name}
-                        </h1>
+                        <div className="rounded-2xl border border-[#e2e8f0] bg-white/80 p-6 shadow-[0_18px_60px_rgba(15,23,42,0.06)] sm:p-8">
+                            <div className="flex flex-wrap gap-2">
+                                {productCollections.map((collection) => (
+                                    <Badge
+                                        key={collection}
+                                        variant="outline"
+                                        className="h-auto border-[#dce4ed] bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#334155]"
+                                    >
+                                        {collection}
+                                    </Badge>
+                                ))}
+                            </div>
 
-                        <div className="mt-3 flex items-center gap-3">
-                            <p className="text-2xl sm:text-3xl font-semibold text-primary">
-                                {product.price}
-                            </p>
-                        </div>
+                            <h1 className="mt-5 text-4xl font-semibold leading-[1.02] tracking-tight text-[#1e293b] lg:text-6xl">
+                                {product.name}
+                            </h1>
 
-                        <p className="mt-3 max-w-xl text-lg leading-8 text-[#64748b]">
-                            {product.description}
-                        </p>
-
-                        <div className="mt-5 space-y-3">
-                            <div>
-                                <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#64748b]">
-                                    Category
+                            <div className="mt-4 flex items-center gap-3">
+                                <p className="text-2xl font-semibold text-primary sm:text-3xl">
+                                    {product.price}
                                 </p>
-                                <div className="flex flex-wrap gap-2">
-                                    {productCollections.map((collection) => (
-                                        <Badge
-                                            key={collection}
-                                            variant="outline"
-                                            className="h-auto rounded-none border-[#dce4ed] bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#334155]"
-                                        >
-                                            {collection}
-                                        </Badge>
-                                    ))}
+                            </div>
+
+                            <p className="mt-4 text-base leading-8 text-[#64748b] sm:text-lg">
+                                {product.description}
+                            </p>
+
+                            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                                <div className="rounded-xl border border-[#e2e8f0] bg-[#fcfcfb] p-4">
+                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#64748b]">
+                                        Material
+                                    </p>
+                                    <p className="mt-2 text-sm font-medium text-[#1e293b]">
+                                        {product.material}
+                                    </p>
+                                </div>
+                                <div className="rounded-xl border border-[#e2e8f0] bg-[#fcfcfb] p-4">
+                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#64748b]">
+                                        Origin
+                                    </p>
+                                    <p className="mt-2 text-sm font-medium text-[#1e293b]">
+                                        {product.origin}
+                                    </p>
+                                </div>
+                                <div className="rounded-xl border border-[#e2e8f0] bg-[#fcfcfb] p-4">
+                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#64748b]">
+                                        Fit
+                                    </p>
+                                    <p className="mt-2 text-sm font-medium text-[#1e293b]">
+                                        Structured silhouette
+                                    </p>
                                 </div>
                             </div>
 
-                            <div>
-                                <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#64748b]">
+                            <div className="mt-6 border-t border-[#e2e8f0] pt-6">
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#64748b]">
                                     Sizes
                                 </p>
-                                <div className="flex flex-wrap gap-2">
+                                <div className="mt-3 flex flex-wrap gap-2">
                                     {productSizes.length > 0 ? (
                                         productSizes.map((size) => (
                                             <Badge
                                                 key={size}
                                                 variant="outline"
-                                                className="h-auto rounded-none border-[#dce4ed] bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#334155]"
+                                                className="h-auto rounded-full border-[#dce4ed] bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#334155]"
                                             >
                                                 {size}
                                             </Badge>
@@ -161,26 +180,11 @@ export default async function ProductDetailPage({
                                     )}
                                 </div>
                             </div>
-                        </div>
 
-                        <ProductSizeAddToCart
-                            productId={product.productId}
-                            sizes={productSizes}
-                        />
-
-                        <div className="mt-8 space-y-4 border-t border-[#e2e8f0] pt-5 text-[#334155]">
-                            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#64748b]">
-                                Specifications
-                            </p>
-                            <p className="text-lg font-semibold">
-                                Material: {product.material}
-                            </p>
-                            <p className="text-lg font-semibold">
-                                Fit: Structured, Architectural Silhouette
-                            </p>
-                            <p className="text-lg font-semibold">
-                                Origin: {product.origin}
-                            </p>
+                            <ProductSizeAddToCart
+                                productId={product.productId}
+                                sizes={productSizes}
+                            />
                         </div>
                     </div>
                 </div>
@@ -189,7 +193,7 @@ export default async function ProductDetailPage({
             <section className="mx-auto w-full max-w-7xl px-5 py-10 lg:px-10 lg:py-14 reveal-up">
                 <div className="grid gap-10 border-t border-[#e4e7ea] pt-10 lg:grid-cols-[1fr_1fr] lg:items-center">
                     <div>
-                        <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-[#1e293b]">
+                        <h2 className="text-4xl font-semibold tracking-tight text-[#1e293b] sm:text-5xl">
                             The Story of the Fabric
                         </h2>
                         <p className="mt-5 max-w-2xl text-lg leading-9 text-[#64748b]">
@@ -206,7 +210,7 @@ export default async function ProductDetailPage({
                         </p>
 
                         <div className="mt-8 grid max-w-md grid-cols-2 gap-3">
-                            <div className="border border-[#e2e8f0] p-4">
+                            <div className="rounded-xl border border-[#e2e8f0] bg-white p-4">
                                 <p className="text-3xl font-semibold text-primary">
                                     14
                                 </p>
@@ -214,7 +218,7 @@ export default async function ProductDetailPage({
                                     Days to dye
                                 </p>
                             </div>
-                            <div className="border border-[#e2e8f0] p-4">
+                            <div className="rounded-xl border border-[#e2e8f0] bg-white p-4">
                                 <p className="text-3xl font-semibold text-primary">
                                     100%
                                 </p>
@@ -225,7 +229,7 @@ export default async function ProductDetailPage({
                         </div>
                     </div>
 
-                    <div className="image-zoom relative h-96 overflow-hidden rounded-sm bg-[#efefef] lg:h-110">
+                    <div className="image-zoom relative h-96 overflow-hidden rounded-2xl bg-[#efefef] shadow-[0_18px_60px_rgba(15,23,42,0.08)] lg:h-110">
                         <Image
                             src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1400&q=80"
                             alt="Adire craft process"
@@ -238,7 +242,7 @@ export default async function ProductDetailPage({
             </section>
 
             <section className="mx-auto w-full max-w-7xl px-5 py-8 text-center lg:px-10 lg:py-12 reveal-up">
-                <h2 className="text-4xl sm:text-5xl font-semibold text-[#1e293b]">
+                <h2 className="text-4xl font-semibold text-[#1e293b] sm:text-5xl">
                     Manufacturing Excellence
                 </h2>
                 <p className="mx-auto mt-4 max-w-4xl text-lg leading-8 text-[#64748b]">
@@ -248,26 +252,32 @@ export default async function ProductDetailPage({
                 </p>
 
                 <div className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-3">
-                    <div className="flex flex-col items-center gap-2">
-                        <Sparkle size={24} className="text-[#64748b]" />
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
-                            Ethically Sourced
-                        </p>
+                    <div className="rounded-xl border border-[#e2e8f0] bg-white/80 p-5">
+                        <div className="flex flex-col items-center gap-2">
+                            <Sparkle size={24} className="text-[#64748b]" />
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
+                                Ethically Sourced
+                            </p>
+                        </div>
                     </div>
-                    <div className="flex flex-col items-center gap-2">
-                        <GlobeHemisphereWest
-                            size={24}
-                            className="text-[#64748b]"
-                        />
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
-                            Made in Cameroon
-                        </p>
+                    <div className="rounded-xl border border-[#e2e8f0] bg-white/80 p-5">
+                        <div className="flex flex-col items-center gap-2">
+                            <GlobeHemisphereWest
+                                size={24}
+                                className="text-[#64748b]"
+                            />
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
+                                Made in Cameroon
+                            </p>
+                        </div>
                     </div>
-                    <div className="flex flex-col items-center gap-2">
-                        <Scales size={24} className="text-[#64748b]" />
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
-                            Industrial Precision
-                        </p>
+                    <div className="rounded-xl border border-[#e2e8f0] bg-white/80 p-5">
+                        <div className="flex flex-col items-center gap-2">
+                            <Scales size={24} className="text-[#64748b]" />
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#94a3b8]">
+                                Industrial Precision
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -281,30 +291,39 @@ export default async function ProductDetailPage({
                     {completeTheLook.map((item) => (
                         <Card
                             key={item.id}
-                            className="hover-lift gap-3 rounded-none bg-transparent p-2 py-2 shadow-none ring-0"
+                            className="group mx-auto w-full max-w-80 gap-0 overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white py-0 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.45)]"
                         >
                             <Link
                                 href={`/products/${item.id}`}
                                 className="block"
                             >
-                                <div className="image-zoom relative h-96 overflow-hidden bg-white">
+                                <div className="image-zoom relative aspect-4/5 overflow-hidden rounded-t-2xl bg-[#f8fafc]">
                                     <Image
                                         src={item.image}
                                         alt={item.name}
-                                        fill
-                                        sizes="(min-width: 1024px) 30vw, 100vw"
-                                        className="object-cover"
+                                        width={640}
+                                        height={800}
+                                        unoptimized
+                                        className="block h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                                     />
+                                    <span className="absolute left-3 top-3 rounded-full border border-white/70 bg-white/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#334155] backdrop-blur-sm">
+                                        {item.collections[0] || "Diensa"}
+                                    </span>
                                 </div>
-                                <CardContent className="px-0 pb-0 pt-3">
-                                    <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
+                                <CardContent className="space-y-2 px-4 pb-4 pt-3">
+                                    <div className="flex items-center justify-between gap-3">
+                                        <h3 className="line-clamp-2 text-[17px] font-semibold leading-tight text-[#0f172a] transition-colors group-hover:text-primary">
+                                            {item.name}
+                                        </h3>
+                                        <p className="shrink-0 text-lg font-semibold text-primary">
+                                            {item.price}
+                                        </p>
+                                    </div>
+                                    <p className="line-clamp-2 text-sm text-[#64748b]">
                                         {item.note}
                                     </p>
-                                    <h3 className="text-2xl font-semibold text-[#1e293b]">
-                                        {item.name}
-                                    </h3>
-                                    <p className="text-lg font-semibold text-[#334155]">
-                                        {item.price}
+                                    <p className="pt-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#94a3b8] transition-colors group-hover:text-primary">
+                                        View details
                                     </p>
                                 </CardContent>
                             </Link>

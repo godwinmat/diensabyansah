@@ -53,12 +53,11 @@ export function proxy(request: NextRequest) {
         pathname === "/blog" ||
         pathname === "/testimonial" ||
         pathname === "/testimonials" ||
-        pathname.startsWith("/blog/");
-
-    const isProtectedPage =
         pathname === "/products" ||
         pathname.startsWith("/products/") ||
-        pathname === "/cart";
+        pathname.startsWith("/blog/");
+
+    const isProtectedPage = pathname === "/cart";
 
     const isLoggedOutOnlyPage =
         pathname === "/account" ||

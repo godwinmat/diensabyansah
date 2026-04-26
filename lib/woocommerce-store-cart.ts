@@ -1,5 +1,6 @@
 export const WC_CART_TOKEN_COOKIE = "wc_cart_token";
 export const WC_STORE_NONCE_COOKIE = "wc_store_nonce";
+export const WC_CUSTOMER_ID_COOKIE = "wc_customer_id";
 
 export type WooStoreResult = {
     ok: boolean;

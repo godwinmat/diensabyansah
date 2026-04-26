@@ -54,6 +54,12 @@ type WooCommerceCategoryRecord = Record<string, unknown> & {
     image?: Record<string, unknown> | null;
 };
 
+type GetWooCommerceProductsOptions = {
+    limit?: number;
+};
+
+const WOOCOMMERCE_REVALIDATE_SECONDS = 300;
+
 const DEFAULT_IMAGE =
     "https://images.unsplash.com/photo-1615212814093-4f4c0ca0d7f5?auto=format&fit=crop&w=900&q=80";
 
@@ -259,6 +265,7 @@ function mapCollection(
 async function fetchPaginatedProducts(
     path: string,
     init?: RequestInit,
+    options?: GetWooCommerceProductsOptions,
 ): Promise<WooCommerceProduct[]> {
     const wordpressUrl = process.env.WORDPRESS_API_URL?.replace(/\/$/, "");
 
@@ -268,6 +275,10 @@ async function fetchPaginatedProducts(
 
     const products: WooCommerceProduct[] = [];
     const pageSize = 100;
+    const limit =
+        typeof options?.limit === "number" && options.limit > 0
+            ? Math.floor(options.limit)
+            : undefined;
 
     for (let page = 1; page <= 20; page += 1) {
         const requestUrl = new URL(`${wordpressUrl}${path}`);
@@ -275,7 +286,9 @@ async function fetchPaginatedProducts(
         requestUrl.searchParams.set("page", String(page));
 
         const response = await fetch(requestUrl, {
-            cache: "no-store",
+            next: {
+                revalidate: WOOCOMMERCE_REVALIDATE_SECONDS,
+            },
             ...init,
             headers: {
                 "Content-Type": "application/json",
@@ -299,15 +312,21 @@ async function fetchPaginatedProducts(
             ...payload.map((record) => mapProduct(record as WooCommerceRecord)),
         );
 
+        if (limit && products.length >= limit) {
+            break;
+        }
+
         if (payload.length < pageSize) {
             break;
         }
     }
 
-    return products;
+    return limit ? products.slice(0, limit) : products;
 }
 
-async function fetchAuthenticatedProducts() {
+async function fetchAuthenticatedProducts(
+    options?: GetWooCommerceProductsOptions,
+) {
     const consumerKey = process.env.WOOCOMMERCE_CONSUMER_KEY?.trim();
     const consumerSecret = process.env.WOOCOMMERCE_CONSUMER_SECRET?.trim();
 
@@ -319,15 +338,23 @@ async function fetchAuthenticatedProducts() {
         `${consumerKey}:${consumerSecret}`,
     ).toString("base64")}`;
 
-    return fetchPaginatedProducts("/wc/v3/products", {
-        headers: {
-            Authorization: authorization,
+    return fetchPaginatedProducts(
+        "/wc/v3/products",
+        {
+            headers: {
+                Authorization: authorization,
+            },
         },
-    }).catch(() => []);
+        options,
+    ).catch(() => []);
 }
 
-async function fetchStoreProducts() {
-    return fetchPaginatedProducts("/wc/store/v1/products").catch(() => []);
+async function fetchStoreProducts(options?: GetWooCommerceProductsOptions) {
+    return fetchPaginatedProducts(
+        "/wc/store/v1/products",
+        undefined,
+        options,
+    ).catch(() => []);
 }
 
 async function fetchCollections(path: string, init?: RequestInit) {
@@ -341,7 +368,9 @@ async function fetchCollections(path: string, init?: RequestInit) {
     requestUrl.searchParams.set("per_page", "100");
 
     const response = await fetch(requestUrl, {
-        cache: "no-store",
+        next: {
+            revalidate: WOOCOMMERCE_REVALIDATE_SECONDS,
+        },
         ...init,
         headers: {
             "Content-Type": "application/json",
@@ -389,14 +418,16 @@ async function fetchStoreCollections() {
     return fetchCollections("/wc/store/v1/products/categories").catch(() => []);
 }
 
-export async function getWooCommerceProducts() {
-    const authenticatedProducts = await fetchAuthenticatedProducts();
+export async function getWooCommerceProducts(
+    options?: GetWooCommerceProductsOptions,
+) {
+    const authenticatedProducts = await fetchAuthenticatedProducts(options);
 
     if (authenticatedProducts.length > 0) {
         return authenticatedProducts;
     }
 
-    return fetchStoreProducts();
+    return fetchStoreProducts(options);
 }
 
 export async function getWooCommerceCollections() {

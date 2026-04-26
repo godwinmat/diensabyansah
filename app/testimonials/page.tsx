@@ -70,7 +70,7 @@ const clients = [
 export default function TestimonialsPage() {
     return (
         <div className="bg-[#f4f4f3]">
-            <section className="mx-auto grid w-full max-w-screen gap-6 px-3 sm:px-5 py-5 sm:gap-8 sm:py-6 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:px-10 lg:py-8 reveal-up">
+            <section className="mx-auto grid w-full max-w-7xl gap-6 px-3 py-5 sm:px-5 sm:gap-8 sm:py-6 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:px-10 lg:py-8 reveal-up">
                 <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
                         Testimonials
@@ -93,7 +93,7 @@ export default function TestimonialsPage() {
                     </Button>
                 </div>
 
-                <div className="image-zoom hover-lift overflow-hidden rounded-lg shadow-md">
+                <div className="image-zoom overflow-hidden rounded-2xl shadow-[0_18px_60px_-30px_rgba(15,23,42,0.45)]">
                     <Image
                         src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1100&q=80"
                         alt="Model portrait"
@@ -104,7 +104,7 @@ export default function TestimonialsPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 py-5 sm:py-6 lg:px-10 lg:py-8 reveal-up">
+            <section className="mx-auto w-full max-w-7xl px-3 py-5 sm:px-5 sm:py-6 lg:px-10 lg:py-8 reveal-up">
                 <div className="mb-5 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
@@ -131,7 +131,7 @@ export default function TestimonialsPage() {
                     {videos.map((video) => (
                         <article
                             key={video.title}
-                            className="image-zoom hover-lift relative overflow-hidden rounded-lg"
+                            className="image-zoom relative overflow-hidden rounded-2xl shadow-[0_14px_40px_-28px_rgba(15,23,42,0.45)]"
                         >
                             <Image
                                 src={video.image}
@@ -159,8 +159,8 @@ export default function TestimonialsPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 py-6 lg:px-10 lg:py-8 reveal-up">
-                <Card className="glass-panel hover-lift gap-0 rounded-lg border-[#dfe4e9] bg-[#f8f8f7]/86 py-0 shadow-none">
+            <section className="mx-auto w-full max-w-7xl px-3 py-6 sm:px-5 lg:px-10 lg:py-8 reveal-up">
+                <Card className="gap-0 rounded-2xl border border-[#dfe4e9] bg-[#f8f8f7]/86 py-0 shadow-[0_18px_60px_-36px_rgba(15,23,42,0.45)]">
                     <CardContent className="px-3 sm:px-5 py-8 lg:px-8 lg:py-10">
                         <h2 className="text-3xl font-light text-[#6b7280] md:text-5xl">
                             Institutional Partners
@@ -170,7 +170,7 @@ export default function TestimonialsPage() {
                             {partnerRows.map((row) => (
                                 <article
                                     key={row.partner}
-                                    className="hover-lift rounded-sm border border-[#e2e7ed] bg-white p-4"
+                                    className="rounded-xl border border-[#e2e7ed] bg-white p-4 shadow-[0_10px_30px_-24px_rgba(15,23,42,0.35)]"
                                 >
                                     <p className="text-2xl font-semibold leading-tight text-[#1f2937]">
                                         {row.partner}
@@ -185,7 +185,7 @@ export default function TestimonialsPage() {
                             ))}
                         </div>
 
-                        <div className="mt-8 hidden rounded-sm border border-[#e2e7ed] bg-white md:block">
+                        <div className="mt-8 hidden overflow-hidden rounded-xl border border-[#e2e7ed] bg-white md:block">
                             <Table>
                                 <TableHeader>
                                     <TableRow className="hover:bg-transparent">
@@ -226,7 +226,7 @@ export default function TestimonialsPage() {
                 </Card>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 py-6 sm:py-8 lg:px-10 lg:py-10 reveal-up">
+            <section className="mx-auto w-full max-w-7xl px-3 py-6 sm:px-5 sm:py-8 lg:px-10 lg:py-10 reveal-up">
                 <div className="mb-6 flex items-end justify-between gap-4">
                     <div>
                         <h2 className="text-3xl font-semibold leading-none text-[#1e293b] sm:text-4xl lg:text-5xl">
@@ -243,7 +243,7 @@ export default function TestimonialsPage() {
                     {clients.map((client) => (
                         <Card
                             key={client.name}
-                            className="gap-0 rounded-none border-[#e3e8ed] bg-white py-0 shadow-none"
+                            className="gap-0 rounded-2xl border border-[#e3e8ed] bg-white py-0 shadow-[0_10px_30px_-24px_rgba(15,23,42,0.35)]"
                         >
                             <CardContent className="p-5">
                                 <p className="text-primary">★★★★★</p>
@@ -258,7 +258,7 @@ export default function TestimonialsPage() {
                                             alt={client.name}
                                             width={44}
                                             height={44}
-                                            className="h-11 w-11 rounded-md object-cover"
+                                            className="h-11 w-11 rounded-xl object-cover"
                                         />
                                         <div>
                                             <p className="text-xl font-semibold text-[#1f2937]">
@@ -276,8 +276,8 @@ export default function TestimonialsPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 pb-12 pt-6 lg:px-10 lg:pb-14 reveal-up">
-                <div className="glass-panel hover-lift rounded-lg bg-linear-to-r from-[#3a3521] via-[#5b4d23] to-[#6f6325] px-6 py-16 text-center text-white lg:px-10">
+            <section className="mx-auto w-full max-w-7xl px-3 pb-12 pt-6 sm:px-5 lg:px-10 lg:pb-14 reveal-up">
+                <div className="rounded-2xl bg-linear-to-r from-[#3a3521] via-[#5b4d23] to-[#6f6325] px-6 py-16 text-center text-white shadow-[0_20px_60px_-30px_rgba(58,53,33,0.65)] lg:px-10">
                     <p className="text-3xl text-primary">✎</p>
                     <h2 className="mt-3 text-3xl font-semibold sm:text-5xl lg:text-6xl">
                         Share Your Experience

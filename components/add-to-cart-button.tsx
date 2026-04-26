@@ -40,6 +40,11 @@ export function AddToCartButton({
                 message?: string;
             } | null;
 
+            if (response.status === 401) {
+                router.push("/account");
+                return;
+            }
+
             if (!response.ok || !data?.success) {
                 throw new Error(data?.message || "Failed to add item to cart");
             }

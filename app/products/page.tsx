@@ -2,7 +2,6 @@ import { ProductsRefreshButton } from "@/components/products-refresh-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { getWooCommerceProducts } from "@/lib/woocommerce";
-import { Heart } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,12 +10,18 @@ type ProductsPageProps = {
         | Promise<{
               collection?: string;
               size?: string;
+              q?: string;
+              page?: string;
           }>
         | {
               collection?: string;
               size?: string;
+              q?: string;
+              page?: string;
           };
 };
+
+const PRODUCTS_PER_PAGE = 6;
 
 export default async function ProductsPage({
     searchParams,
@@ -24,6 +29,12 @@ export default async function ProductsPage({
     const resolvedSearchParams = await Promise.resolve(searchParams);
     const selectedCollection = resolvedSearchParams?.collection?.trim() ?? "";
     const selectedSize = resolvedSearchParams?.size?.trim() ?? "";
+    const selectedQuery = resolvedSearchParams?.q?.trim() ?? "";
+    const normalizedQuery = selectedQuery.toLowerCase();
+    const requestedPage = Number.parseInt(
+        resolvedSearchParams?.page ?? "1",
+        10,
+    );
     const products = await getWooCommerceProducts();
 
     const collectionOptions = Array.from(
@@ -40,14 +51,68 @@ export default async function ProductsPage({
             product.collections.includes(selectedCollection);
         const matchesSize =
             selectedSize.length === 0 || product.sizes.includes(selectedSize);
+        const matchesSearch =
+            normalizedQuery.length === 0 ||
+            product.name.toLowerCase().includes(normalizedQuery) ||
+            product.note.toLowerCase().includes(normalizedQuery) ||
+            product.collections.some((collection) =>
+                collection.toLowerCase().includes(normalizedQuery),
+            );
 
-        return matchesCollection && matchesSize;
+        return matchesCollection && matchesSize && matchesSearch;
     });
 
-    const countLabel =
-        filteredProducts.length === products.length
-            ? `${products.length}`
-            : `${filteredProducts.length} of ${products.length}`;
+    const totalPages = Math.max(
+        1,
+        Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE),
+    );
+    const currentPage = Number.isFinite(requestedPage)
+        ? Math.min(Math.max(requestedPage, 1), totalPages)
+        : 1;
+    const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    const paginatedProducts = filteredProducts.slice(
+        startIndex,
+        startIndex + PRODUCTS_PER_PAGE,
+    );
+
+    const buildProductsHref = ({
+        collection,
+        size,
+        query,
+        page,
+    }: {
+        collection?: string;
+        size?: string;
+        query?: string;
+        page?: number;
+    }) => {
+        const params = new URLSearchParams();
+
+        if (collection && collection.trim().length > 0) {
+            params.set("collection", collection);
+        }
+
+        if (size && size.trim().length > 0) {
+            params.set("size", size);
+        }
+
+        if (query && query.trim().length > 0) {
+            params.set("q", query);
+        }
+
+        if (page && page > 1) {
+            params.set("page", String(page));
+        }
+
+        const hrefQuery = params.toString();
+        return hrefQuery ? `/products?${hrefQuery}` : "/products";
+    };
+
+    const pageStart = filteredProducts.length === 0 ? 0 : startIndex + 1;
+    const pageEnd = Math.min(
+        startIndex + PRODUCTS_PER_PAGE,
+        filteredProducts.length,
+    );
 
     // Get random collection with products and its most recent product
     const collectionsWithProducts = collectionOptions.filter(
@@ -76,8 +141,8 @@ export default async function ProductsPage({
 
     return (
         <div className="bg-white">
-            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 pb-8 pt-6 lg:px-10 lg:pt-8 reveal-up">
-                <div className="image-zoom relative overflow-hidden rounded-xl">
+            <section className="mx-auto w-full max-w-7xl px-3 pb-8 pt-6 sm:px-5 lg:px-10 lg:pt-8 reveal-up">
+                <div className="image-zoom relative overflow-hidden rounded-2xl shadow-[0_18px_60px_-30px_rgba(15,23,42,0.45)]">
                     <div className="relative h-[32svh] min-h-64">
                         <Image
                             src={heroImage}
@@ -89,15 +154,15 @@ export default async function ProductsPage({
                         />
                     </div>
                     <div className="absolute inset-0 bg-[#0f2138]/55" />
-                    <div className="absolute inset-x-3 sm:inset-x-6 text-white lg:inset-x-10 bottom-10">
+                    <div className="absolute inset-x-4 bottom-8 text-white sm:inset-x-6 lg:inset-x-10 lg:bottom-10">
                         <Badge className="h-auto bg-primary px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-[#1f2937]">
                             New Season
                         </Badge>
-                        <h1 className="mt-3 text-5xl font-semibold tracking-tight lg:text-6xl">
+                        <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
                             {randomCollection ||
                                 "2026 Industrial Indigo Series"}
                         </h1>
-                        <p className="mt-3 max-w-3xl text-sm text-white/85 lg:text-base">
+                        <p className="mt-3 max-w-3xl text-sm leading-6 text-white/85 lg:text-base lg:leading-7">
                             A curated selection of structural silhouettes and
                             hand-crafted Adire techniques.
                         </p>
@@ -105,7 +170,7 @@ export default async function ProductsPage({
                 </div>
             </section>
 
-            <section className="mx-auto grid w-full max-w-375 gap-8 px-3 sm:px-5 pb-16 lg:grid-cols-[260px_1fr] lg:px-10 lg:pb-20 reveal-up">
+            <section className="mx-auto grid w-full max-w-7xl gap-8 px-3 sm:px-5 pb-16 lg:grid-cols-[260px_1fr] lg:px-10 lg:pb-20 reveal-up">
                 <aside className="glass-panel h-fit rounded-xl bg-white/70 p-4 sm:p-5">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
                         Filters
@@ -130,11 +195,10 @@ export default async function ProductsPage({
                                     }
                                 >
                                     <Link
-                                        href={
-                                            selectedSize
-                                                ? `/products?size=${encodeURIComponent(selectedSize)}`
-                                                : "/products"
-                                        }
+                                        href={buildProductsHref({
+                                            size: selectedSize,
+                                            query: selectedQuery,
+                                        })}
                                     >
                                         All Pieces
                                     </Link>
@@ -155,7 +219,11 @@ export default async function ProductsPage({
                                         }
                                     >
                                         <Link
-                                            href={`/products?collection=${encodeURIComponent(collection)}${selectedSize ? `&size=${encodeURIComponent(selectedSize)}` : ""}`}
+                                            href={buildProductsHref({
+                                                collection,
+                                                size: selectedSize,
+                                                query: selectedQuery,
+                                            })}
                                         >
                                             {collection}
                                         </Link>
@@ -170,11 +238,10 @@ export default async function ProductsPage({
                             </p>
                             <div className="mt-3 grid grid-cols-4 gap-2 text-center text-xs">
                                 <Link
-                                    href={
-                                        selectedCollection
-                                            ? `/products?collection=${encodeURIComponent(selectedCollection)}`
-                                            : "/products"
-                                    }
+                                    href={buildProductsHref({
+                                        collection: selectedCollection,
+                                        query: selectedQuery,
+                                    })}
                                     className={
                                         selectedSize.length === 0
                                             ? "rounded-sm border border-primary bg-primary/12 py-2 font-semibold text-primary"
@@ -186,7 +253,11 @@ export default async function ProductsPage({
                                 {sizeOptions.map((size) => (
                                     <Link
                                         key={size}
-                                        href={`/products?size=${encodeURIComponent(size)}${selectedCollection ? `&collection=${encodeURIComponent(selectedCollection)}` : ""}`}
+                                        href={buildProductsHref({
+                                            size,
+                                            collection: selectedCollection,
+                                            query: selectedQuery,
+                                        })}
                                         className={
                                             selectedSize === size
                                                 ? "rounded-sm border border-primary bg-primary/12 py-2 font-semibold text-primary"
@@ -205,7 +276,11 @@ export default async function ProductsPage({
                     <div className="mb-6 flex items-center justify-between gap-3">
                         <p className="text-sm text-[#64748b]">
                             Showing{" "}
-                            <span className="font-semibold">{countLabel}</span>{" "}
+                            <span className="font-semibold">{pageStart}</span>-
+                            <span className="font-semibold">{pageEnd}</span> of{" "}
+                            <span className="font-semibold">
+                                {filteredProducts.length}
+                            </span>{" "}
                             curated pieces
                         </p>
                         <ProductsRefreshButton />
@@ -217,56 +292,132 @@ export default async function ProductsPage({
                                 No products match this filter.
                             </p>
                             <p className="mt-2 text-sm">
-                                Try another collection or size.
+                                Try a different search term, collection, or
+                                size.
                             </p>
                         </div>
                     ) : (
-                        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                            {filteredProducts.map((product) => (
-                                <Card
-                                    key={product.id}
-                                    className="hover-lift mx-auto w-full max-w-80 gap-4 rounded-none bg-white/80 p-2 py-2 shadow-none ring-0"
+                        <>
+                            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                                {paginatedProducts.map((product) => (
+                                    <Card
+                                        key={product.id}
+                                        className="group mx-auto w-full max-w-80 gap-0 overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white py-0 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.45)]"
+                                    >
+                                        <Link
+                                            href={`/products/${product.id}`}
+                                            className="block"
+                                        >
+                                            <div className="image-zoom relative aspect-4/5 overflow-hidden rounded-t-2xl bg-[#f8fafc]">
+                                                <Image
+                                                    src={product.image}
+                                                    alt={product.name}
+                                                    width={640}
+                                                    height={800}
+                                                    unoptimized
+                                                    className="block h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                                                />
+                                                <span className="absolute left-3 top-3 rounded-full border border-white/70 bg-white/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#334155] backdrop-blur-sm">
+                                                    {product.collections[0] ||
+                                                        "Diensa"}
+                                                </span>
+                                            </div>
+                                            <CardContent className="space-y-2 px-4 pb-4 pt-3">
+                                                <div className="flex items-center justify-between gap-3">
+                                                    <h3 className="line-clamp-2 text-[17px] font-semibold leading-tight text-[#0f172a] transition-colors group-hover:text-primary">
+                                                        {product.name}
+                                                    </h3>
+                                                    <p className="shrink-0 text-lg font-semibold text-primary">
+                                                        {product.price}
+                                                    </p>
+                                                </div>
+                                                <p className="line-clamp-2 text-sm text-[#64748b]">
+                                                    {product.note}
+                                                </p>
+                                                <p className="pt-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#94a3b8] transition-colors group-hover:text-primary">
+                                                    View details
+                                                </p>
+                                            </CardContent>
+                                        </Link>
+                                    </Card>
+                                ))}
+                            </div>
+
+                            {totalPages > 1 ? (
+                                <nav
+                                    className="mt-8 flex flex-wrap items-center justify-center gap-2"
+                                    aria-label="Products pagination"
                                 >
                                     <Link
-                                        href={`/products/${product.id}`}
-                                        className="group block"
+                                        href={buildProductsHref({
+                                            collection: selectedCollection,
+                                            size: selectedSize,
+                                            query: selectedQuery,
+                                            page: currentPage - 1,
+                                        })}
+                                        aria-disabled={currentPage === 1}
+                                        className={
+                                            currentPage === 1
+                                                ? "pointer-events-none rounded-sm border border-[#dce4ed] px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#94a3b8]"
+                                                : "rounded-sm border border-[#dce4ed] px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#334155] hover:border-primary hover:text-primary"
+                                        }
                                     >
-                                        <div className="image-zoom relative aspect-4/5 overflow-hidden">
-                                            <Image
-                                                src={product.image}
-                                                alt={product.name}
-                                                width={640}
-                                                height={800}
-                                                unoptimized
-                                                className="block h-full w-full object-cover"
-                                            />
-                                            <span
-                                                className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-[#334155]"
-                                                aria-hidden="true"
-                                            >
-                                                <Heart
-                                                    size={16}
-                                                    weight="regular"
-                                                />
-                                            </span>
-                                        </div>
-                                        <CardContent className="space-y-1 px-0 py-2">
-                                            <div className="flex items-center justify-between gap-3">
-                                                <h3 className="text-[16px] font-semibold text-[#1e293b] transition-colors group-hover:text-primary">
-                                                    {product.name}
-                                                </h3>
-                                                <p className="text-lg font-semibold text-primary">
-                                                    {product.price}
-                                                </p>
-                                            </div>
-                                            <p className="text-sm text-[#64748b]">
-                                                {product.note}
-                                            </p>
-                                        </CardContent>
+                                        Previous
                                     </Link>
-                                </Card>
-                            ))}
-                        </div>
+
+                                    {Array.from(
+                                        { length: totalPages },
+                                        (_, index) => {
+                                            const page = index + 1;
+
+                                            return (
+                                                <Link
+                                                    key={`products-page-${page}`}
+                                                    href={buildProductsHref({
+                                                        collection:
+                                                            selectedCollection,
+                                                        size: selectedSize,
+                                                        query: selectedQuery,
+                                                        page,
+                                                    })}
+                                                    aria-current={
+                                                        currentPage === page
+                                                            ? "page"
+                                                            : undefined
+                                                    }
+                                                    className={
+                                                        currentPage === page
+                                                            ? "rounded-sm border border-primary bg-primary/12 px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-primary"
+                                                            : "rounded-sm border border-[#dce4ed] px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#334155] hover:border-primary hover:text-primary"
+                                                    }
+                                                >
+                                                    {page}
+                                                </Link>
+                                            );
+                                        },
+                                    )}
+
+                                    <Link
+                                        href={buildProductsHref({
+                                            collection: selectedCollection,
+                                            size: selectedSize,
+                                            query: selectedQuery,
+                                            page: currentPage + 1,
+                                        })}
+                                        aria-disabled={
+                                            currentPage === totalPages
+                                        }
+                                        className={
+                                            currentPage === totalPages
+                                                ? "pointer-events-none rounded-sm border border-[#dce4ed] px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#94a3b8]"
+                                                : "rounded-sm border border-[#dce4ed] px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#334155] hover:border-primary hover:text-primary"
+                                        }
+                                    >
+                                        Next
+                                    </Link>
+                                </nav>
+                            ) : null}
+                        </>
                     )}
                 </div>
             </section>

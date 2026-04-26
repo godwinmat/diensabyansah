@@ -14,8 +14,8 @@ import {
     X,
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 const navigation = [
     { href: "/products", label: "Shop" },
@@ -29,6 +29,7 @@ const navigation = [
 export function SiteHeader() {
     const pathname = usePathname();
     const router = useRouter();
+    const searchParams = useSearchParams();
     const mobileMenuRef = useRef<HTMLInputElement>(null);
     const userMenuRef = useRef<HTMLDivElement>(null);
     const [cartCount, setCartCount] = useState(0);
@@ -39,6 +40,11 @@ export function SiteHeader() {
     const [authChecked, setAuthChecked] = useState(false);
     const [authLoading, setAuthLoading] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const [productSearch, setProductSearch] = useState("");
+
+    useEffect(() => {
+        setProductSearch(searchParams.get("q")?.trim() ?? "");
+    }, [pathname, searchParams]);
 
     useEffect(() => {
         const syncCartCount = async () => {
@@ -181,6 +187,26 @@ export function SiteHeader() {
         return pathname === href || pathname.startsWith(`${href}/`);
     };
 
+    const handleProductSearch = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const value = productSearch.trim();
+        const params = new URLSearchParams(
+            pathname.startsWith("/products") ? searchParams.toString() : "",
+        );
+
+        if (value.length > 0) {
+            params.set("q", value);
+        } else {
+            params.delete("q");
+        }
+
+        params.delete("page");
+
+        const query = params.toString();
+        router.push(query ? `/products?${query}` : "/products");
+    };
+
     return (
         <header className="glass-panel fixed inset-x-0 top-0 z-50 border-b border-border/70 bg-white/75">
             <div className="mx-auto w-full max-w-screen px-2 sm:px-5 lg:px-10">
@@ -223,13 +249,27 @@ export function SiteHeader() {
                     </nav>
 
                     <div className="ml-auto hidden items-center gap-4 md:flex">
-                        <div className="glass-panel flex h-10 w-56 items-center rounded-lg bg-[#f3f4f6]/85 px-2 text-[#9ca3af] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md focus-within:-translate-y-0.5 focus-within:border-primary/35 focus-within:shadow-md focus-within:ring-2 focus-within:ring-primary/20">
-                            <MagnifyingGlass size={18} weight="regular" />
+                        <form
+                            onSubmit={handleProductSearch}
+                            className="glass-panel flex h-10 w-56 items-center rounded-lg bg-[#f3f4f6]/85 px-2 text-[#9ca3af] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md focus-within:-translate-y-0.5 focus-within:border-primary/35 focus-within:shadow-md focus-within:ring-2 focus-within:ring-primary/20"
+                        >
+                            <button
+                                type="submit"
+                                aria-label="Search products"
+                                className="grid h-7 w-7 place-items-center rounded-sm text-[#9ca3af] hover:text-[#6b7280]"
+                            >
+                                <MagnifyingGlass size={18} weight="regular" />
+                            </button>
                             <Input
+                                value={productSearch}
+                                onChange={(event) =>
+                                    setProductSearch(event.target.value)
+                                }
+                                aria-label="Search products"
                                 placeholder="Search"
                                 className="ml-2 h-8 border-0 bg-transparent p-0 text-base shadow-none transition-none focus-visible:border-0 focus-visible:bg-transparent focus-visible:shadow-none focus-visible:ring-0"
                             />
-                        </div>
+                        </form>
 
                         {authChecked ? (
                             isAuthenticated ? (

@@ -1,7 +1,5 @@
 import { wooStoreRequest } from "@/lib/woocommerce-store-cart";
 
-const CART_SNAPSHOT_META_KEY = "diensa_cart_snapshot_v1";
-
 type JwtPayload = {
     email?: string;
     user_email?: string;
@@ -16,22 +14,10 @@ type CustomerMeta = {
 type WooCustomerRecord = {
     id?: number;
     email?: string;
+    first_name?: string;
+    last_name?: string;
+    username?: string;
     meta_data?: CustomerMeta[];
-};
-
-export type CartSnapshotItem = {
-    productId: number;
-    quantity: number;
-    size?: string;
-};
-
-type WooCartData = {
-    items?: Array<{
-        id?: number;
-        quantity?: number;
-        variation?: Array<{ attribute?: string; value?: string }>;
-        item_data?: Array<{ key?: string; value?: string }>;
-    }>;
 };
 
 function getWordPressApiUrl() {
@@ -47,6 +33,23 @@ function getWooAuthorizationHeader() {
     }
 
     return `Basic ${Buffer.from(`${consumerKey}:${consumerSecret}`).toString("base64")}`;
+}
+
+function buildCustomerUsername(email: string) {
+    const [localPart = "user"] = email.split("@");
+    const usernameSeed = localPart.replace(/[^a-z0-9._-]/gi, "").toLowerCase();
+
+    return `${usernameSeed || "user"}-${Math.floor(Date.now() / 1000)}`;
+}
+
+function splitName(fullName?: string) {
+    const cleanedName = fullName?.trim() ?? "";
+    const [firstName = "", ...lastNameParts] = cleanedName.split(/\s+/);
+
+    return {
+        firstName,
+        lastName: lastNameParts.join(" "),
+    };
 }
 
 function decodeJwtPayload(token: string): JwtPayload | null {
@@ -84,54 +87,35 @@ function getEmailFromAuthToken(authToken?: string) {
     return payload?.email?.trim() || payload?.user_email?.trim() || "";
 }
 
-function stripHtml(value?: string) {
-    return (value ?? "")
-        .replace(/<[^>]*>/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-}
+async function findCustomerById(customerId: number) {
+    const wordpressApiUrl = getWordPressApiUrl();
+    const authorization = getWooAuthorizationHeader();
 
-function extractSize(item: {
-    variation?: Array<{ attribute?: string; value?: string }>;
-    item_data?: Array<{ key?: string; value?: string }>;
-}) {
-    const variationMatch = (item.variation ?? []).find((entry) => {
-        const attribute = String(entry.attribute ?? "").toLowerCase();
-        return attribute.includes("size") || attribute.includes("pa_size");
-    });
-
-    if (variationMatch?.value?.trim()) {
-        return variationMatch.value.trim();
+    if (!wordpressApiUrl || !authorization || !Number.isFinite(customerId)) {
+        return null;
     }
 
-    const itemDataMatch = (item.item_data ?? []).find((entry) =>
-        String(entry.key ?? "")
-            .toLowerCase()
-            .includes("size"),
+    const response = await fetch(
+        `${wordpressApiUrl}/wc/v3/customers/${customerId}`,
+        {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: authorization,
+            },
+            cache: "no-store",
+        },
     );
 
-    return stripHtml(itemDataMatch?.value).trim();
+    if (!response.ok) {
+        return null;
+    }
+
+    return (await response
+        .json()
+        .catch(() => null)) as WooCustomerRecord | null;
 }
 
-export function getSnapshotFromWooCart(cart: unknown): CartSnapshotItem[] {
-    const cartData = (cart ?? {}) as WooCartData;
-
-    return (cartData.items ?? [])
-        .map((item) => {
-            const productId = Number(item.id ?? 0);
-            const quantity = Math.max(1, Number(item.quantity ?? 1));
-            const size = extractSize(item);
-
-            return {
-                productId,
-                quantity,
-                size: size || undefined,
-            };
-        })
-        .filter(
-            (item) => Number.isFinite(item.productId) && item.productId > 0,
-        );
-}
 
 async function findCustomerByEmail(
     email: string,
@@ -197,193 +181,79 @@ async function findCustomerByEmail(
     );
 }
 
-export async function loadUserCartSnapshotFromAuthToken(authToken?: string) {
-    const email = getEmailFromAuthToken(authToken);
+async function getCustomerByIdentifier(options: {
+    customerId?: string | number;
+    authToken?: string;
+}) {
+    const customerId = Number(options.customerId ?? 0);
 
-    if (!email) {
-        return [] as CartSnapshotItem[];
-    }
+    if (Number.isFinite(customerId) && customerId > 0) {
+        const customerById = await findCustomerById(customerId);
 
-    const customer = await findCustomerByEmail(email);
-
-    if (!customer) {
-        return [];
-    }
-
-    const snapshotMeta = (customer.meta_data ?? []).find(
-        (meta) => meta.key === CART_SNAPSHOT_META_KEY,
-    );
-
-    if (!snapshotMeta) {
-        return [];
-    }
-
-    const value = snapshotMeta.value;
-
-    if (Array.isArray(value)) {
-        return value
-            .map((entry) => ({
-                productId: Number((entry as { productId?: unknown }).productId),
-                quantity: Math.max(
-                    1,
-                    Number((entry as { quantity?: unknown }).quantity ?? 1),
-                ),
-                size:
-                    typeof (entry as { size?: unknown }).size === "string"
-                        ? ((entry as { size?: string }).size ?? "").trim() ||
-                          undefined
-                        : undefined,
-            }))
-            .filter(
-                (entry) =>
-                    Number.isFinite(entry.productId) && entry.productId > 0,
-            );
-    }
-
-    if (typeof value === "string") {
-        try {
-            const parsed = JSON.parse(value) as unknown;
-            if (Array.isArray(parsed)) {
-                return parsed
-                    .map((entry) => ({
-                        productId: Number(
-                            (entry as { productId?: unknown }).productId,
-                        ),
-                        quantity: Math.max(
-                            1,
-                            Number(
-                                (entry as { quantity?: unknown }).quantity ?? 1,
-                            ),
-                        ),
-                        size:
-                            typeof (entry as { size?: unknown }).size ===
-                            "string"
-                                ? (
-                                      (entry as { size?: string }).size ?? ""
-                                  ).trim() || undefined
-                                : undefined,
-                    }))
-                    .filter(
-                        (entry) =>
-                            Number.isFinite(entry.productId) &&
-                            entry.productId > 0,
-                    );
-            }
-        } catch {
-            return [];
+        if (customerById) {
+            return customerById;
         }
     }
 
-    return [];
+    const email = getEmailFromAuthToken(options.authToken);
+
+    if (!email) {
+        return null;
+    }
+
+    return findCustomerByEmail(email);
 }
 
-export async function saveUserCartSnapshotFromAuthToken(options: {
-    authToken?: string;
-    snapshot: CartSnapshotItem[];
+export async function ensureWooCustomerRecord(options: {
+    email?: string;
+    name?: string;
 }) {
-    const email = getEmailFromAuthToken(options.authToken);
+    const email = options.email?.trim().toLowerCase() ?? "";
+
+    if (!email) {
+        return null;
+    }
+
+    const existingCustomer = await findCustomerByEmail(email);
+
+    if (existingCustomer?.id) {
+        return existingCustomer;
+    }
+
     const wordpressApiUrl = getWordPressApiUrl();
     const authorization = getWooAuthorizationHeader();
 
-    if (!email || !wordpressApiUrl || !authorization) {
-        return;
+    if (!wordpressApiUrl || !authorization) {
+        return null;
     }
 
-    const customer = await findCustomerByEmail(email);
+    const { firstName, lastName } = splitName(options.name || email);
 
-    if (!customer?.id) {
-        return;
-    }
-
-    const existingMeta = (customer.meta_data ?? []).find(
-        (meta) => meta.key === CART_SNAPSHOT_META_KEY,
-    );
-
-    const updatePayload: {
-        meta_data: Array<{
-            key: string;
-            value: CartSnapshotItem[];
-            id?: number;
-        }>;
-    } = {
-        meta_data: [
-            {
-                ...(existingMeta?.id ? { id: existingMeta.id } : {}),
-                key: CART_SNAPSHOT_META_KEY,
-                value: options.snapshot,
-            },
-        ],
-    };
-
-    await fetch(`${wordpressApiUrl}/wc/v3/customers/${customer.id}`, {
-        method: "PUT",
+    const createResponse = await fetch(`${wordpressApiUrl}/wc/v3/customers`, {
+        method: "POST",
         headers: {
             "Content-Type": "application/json",
             Authorization: authorization,
         },
-        body: JSON.stringify(updatePayload),
+        body: JSON.stringify({
+            email,
+            username: buildCustomerUsername(email),
+            first_name: firstName,
+            last_name: lastName,
+        }),
         cache: "no-store",
-    }).catch(() => null);
-}
+    });
 
-export async function hydrateWooSessionCartFromSnapshot(options: {
-    snapshot: CartSnapshotItem[];
-    cartToken?: string | null;
-    nonce?: string | null;
-    cookieHeader?: string;
-    authToken?: string;
-}) {
-    let cartToken = options.cartToken ?? null;
-    let nonce = options.nonce ?? null;
+    const createPayload = (await createResponse.json().catch(() => null)) as
+        | WooCustomerRecord
+        | { message?: string }
+        | null;
 
-    for (const entry of options.snapshot) {
-        if (!Number.isFinite(entry.productId) || entry.productId <= 0) {
-            continue;
-        }
-
-        let result = await wooStoreRequest({
-            path: "/cart/add-item",
-            method: "POST",
-            body: entry.size
-                ? {
-                      id: entry.productId,
-                      quantity: entry.quantity,
-                      variation: [{ attribute: "pa_size", value: entry.size }],
-                  }
-                : {
-                      id: entry.productId,
-                      quantity: entry.quantity,
-                  },
-            cartToken: cartToken ?? undefined,
-            nonce: nonce ?? undefined,
-            cookieHeader: options.cookieHeader,
-            authToken: options.authToken,
-        });
-
-        if (!result.ok && entry.size) {
-            result = await wooStoreRequest({
-                path: "/cart/add-item",
-                method: "POST",
-                body: {
-                    id: entry.productId,
-                    quantity: entry.quantity,
-                    variation: [{ attribute: "Size", value: entry.size }],
-                },
-                cartToken: cartToken ?? undefined,
-                nonce: nonce ?? undefined,
-                cookieHeader: options.cookieHeader,
-                authToken: options.authToken,
-            });
-        }
-
-        if (result.cartToken) {
-            cartToken = result.cartToken;
-        }
-
-        if (result.nonce) {
-            nonce = result.nonce;
-        }
+    if (createResponse.ok) {
+        return createPayload as WooCustomerRecord;
     }
 
-    return { cartToken, nonce };
+    // If creation raced with another browser or the customer already exists,
+    // try fetching it one more time before giving up.
+    return findCustomerByEmail(email);
 }

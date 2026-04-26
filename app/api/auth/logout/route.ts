@@ -1,5 +1,6 @@
 import {
     WC_CART_TOKEN_COOKIE,
+    WC_CUSTOMER_ID_COOKIE,
     WC_STORE_NONCE_COOKIE,
 } from "@/lib/woocommerce-store-cart";
 import { cookies } from "next/headers";
@@ -55,6 +56,14 @@ export async function POST() {
     });
 
     response.cookies.set(WC_STORE_NONCE_COOKIE, "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 0,
+    });
+
+    response.cookies.set(WC_CUSTOMER_ID_COOKIE, "", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",

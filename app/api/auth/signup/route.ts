@@ -1,3 +1,7 @@
+import { ensureWooCustomerRecord } from "@/lib/woocommerce-customer-cart-sync";
+import { WC_CUSTOMER_ID_COOKIE } from "@/lib/woocommerce-store-cart";
+import { NextResponse } from "next/server";
+
 type SignupBody = {
     name?: string;
     email?: string;
@@ -11,8 +15,7 @@ export async function POST(request: Request) {
     const email = body?.email?.trim().toLowerCase() ?? "";
     const password = body?.password ?? "";
 
-    const wpApiUrl =
-        process.env.WORDPRESS_API_URL ?? "https://diensabyansah.com/wp-json";
+    const wpApiUrl = process.env.WORDPRESS_API_URL?.trim() ?? "";
     const registerPath =
         process.env.WORDPRESS_REGISTER_PATH ?? "/simple-jwt-login/v1/users";
     const appUser = process.env.WORDPRESS_APP_USERNAME;
@@ -37,6 +40,16 @@ export async function POST(request: Request) {
         return Response.json(
             { message: "Password must be at least 6 characters." },
             { status: 400 },
+        );
+    }
+
+    if (!wpApiUrl) {
+        return Response.json(
+            {
+                message:
+                    "WORDPRESS_API_URL is not configured. Please set it to your WordPress REST API base URL.",
+            },
+            { status: 500 },
         );
     }
 
@@ -96,11 +109,23 @@ export async function POST(request: Request) {
               password,
           };
 
-    const wpResponse = await fetch(`${wpApiUrl}${registerPath}`, {
-        method: "POST",
-        headers,
-        body: JSON.stringify(requestBody),
-    });
+    let wpResponse: Response;
+
+    try {
+        wpResponse = await fetch(`${wpApiUrl}${registerPath}`, {
+            method: "POST",
+            headers,
+            body: JSON.stringify(requestBody),
+        });
+    } catch {
+        return Response.json(
+            {
+                message:
+                    "Unable to reach WordPress while creating the account. Please try again later.",
+            },
+            { status: 502 },
+        );
+    }
 
     const wpData = (await wpResponse.json().catch(() => null)) as {
         id?: number;
@@ -144,7 +169,12 @@ export async function POST(request: Request) {
         );
     }
 
-    return Response.json({
+    const wooCustomer = await ensureWooCustomerRecord({
+        email,
+        name,
+    }).catch(() => null);
+
+    const response = NextResponse.json({
         message: "Account created successfully.",
         token: wpData?.jwt,
         user: {
@@ -153,4 +183,16 @@ export async function POST(request: Request) {
             email: wpData?.user?.email ?? wpData?.email ?? email,
         },
     });
+
+    if (wooCustomer?.id) {
+        response.cookies.set(WC_CUSTOMER_ID_COOKIE, String(wooCustomer.id), {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/",
+            maxAge: 60 * 60 * 24 * 7,
+        });
+    }
+
+    return response;
 }

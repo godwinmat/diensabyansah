@@ -32,8 +32,8 @@ export default async function CollectionsPage() {
 
     return (
         <div className="bg-white">
-            <section className="mx-auto w-full max-w-screen px-3 pb-8 pt-6 sm:px-5 lg:px-10 lg:pt-8 reveal-up">
-                <div className="image-zoom relative overflow-hidden rounded-xl">
+            <section className="mx-auto w-full max-w-7xl px-3 pb-8 pt-6 sm:px-5 lg:px-10 lg:pt-8 reveal-up">
+                <div className="image-zoom relative overflow-hidden rounded-2xl shadow-[0_18px_60px_-30px_rgba(15,23,42,0.45)]">
                     <div className="relative h-[30svh] min-h-56 sm:h-[36svh]">
                         <Image
                             src="/collection.jpg"
@@ -60,7 +60,7 @@ export default async function CollectionsPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-375 px-3 pb-16 sm:px-5 lg:px-10 lg:pb-20 reveal-up">
+            <section className="mx-auto w-full max-w-7xl px-3 pb-16 sm:px-5 lg:px-10 lg:pb-20 reveal-up">
                 <div className="mb-6 flex items-center justify-between gap-3">
                     <p className="text-sm text-[#64748b]">
                         Showing{" "}
@@ -95,35 +95,43 @@ export default async function CollectionsPage() {
                         {collectionsWithPreview.map((collection) => (
                             <Card
                                 key={collection.id}
-                                className="hover-lift mx-auto w-full max-w-90 gap-3 rounded-none bg-white/80 p-2 py-2 shadow-none ring-0"
+                                className="group mx-auto w-full max-w-90 gap-0 overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white py-0 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.45)]"
                             >
                                 <Link
                                     href={`/products?collection=${encodeURIComponent(collection.name)}`}
                                     className="group block"
                                 >
-                                    <div className="image-zoom relative aspect-4/5 overflow-hidden">
+                                    <div className="image-zoom relative aspect-4/5 overflow-hidden rounded-t-2xl bg-[#f8fafc]">
                                         <Image
                                             src={collection.previewImage}
                                             alt={collection.name}
                                             fill
                                             unoptimized
                                             sizes="(min-width: 1024px) 30vw, (min-width: 640px) 48vw, 100vw"
-                                            className="object-cover"
+                                            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                                         />
+                                        <span className="absolute left-3 top-3 rounded-full border border-white/70 bg-white/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#334155] backdrop-blur-sm">
+                                            {collection.productCount} pieces
+                                        </span>
                                     </div>
 
-                                    <CardContent className="space-y-1 px-0 pb-1 pt-3">
+                                    <CardContent className="space-y-2 px-4 pb-4 pt-3">
                                         <div className="flex items-start justify-between gap-3">
-                                            <h2 className="text-[18px] font-semibold text-[#1e293b] transition-colors group-hover:text-primary">
+                                            <h2 className="text-[18px] font-semibold leading-tight text-[#1e293b] transition-colors group-hover:text-primary">
                                                 {collection.name}
                                             </h2>
-                                            <p className="text-sm font-semibold text-primary">
-                                                {collection.productCount}
-                                            </p>
+                                            <ArrowRight
+                                                size={16}
+                                                weight="bold"
+                                                className="mt-1 shrink-0 text-[#94a3b8] transition-colors group-hover:text-primary"
+                                            />
                                         </div>
                                         <p className="line-clamp-2 text-sm text-[#64748b]">
                                             {collection.description ||
                                                 "Discover curated pieces from this collection."}
+                                        </p>
+                                        <p className="pt-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#94a3b8] transition-colors group-hover:text-primary">
+                                            View collection
                                         </p>
                                     </CardContent>
                                 </Link>

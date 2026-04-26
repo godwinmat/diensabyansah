@@ -40,8 +40,8 @@ const gallery = [
 export default function AboutPage() {
     return (
         <div className="bg-white">
-            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 pt-6 lg:px-10 lg:pt-8 reveal-up">
-                <div className="relative overflow-hidden rounded-xl image-zoom">
+            <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 pt-6 lg:px-10 lg:pt-8 reveal-up">
+                <div className="relative overflow-hidden rounded-2xl image-zoom shadow-[0_18px_60px_-30px_rgba(15,23,42,0.45)]">
                     <div className="relative h-[36svh] min-h-72">
                         <Image
                             src="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1900&q=80"
@@ -66,7 +66,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto grid w-full max-w-screen gap-8 px-3 sm:px-5 py-14 lg:grid-cols-[1.1fr_1fr] lg:px-10 lg:py-16 reveal-up">
+            <section className="mx-auto grid w-full max-w-7xl gap-8 px-3 py-12 sm:px-5 lg:grid-cols-[1.1fr_1fr] lg:px-10 lg:py-16 reveal-up">
                 <div>
                     <h2 className="text-4xl font-bold leading-[1.05] tracking-tight text-[#0f172a] lg:text-6xl">
                         Made-in-Africa:
@@ -97,7 +97,7 @@ export default function AboutPage() {
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="image-zoom relative h-72 overflow-hidden rounded-sm">
+                    <div className="image-zoom relative h-72 overflow-hidden rounded-2xl shadow-[0_14px_40px_-28px_rgba(15,23,42,0.45)]">
                         <Image
                             src="/explore-1.png"
                             alt="Factory interior"
@@ -106,7 +106,7 @@ export default function AboutPage() {
                             className="object-cover"
                         />
                     </div>
-                    <div className="image-zoom relative h-72 overflow-hidden rounded-sm">
+                    <div className="image-zoom relative h-72 overflow-hidden rounded-2xl shadow-[0_14px_40px_-28px_rgba(15,23,42,0.45)]">
                         <Image
                             src="/explore-2.png"
                             alt="Design and production"
@@ -118,7 +118,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
+            <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
                 <h3 className="pb-4 text-3xl font-semibold text-[#0f172a]">
                     Core Pillars
                 </h3>
@@ -128,24 +128,24 @@ export default function AboutPage() {
                     {pillars.map((pillar) => (
                         <Card
                             key={pillar.title}
-                            className="hover-lift gap-4 rounded-none bg-transparent p-2 py-2 shadow-none ring-0"
+                            className="group gap-4 overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white py-0 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.45)]"
                         >
-                            <div className="image-zoom relative h-80 overflow-hidden rounded-sm">
+                            <div className="image-zoom relative h-80 overflow-hidden rounded-t-2xl bg-[#f8fafc]">
                                 <Image
                                     src={pillar.image}
                                     alt={pillar.title}
                                     fill
                                     sizes="(min-width: 768px) 31vw, 100vw"
-                                    className="object-cover"
+                                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                                 />
                             </div>
-                            <h4 className="px-2 pt-1 text-3xl font-semibold text-[#0f172a]">
+                            <h4 className="px-4 pt-1 text-3xl font-semibold text-[#0f172a]">
                                 {pillar.title}
                             </h4>
-                            <p className="px-2 text-lg leading-8 text-[#94a3b8]">
+                            <p className="px-4 text-lg leading-8 text-[#94a3b8]">
                                 {pillar.description}
                             </p>
-                            <CardContent className="mt-1 px-2 pb-2">
+                            <CardContent className="mt-1 px-4 pb-4">
                                 <Button
                                     asChild
                                     variant="link"
@@ -159,8 +159,8 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
-                <div className="glass-panel hover-lift relative overflow-hidden rounded-2xl bg-[#f7f5ee]/88 px-3 sm:px-8 py-10 lg:px-14 lg:py-14">
+            <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
+                <div className="glass-panel relative overflow-hidden rounded-2xl border border-[#ece6d8] bg-[#f7f5ee]/88 px-3 py-10 shadow-[0_18px_60px_-36px_rgba(15,23,42,0.45)] sm:px-8 lg:px-14 lg:py-14">
                     <div className="absolute -right-6 -top-14 text-[16rem] font-black leading-none text-[#ece9dd]">
                         DA
                     </div>
@@ -188,12 +188,12 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
+            <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {gallery.map((image, index) => (
                         <div
                             key={index}
-                            className="image-zoom relative h-56 overflow-hidden rounded-sm"
+                            className="image-zoom relative h-56 overflow-hidden rounded-2xl shadow-[0_14px_40px_-28px_rgba(15,23,42,0.45)]"
                         >
                             <Image
                                 src={image}
@@ -207,9 +207,8 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-3 sm:px-5 pb-16 pt-8 lg:px-10 lg:pb-20 lg:pt-10 reveal-up">
-                <div className="pt-12 text-center">
-                    <Separator className="mb-12 bg-[#e2e8f0]" />
+            <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 pb-16 pt-8 lg:px-10 lg:pb-20 lg:pt-10 reveal-up">
+                <div className="rounded-2xl border border-[#e2e8f0] bg-[#fcfcfb] px-4 pb-10 pt-12 text-center shadow-[0_18px_60px_-36px_rgba(15,23,42,0.32)] sm:px-8 sm:pb-12">
                     <h3 className="text-5xl font-semibold tracking-tight text-[#0f172a]">
                         Partner with the Future
                     </h3>

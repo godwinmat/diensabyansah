@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+import { AnimatedStats } from "@/components/animated-stats";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import {
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 const stats = [
     { value: "2012", label: "Established" },
@@ -16,26 +17,7 @@ const stats = [
     { value: "250", label: "Artisans" },
 ];
 
-export default async function Home() {
-    const [products, collections] = await Promise.all([
-        getWooCommerceProducts(),
-        getWooCommerceCollections(),
-    ]);
-
-    const featuredCollection =
-        collections.find(
-            (collection) => collection.featured && collection.productCount > 0,
-        ) ?? collections.find((collection) => collection.productCount > 0);
-
-    const featuredCollectionProducts = featuredCollection
-        ? products
-              .filter((product) =>
-                  product.collections.includes(featuredCollection.name),
-              )
-              .sort((a, b) => b.productId - a.productId)
-              .slice(0, 4)
-        : products.sort((a, b) => b.productId - a.productId).slice(0, 4);
-
+export default function Home() {
     return (
         <div className="bg-white">
             <section className="relative min-h-[84svh] overflow-hidden bg-[#0f172a] reveal-up sm:min-h-[92svh]">
@@ -86,70 +68,14 @@ export default async function Home() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-3 py-12 sm:px-5 sm:py-14 lg:px-10 lg:py-16 reveal-up">
-                <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:mb-8 sm:flex-row sm:items-end sm:gap-4">
-                    <div>
-                        <h2 className="text-3xl font-semibold tracking-tight text-[#0f172a] sm:text-4xl">
-                            Featured Collection
-                        </h2>
-                        <p className="mt-1 text-base text-[#94a3b8]">
-                            {featuredCollection?.name ?? "Curated Selection"}
-                        </p>
-                    </div>
-                    <Button
-                        asChild
-                        variant="link"
-                        className="h-auto p-0 text-sm font-semibold uppercase tracking-[0.2em] text-primary no-underline hover:text-[#9d7f14] hover:no-underline"
-                    >
-                        <Link href="/products">
-                            View All <ArrowRight size={16} weight="bold" />
-                        </Link>
-                    </Button>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    {featuredCollectionProducts.map((product) => (
-                        <Card
-                            key={product.id}
-                            className="hover-lift gap-4 rounded-xl p-2 py-2 shadow-none ring-0"
-                        >
-                            <CardContent className="rounded-xl p-1.5">
-                                <div className="image-zoom relative h-64 overflow-hidden rounded-lg sm:h-72">
-                                    <Image
-                                        src={product.image}
-                                        alt={product.name}
-                                        fill
-                                        sizes="(min-width: 1024px) 23vw, (min-width: 640px) 48vw, 100vw"
-                                        className="object-cover"
-                                        unoptimized
-                                    />
-                                </div>
-                            </CardContent>
-                            <div className="flex items-start justify-between gap-3 px-2 pb-2 sm:gap-4">
-                                <div className="min-w-0 flex-1">
-                                    <h3 className="line-clamp-2 text-base font-medium text-[#1e293b] sm:text-xl">
-                                        {product.name}
-                                    </h3>
-                                    <Badge
-                                        variant="ghost"
-                                        className="h-auto max-w-full truncate px-0 text-xs font-semibold uppercase tracking-[0.12em] text-[#94a3b8]"
-                                    >
-                                        {product.note}
-                                    </Badge>
-                                </div>
-                                <p className="shrink-0 whitespace-nowrap pt-1 text-base font-semibold text-primary sm:text-lg">
-                                    {product.price}
-                                </p>
-                            </div>
-                        </Card>
-                    ))}
-                </div>
-            </section>
+            <Suspense fallback={<FeaturedCollectionFallback />}>
+                <FeaturedCollectionSection />
+            </Suspense>
 
             <section className="bg-[#f4f1e6] py-12 sm:py-16 lg:py-20 reveal-up">
-                <div className="mx-auto grid w-full max-w-screen gap-8 px-3 sm:gap-10 sm:px-5 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:px-10">
+                <div className="mx-auto grid w-full max-w-7xl gap-8 px-3 sm:gap-10 sm:px-5 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:px-10">
                     <div className="relative">
-                        <div className="image-zoom relative h-64 overflow-hidden rounded-2xl sm:h-84">
+                        <div className="image-zoom relative h-64 overflow-hidden rounded-2xl sm:h-96">
                             <Image
                                 src="/factory.jpg"
                                 alt="Diensa factory"
@@ -232,38 +158,27 @@ export default async function Home() {
                     industrialization.
                 </p>
 
-                <div className="mt-10 flex flex-wrap items-center justify-center gap-8 sm:mt-14 sm:gap-12 md:gap-16">
-                    {stats.map((stat) => (
-                        <div
-                            key={stat.label}
-                            className="hover-lift rounded-xl px-5 py-4"
-                        >
-                            <p className="text-4xl font-semibold text-[#0f172a] sm:text-5xl">
-                                {stat.value}
-                            </p>
-                            <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-                                {stat.label}
-                            </p>
-                        </div>
-                    ))}
-                </div>
+                <AnimatedStats stats={stats} />
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-3 pb-16 sm:px-5 sm:pb-20 lg:px-10 lg:pb-24 reveal-up">
-                <div className="glass-panel hover-lift rounded-2xl bg-[#f4edcf]/88 px-4 py-8 sm:rounded-3xl sm:px-8 sm:py-12 md:px-12 md:py-14">
+            <section className="mx-auto w-full max-w-7xl px-3 pb-16 sm:px-5 sm:pb-20 lg:px-10 lg:pb-24 reveal-up">
+                <div className="glass-panel flex flex-col items-center justify-center rounded-2xl border border-[#e9dfbb] bg-[#f4edcf]/88 px-4 py-8 text-center shadow-[0_18px_60px_-36px_rgba(15,23,42,0.32)] sm:rounded-3xl sm:px-8 sm:py-12 md:px-12 md:py-14">
+                    <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary">
+                        Private Access
+                    </p>
                     <h2 className="text-3xl font-semibold tracking-tight text-[#0f172a] sm:text-5xl">
                         Join the Inner Circle
                     </h2>
-                    <p className="mt-3 max-w-3xl text-base leading-7 text-[#94a3b8] sm:mt-4 sm:text-lg sm:leading-8">
+                    <p className="mx-auto mt-3 max-w-3xl text-base leading-7 text-[#94a3b8] sm:mt-4 sm:text-lg sm:leading-8">
                         Receive early access to seasonal collections,
                         manufacturing insights, and archival stories.
                     </p>
 
-                    <form className="mt-8 flex max-w-3xl flex-col gap-3 sm:flex-row">
+                    <form className="mx-auto mt-8 flex w-full max-w-3xl flex-col gap-3 sm:flex-row">
                         <Input
                             type="email"
                             placeholder="Your email address"
-                            className="h-12 flex-1 rounded-sm border border-[#e2e8f0] bg-white px-4 text-base text-[#0f172a]"
+                            className="h-12 flex-1 rounded-xl border border-[#e2e8f0] bg-white px-4 text-base text-[#0f172a]"
                         />
                         <Button
                             type="submit"
@@ -275,5 +190,150 @@ export default async function Home() {
                 </div>
             </section>
         </div>
+    );
+}
+
+async function FeaturedCollectionSection() {
+    const [products, collections] = await Promise.all([
+        getWooCommerceProducts({ limit: 40 }),
+        getWooCommerceCollections(),
+    ]);
+
+    const featuredCollection =
+        collections.find(
+            (collection) => collection.featured && collection.productCount > 0,
+        ) ?? collections.find((collection) => collection.productCount > 0);
+
+    const featuredCollectionProducts = featuredCollection
+        ? products
+              .filter((product) =>
+                  product.collections.includes(featuredCollection.name),
+              )
+              .sort((a, b) => b.productId - a.productId)
+              .slice(0, 4)
+        : products.sort((a, b) => b.productId - a.productId).slice(0, 4);
+
+    const featuredCollectionHref = featuredCollection
+        ? `/products?collection=${encodeURIComponent(featuredCollection.name)}`
+        : "/products";
+
+    return (
+        <section className="mx-auto w-full max-w-7xl px-3 py-12 sm:px-5 sm:py-14 lg:px-10 lg:py-16 reveal-up">
+            <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:mb-8 sm:flex-row sm:items-end sm:gap-4">
+                <div>
+                    <h2 className="text-3xl font-semibold tracking-tight text-[#0f172a] sm:text-4xl">
+                        Featured Collection
+                    </h2>
+                    <p className="mt-1 text-base text-[#94a3b8]">
+                        {featuredCollection?.name ?? "Curated Selection"}
+                    </p>
+                </div>
+                <Button
+                    asChild
+                    variant="link"
+                    className="h-auto p-0 text-sm font-semibold uppercase tracking-[0.2em] text-primary no-underline hover:text-[#9d7f14] hover:no-underline"
+                >
+                    <Link href={featuredCollectionHref}>
+                        View All <ArrowRight size={16} weight="bold" />
+                    </Link>
+                </Button>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                {featuredCollectionProducts.map((product) => (
+                    <Card
+                        key={product.id}
+                        className="group mx-auto w-full max-w-80 gap-0 overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white py-0 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.45)]"
+                    >
+                        <Link
+                            href={`/products/${product.id}`}
+                            className="block"
+                        >
+                            <CardContent className="space-y-2 px-0 py-0">
+                                <div className="image-zoom relative h-64 overflow-hidden rounded-t-2xl bg-[#f8fafc] sm:h-72">
+                                    <Image
+                                        src={product.image}
+                                        alt={product.name}
+                                        fill
+                                        sizes="(min-width: 1024px) 23vw, (min-width: 640px) 48vw, 100vw"
+                                        className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                                        unoptimized
+                                    />
+                                    <span className="absolute left-3 top-3 rounded-full border border-white/70 bg-white/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#334155] backdrop-blur-sm">
+                                        {product.collections[0] || "Diensa"}
+                                    </span>
+                                    <span
+                                        className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full border border-white/70 bg-white/90 text-[#334155] backdrop-blur-sm"
+                                        aria-hidden="true"
+                                    >
+                                        <ArrowRight size={14} weight="bold" />
+                                    </span>
+                                </div>
+                            </CardContent>
+                            <div className="flex items-start justify-between gap-3 px-4 pb-4 pt-3 sm:gap-4">
+                                <div className="min-w-0 flex-1">
+                                    <h3 className="line-clamp-2 text-[17px] font-semibold leading-tight text-[#0f172a] transition-colors group-hover:text-primary">
+                                        {product.name}
+                                    </h3>
+                                    <p className="line-clamp-2 pt-1 text-sm text-[#64748b]">
+                                        {product.note}
+                                    </p>
+                                    <p className="pt-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#94a3b8] transition-colors group-hover:text-primary">
+                                        View details
+                                    </p>
+                                </div>
+                                <p className="shrink-0 whitespace-nowrap pt-1 text-base font-semibold text-primary sm:text-lg">
+                                    {product.price}
+                                </p>
+                            </div>
+                        </Link>
+                    </Card>
+                ))}
+            </div>
+        </section>
+    );
+}
+
+function FeaturedCollectionFallback() {
+    return (
+        <section
+            className="mx-auto w-full max-w-screen px-3 py-12 sm:px-5 sm:py-14 lg:px-10 lg:py-16 reveal-up"
+            aria-busy="true"
+            aria-live="polite"
+        >
+            <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:mb-8 sm:flex-row sm:items-end sm:gap-4">
+                <div>
+                    <h2 className="text-3xl font-semibold tracking-tight text-[#0f172a] sm:text-4xl">
+                        Featured Collection
+                    </h2>
+                    <p className="mt-1 text-base text-[#94a3b8]">
+                        Loading featured products...
+                    </p>
+                </div>
+                <div className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-primary">
+                    <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
+                    Loading
+                </div>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                {Array.from({ length: 4 }).map((_, index) => (
+                    <Card
+                        key={`featured-loading-${index}`}
+                        className="mx-auto w-full max-w-80 gap-0 overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white py-0 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.35)]"
+                    >
+                        <CardContent className="space-y-2 px-0 py-0">
+                            <div className="relative h-64 animate-pulse overflow-hidden rounded-t-2xl bg-[#eef2f7] sm:h-72" />
+                        </CardContent>
+                        <div className="px-4 pb-4 pt-3">
+                            <div className="h-5 w-2/3 animate-pulse rounded bg-[#eef2f7]" />
+                            <div className="mt-2 h-4 w-11/12 animate-pulse rounded bg-[#f1f5f9]" />
+                            <div className="mt-1 h-4 w-3/4 animate-pulse rounded bg-[#f1f5f9]" />
+                            <div className="mt-3 h-3 w-1/3 animate-pulse rounded bg-[#e2e8f0]" />
+                        </div>
+                    </Card>
+                ))}
+            </div>
+        </section>
     );
 }

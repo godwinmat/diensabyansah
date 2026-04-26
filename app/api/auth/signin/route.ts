@@ -1,5 +1,7 @@
+import { ensureWooCustomerRecord } from "@/lib/woocommerce-customer-cart-sync";
 import {
     WC_CART_TOKEN_COOKIE,
+    WC_CUSTOMER_ID_COOKIE,
     WC_STORE_NONCE_COOKIE,
 } from "@/lib/woocommerce-store-cart";
 import { NextResponse } from "next/server";
@@ -14,8 +16,8 @@ export async function POST(request: Request) {
 
     const email = body?.email?.trim().toLowerCase() ?? "";
     const password = body?.password ?? "";
-    const wpApiUrl = process.env.WORDPRESS_API_URL;
-    const jwtSigninPath = process.env.WORDPRESS_JWT_TOKEN_PATH;
+    const wpApiUrl = process.env.WORDPRESS_API_URL?.trim() ?? "";
+    const jwtSigninPath = process.env.WORDPRESS_JWT_TOKEN_PATH?.trim() ?? "";
 
     if (!email || !password) {
         return Response.json(
@@ -24,16 +26,38 @@ export async function POST(request: Request) {
         );
     }
 
-    const jwtResponse = await fetch(`${wpApiUrl}${jwtSigninPath}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            email,
-            password,
-        }),
-    });
+    if (!wpApiUrl || !jwtSigninPath) {
+        return Response.json(
+            {
+                message:
+                    "WORDPRESS_API_URL and WORDPRESS_JWT_TOKEN_PATH must be configured for sign in.",
+            },
+            { status: 500 },
+        );
+    }
+
+    let jwtResponse: Response;
+
+    try {
+        jwtResponse = await fetch(`${wpApiUrl}${jwtSigninPath}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email,
+                password,
+            }),
+        });
+    } catch {
+        return Response.json(
+            {
+                message:
+                    "Unable to reach WordPress while signing in. Please try again later.",
+            },
+            { status: 502 },
+        );
+    }
 
     const jwtData = (await jwtResponse.json().catch(() => null)) as {
         success?: boolean;
@@ -59,6 +83,11 @@ export async function POST(request: Request) {
             { status: jwtResponse.status || 401 },
         );
     }
+
+    const wooCustomer = await ensureWooCustomerRecord({
+        email,
+        name: email,
+    }).catch(() => null);
 
     const response = NextResponse.json({
         message: "Signed in successfully.",
@@ -93,6 +122,16 @@ export async function POST(request: Request) {
         path: "/",
         maxAge: 0,
     });
+
+    if (wooCustomer?.id) {
+        response.cookies.set(WC_CUSTOMER_ID_COOKIE, String(wooCustomer.id), {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/",
+            maxAge: 60 * 60 * 24 * 7,
+        });
+    }
 
     return response;
 }
