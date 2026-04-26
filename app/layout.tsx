@@ -41,7 +41,9 @@ export default function RootLayout({
                     <NavigationLoadingIndicator />
                 </Suspense>
                 <ScrollReveal />
-                <SiteHeader />
+                <Suspense fallback={null}>
+                    <SiteHeader />
+                </Suspense>
                 <main className="relative flex-1 overflow-x-clip pt-16 lg:pt-20">
                     <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-56 bg-linear-to-b from-primary/8 to-transparent" />
                     {children}
