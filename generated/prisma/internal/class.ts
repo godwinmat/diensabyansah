@@ -38,6 +38,10 @@ const config: runtime.GetPrismaClientConfig = {
       {
         "fromEnvVar": null,
         "value": "debian-openssl-3.0.x"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -60,8 +64,8 @@ const config: runtime.GetPrismaClientConfig = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider      = \"prisma-client\"\n  output        = \"../generated/prisma\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Cart {\n  id        String   @id @default(auto()) @map(\"_id\") @db.ObjectId\n  userEmail String   @unique\n  items     Json\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n",
-  "inlineSchemaHash": "282360d1cad8665c9b650e5c08a0a4ddb66ab8a34b7a0510d1a686a414a9bd44",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client\"\n  output        = \"../generated/prisma\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Cart {\n  id        String   @id @default(auto()) @map(\"_id\") @db.ObjectId\n  userEmail String   @unique\n  items     Json\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n",
+  "inlineSchemaHash": "cfce4885be8c75d4f77d8436e2c43b9287fe1b06a153d9247b02e859312a9ca3",
   "copyEngine": true,
   "runtimeDataModel": {
     "models": {},
