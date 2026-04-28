@@ -19,11 +19,7 @@ type ProductDetailPageProps = {
     params: Promise<{ id: string }>;
 };
 
-export async function generateStaticParams() {
-    const products = await getWooCommerceProducts();
-
-    return products.map((product) => ({ id: product.id }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function ProductDetailPage({
     params,
