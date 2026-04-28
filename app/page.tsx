@@ -1,4 +1,5 @@
 import { AnimatedStats } from "@/components/animated-stats";
+import { HeroVideo } from "@/components/hero-video";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -21,14 +22,7 @@ export default function Home() {
     return (
         <div className="bg-white">
             <section className="relative min-h-[84svh] overflow-hidden bg-[#0f172a] reveal-up sm:min-h-[92svh]">
-                <Image
-                    src="/hero.jpg"
-                    alt="Diensa hero"
-                    fill
-                    priority
-                    sizes="100vw"
-                    className="absolute inset-0 object-cover object-center"
-                />
+                <HeroVideo playbackRate={0.5} />
                 <div className="absolute inset-0 bg-black/55" />
 
                 <div className="relative mx-auto flex w-full max-w-screen flex-col items-center px-3 py-16 text-center sm:px-5 sm:py-20 lg:px-10 lg:py-28">
