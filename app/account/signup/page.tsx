@@ -177,20 +177,6 @@ export default function SignUpPage() {
                             ) : null}
                         </form>
 
-                        <div className="my-7 flex items-center gap-3 text-sm text-[#94a3b8]">
-                            <span className="h-px flex-1 bg-[#dbe1e7]" />
-                            Continue with
-                            <span className="h-px flex-1 bg-[#dbe1e7]" />
-                        </div>
-
-                        <Button
-                            type="button"
-                            variant="outline"
-                            className="h-10 w-full rounded-sm border-[#dbe1e7] bg-white text-sm font-medium text-[#1f2937]"
-                        >
-                            Google
-                        </Button>
-
                         <p className="mt-8 text-center text-sm text-[#64748b]">
                             Already have an account?{" "}
                             <Link
