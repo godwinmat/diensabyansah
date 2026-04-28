@@ -7,7 +7,7 @@ import { getWordPressPosts } from "@/lib/wordpress-posts";
 import Image from "next/image";
 import Link from "next/link";
 
-export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 const events = [
     {
@@ -135,10 +135,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                             key={post.slug}
                             className="group gap-0 overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white py-0 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.45)]"
                         >
-                            <Link
-                                href={`/blog/${post.slug}`}
-                                className="block"
-                            >
+                            <Link href={`/blog/${post.slug}`} className="block">
                                 <div className="image-zoom relative h-100 overflow-hidden rounded-t-2xl bg-[#f8fafc]">
                                     <Image
                                         src={post.image}

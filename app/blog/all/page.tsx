@@ -6,7 +6,7 @@ import { getWordPressPosts } from "@/lib/wordpress-posts";
 import Image from "next/image";
 import Link from "next/link";
 
-export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 type BlogAllPageProps = {
     searchParams?:
