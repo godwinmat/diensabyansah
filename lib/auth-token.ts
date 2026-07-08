@@ -1,43 +1,39 @@
+import { verifySessionToken } from "@/lib/auth";
 import { NextRequest } from "next/server";
 
-type JwtPayload = {
-    email?: string;
-    user_email?: string;
+export type AuthSessionPayload = {
+    sub: string;
+    email: string;
+    name: string;
+    exp: number;
 };
 
-function decodeJwtPayload(token: string): JwtPayload | null {
-    try {
-        const parts = token.split(".");
-
-        if (parts.length < 2) {
-            return null;
-        }
-
-        const payloadBase64 = parts[1]
-            .replace(/-/g, "+")
-            .replace(/_/g, "/")
-            .padEnd(Math.ceil(parts[1].length / 4) * 4, "=");
-
-        return JSON.parse(
-            Buffer.from(payloadBase64, "base64").toString("utf8"),
-        ) as JwtPayload;
-    } catch {
-        return null;
-    }
-}
-
-export function getAuthEmailFromToken(authToken?: string) {
+export function getAuthSessionFromToken(authToken?: string) {
     const token = authToken?.trim() ?? "";
 
     if (!token) {
-        return "";
+        return null;
     }
 
-    const payload = decodeJwtPayload(token);
+    return verifySessionToken(token);
+}
 
-    return payload?.email?.trim() || payload?.user_email?.trim() || "";
+export function getAuthEmailFromToken(authToken?: string) {
+    const payload = getAuthSessionFromToken(authToken);
+
+    return payload?.email?.trim() || "";
+}
+
+export function getAuthUserIdFromToken(authToken?: string) {
+    const payload = getAuthSessionFromToken(authToken);
+
+    return payload?.sub?.trim() || "";
 }
 
 export function getAuthEmailFromRequest(request: NextRequest) {
     return getAuthEmailFromToken(request.cookies.get("auth_token")?.value);
+}
+
+export function getAuthUserIdFromRequest(request: NextRequest) {
+    return getAuthUserIdFromToken(request.cookies.get("auth_token")?.value);
 }

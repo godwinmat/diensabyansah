@@ -28,6 +28,7 @@ export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     const token = request.cookies.get("auth_token")?.value ?? "";
+    const adminToken = request.cookies.get("admin_panel_token")?.value ?? "";
     const payload = token ? getJwtPayload(token) : null;
     const exp = payload?.exp;
     const isAuthenticated =
@@ -58,6 +59,11 @@ export function proxy(request: NextRequest) {
         pathname.startsWith("/blog/");
 
     const isProtectedPage = pathname === "/cart";
+    const isAdminLoginPage = pathname === "/admin-panel/login";
+    const isAdminPanelPage =
+        pathname === "/admin-panel" ||
+        pathname.startsWith("/admin-panel/");
+    const isAdminAuthenticated = Boolean(adminToken);
 
     const isLoggedOutOnlyPage =
         pathname === "/account" ||
@@ -74,6 +80,20 @@ export function proxy(request: NextRequest) {
     if (isLoggedOutOnlyPage && isAuthenticated) {
         const redirectUrl = request.nextUrl.clone();
         redirectUrl.pathname = "/products";
+        redirectUrl.search = "";
+        return NextResponse.redirect(redirectUrl);
+    }
+
+    if (isAdminPanelPage && !isAdminLoginPage && !isAdminAuthenticated) {
+        const redirectUrl = request.nextUrl.clone();
+        redirectUrl.pathname = "/admin-panel/login";
+        redirectUrl.search = "";
+        return NextResponse.redirect(redirectUrl);
+    }
+
+    if (isAdminLoginPage && isAdminAuthenticated) {
+        const redirectUrl = request.nextUrl.clone();
+        redirectUrl.pathname = "/admin-panel";
         redirectUrl.search = "";
         return NextResponse.redirect(redirectUrl);
     }
@@ -95,6 +115,7 @@ export const config = {
         "/testimonials",
         "/products/:path*",
         "/cart",
+        "/admin-panel/:path*",
         "/account",
         "/account/signup",
         "/account/reset-password",

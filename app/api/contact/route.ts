@@ -1,3 +1,4 @@
+import { getCompanyProfile } from "@/lib/company-profile";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
@@ -41,8 +42,9 @@ export async function POST(request: Request) {
     const smtpUser = process.env.SMTP_USER?.trim() ?? "";
     const smtpPass = process.env.SMTP_PASS?.trim() ?? "";
     const smtpFrom = process.env.SMTP_FROM?.trim() ?? smtpUser;
+    const profile = await getCompanyProfile();
     const contactToEmail =
-        process.env.CONTACT_TO_EMAIL?.trim() ?? "info@diensabyansah.com";
+        process.env.CONTACT_TO_EMAIL?.trim() ?? profile.contactEmail;
     const smtpSecure = String(process.env.SMTP_SECURE ?? "false") === "true";
 
     if (!smtpHost || !smtpPort || !smtpUser || !smtpPass || !smtpFrom) {

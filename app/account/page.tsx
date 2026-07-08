@@ -77,7 +77,7 @@ export default function SignInPage() {
 
             setAuthenticated(true);
 
-            router.push("/products");
+            router.push("/account/profile");
         } finally {
             setLoading(false);
         }
@@ -122,6 +122,16 @@ export default function SignInPage() {
                                     className="h-11 w-full rounded-sm bg-primary text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-primary/90"
                                 >
                                     {loading ? "Signing Out..." : "Sign Out"}
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    className="h-11 w-full rounded-sm border-[#dbe1e7] text-xs font-semibold uppercase tracking-[0.2em]"
+                                    onClick={() =>
+                                        router.push("/account/profile")
+                                    }
+                                >
+                                    View Profile
                                 </Button>
                                 <Button
                                     type="button"

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const NON_NAVIGATION_HIDE_MS = 700;
 const COMPLETE_HIDE_DELAY_MS = 220;
@@ -18,7 +18,7 @@ export function NavigationLoadingIndicator() {
     const progressIntervalRef = useRef<number | null>(null);
     const startedAtRef = useRef<number>(0);
 
-    const stopLoading = () => {
+    const stopLoading = useCallback(() => {
         const elapsed = Date.now() - startedAtRef.current;
         const remainingMinVisible = Math.max(MIN_VISIBLE_MS - elapsed, 0);
 
@@ -45,9 +45,9 @@ export function NavigationLoadingIndicator() {
             setProgress(0);
             completeTimeoutRef.current = null;
         }, COMPLETE_HIDE_DELAY_MS + remainingMinVisible);
-    };
+    }, []);
 
-    const startLoading = (options?: { keepUntilRouteChange?: boolean }) => {
+    const startLoading = useCallback((options?: { keepUntilRouteChange?: boolean }) => {
         if (completeTimeoutRef.current) {
             window.clearTimeout(completeTimeoutRef.current);
             completeTimeoutRef.current = null;
@@ -84,7 +84,7 @@ export function NavigationLoadingIndicator() {
                 hideTimeoutRef.current = null;
             }, NON_NAVIGATION_HIDE_MS);
         }
-    };
+    }, [stopLoading]);
 
     useEffect(() => {
         const handleDocumentClick = (event: MouseEvent) => {
@@ -160,12 +160,17 @@ export function NavigationLoadingIndicator() {
         return () => {
             document.removeEventListener("click", handleDocumentClick, true);
         };
-    }, []);
+    }, [startLoading]);
 
     useEffect(() => {
-        stopLoading();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pathname, searchParams]);
+        const timeout = window.setTimeout(() => {
+            stopLoading();
+        }, 0);
+
+        return () => {
+            window.clearTimeout(timeout);
+        };
+    }, [pathname, searchParams, stopLoading]);
 
     useEffect(() => {
         return () => {

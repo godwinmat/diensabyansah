@@ -1,10 +1,7 @@
 import { ProductSizeAddToCart } from "@/components/product-size-add-to-cart";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-    getWooCommerceProductById,
-    getWooCommerceProducts,
-} from "@/lib/woocommerce";
+import { getCatalogProductById, getCatalogProducts } from "@/lib/catalog";
 import {
     ArrowLeft,
     GlobeHemisphereWest,
@@ -25,13 +22,13 @@ export default async function ProductDetailPage({
     params,
 }: ProductDetailPageProps) {
     const { id } = await params;
-    const product = await getWooCommerceProductById(id);
+    const product = await getCatalogProductById(id);
 
     if (!product) {
         notFound();
     }
 
-    const allProducts = await getWooCommerceProducts();
+    const allProducts = await getCatalogProducts();
     const completeTheLook = allProducts
         .filter((item) => item.id !== product.id)
         .slice(0, 3);
@@ -40,8 +37,8 @@ export default async function ProductDetailPage({
         : ["Uncategorized"];
     const productSizes = product.sizes;
     const galleryImages = product.galleryImages;
-    const hasGalleryImages = galleryImages.length > 0;
     const mainImage = galleryImages[0] ?? product.image ?? "";
+    const hasMainImage = Boolean(mainImage);
     const thumbImages = galleryImages.slice(1, 5);
 
     return (
@@ -57,12 +54,12 @@ export default async function ProductDetailPage({
 
                 <div
                     className={
-                        hasGalleryImages
+                        hasMainImage
                             ? "grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-start"
                             : "grid gap-8"
                     }
                 >
-                    {hasGalleryImages ? (
+                    {hasMainImage ? (
                         <div>
                             <div className="image-zoom relative h-[70svh] min-h-110 overflow-hidden rounded-2xl bg-[#efefef] shadow-[0_18px_60px_rgba(15,23,42,0.08)]">
                                 <Image

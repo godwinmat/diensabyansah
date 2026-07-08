@@ -1,9 +1,10 @@
-import { ensureWooCustomerRecord } from "@/lib/woocommerce-customer-cart-sync";
 import {
-    WC_CART_TOKEN_COOKIE,
-    WC_CUSTOMER_ID_COOKIE,
-    WC_STORE_NONCE_COOKIE,
-} from "@/lib/woocommerce-store-cart";
+    createSessionToken,
+    getAuthCookieName,
+    getSessionTtlSeconds,
+    verifyPassword,
+} from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 type SigninBody = {
@@ -16,9 +17,6 @@ export async function POST(request: Request) {
 
     const email = body?.email?.trim().toLowerCase() ?? "";
     const password = body?.password ?? "";
-    const wpApiUrl = process.env.WORDPRESS_API_URL?.trim() ?? "";
-    const jwtSigninPath = process.env.WORDPRESS_JWT_TOKEN_PATH?.trim() ?? "";
-
     if (!email || !password) {
         return Response.json(
             { message: "Email and password are required." },
@@ -26,112 +24,56 @@ export async function POST(request: Request) {
         );
     }
 
-    if (!wpApiUrl || !jwtSigninPath) {
-        return Response.json(
-            {
-                message:
-                    "WORDPRESS_API_URL and WORDPRESS_JWT_TOKEN_PATH must be configured for sign in.",
-            },
-            { status: 500 },
-        );
-    }
-
-    let jwtResponse: Response;
-
     try {
-        jwtResponse = await fetch(`${wpApiUrl}${jwtSigninPath}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
+        const user = await prisma.user.findUnique({
+            where: {
                 email,
-                password,
-            }),
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                passwordHash: true,
+            },
         });
-    } catch {
-        return Response.json(
-            {
-                message:
-                    "Unable to reach WordPress while signing in. Please try again later.",
+
+        if (!user || !verifyPassword(password, user.passwordHash)) {
+            return Response.json(
+                { message: "Invalid email or password." },
+                { status: 401 },
+            );
+        }
+
+        const token = createSessionToken({
+            userId: user.id,
+            email: user.email,
+            name: user.name,
+        });
+
+        const response = NextResponse.json({
+            message: "Signed in successfully.",
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
             },
-            { status: 502 },
-        );
-    }
+        });
 
-    const jwtData = (await jwtResponse.json().catch(() => null)) as {
-        success?: boolean;
-        data?: {
-            jwt?: string;
-            message?: string;
-        };
-        message?: string;
-        msg?: string;
-    } | null;
-
-    const jwtToken = jwtData?.data?.jwt ?? "";
-
-    if (!jwtResponse.ok || !jwtData?.success || !jwtToken) {
-        return Response.json(
-            {
-                message:
-                    jwtData?.message ??
-                    jwtData?.msg ??
-                    jwtData?.data?.message ??
-                    "Sign in failed from Simple JWT Login endpoint.",
-            },
-            { status: jwtResponse.status || 401 },
-        );
-    }
-
-    const wooCustomer = await ensureWooCustomerRecord({
-        email,
-        name: email,
-    }).catch(() => null);
-
-    const response = NextResponse.json({
-        message: "Signed in successfully.",
-        token: jwtToken,
-        user: {
-            id: email,
-            name: email,
-            email,
-        },
-    });
-
-    response.cookies.set("auth_token", jwtToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 7,
-    });
-
-    response.cookies.set(WC_CART_TOKEN_COOKIE, "", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 0,
-    });
-
-    response.cookies.set(WC_STORE_NONCE_COOKIE, "", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 0,
-    });
-
-    if (wooCustomer?.id) {
-        response.cookies.set(WC_CUSTOMER_ID_COOKIE, String(wooCustomer.id), {
+        response.cookies.set(getAuthCookieName(), token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
             path: "/",
-            maxAge: 60 * 60 * 24 * 7,
+            maxAge: getSessionTtlSeconds(),
         });
-    }
 
-    return response;
+        return response;
+    } catch {
+        return Response.json(
+            {
+                message: "Unable to sign in right now. Please try again later.",
+            },
+            { status: 500 },
+        );
+    }
 }

@@ -104,7 +104,6 @@ export default function CartPage() {
     const [loading, setLoading] = useState(true);
     const [mutatingKey, setMutatingKey] = useState<string | null>(null);
     const [error, setError] = useState("");
-    const [checkoutLoading, setCheckoutLoading] = useState(false);
 
     useEffect(() => {
         const loadCart = async () => {
@@ -215,46 +214,6 @@ export default function CartPage() {
     };
 
     const isCheckoutDisabled = cartItems.length === 0;
-
-    const handleCheckout = async () => {
-        if (isCheckoutDisabled) {
-            return;
-        }
-
-        setCheckoutLoading(true);
-        setError("");
-
-        try {
-            const response = await fetch("/api/cart/checkout", {
-                method: "POST",
-            });
-
-            const data = (await response.json().catch(() => null)) as {
-                success?: boolean;
-                checkoutUrl?: string;
-                message?: string;
-            } | null;
-
-            console.log("[cart] Checkout response:", { ok: response.ok, data });
-
-            if (!response.ok || !data?.success || !data.checkoutUrl) {
-                const errorMsg = data?.message || "Unable to prepare checkout";
-                console.error("[cart] Checkout failed:", errorMsg);
-                setError(errorMsg);
-                throw new Error(errorMsg);
-            }
-
-            console.log("[cart] Redirecting to:", data.checkoutUrl);
-            window.location.href = data.checkoutUrl;
-        } catch (err) {
-            const errorMsg =
-                err instanceof Error ? err.message : "Checkout failed";
-            setError(errorMsg);
-            console.error("[cart] Error:", errorMsg);
-        } finally {
-            setCheckoutLoading(false);
-        }
-    };
 
     return (
         <div className="bg-[#f4f4f3]">
@@ -413,10 +372,7 @@ export default function CartPage() {
                                                 }
                                                 aria-label={`Increase quantity for ${item.name}`}
                                             >
-                                                <Plus
-                                                    size={14}
-                                                    weight="bold"
-                                                />
+                                                <Plus size={14} weight="bold" />
                                             </button>
                                         </div>
                                     </div>
@@ -516,14 +472,12 @@ export default function CartPage() {
                                 </Button>
                             ) : (
                                 <Button
-                                    type="button"
-                                    onClick={handleCheckout}
-                                    disabled={checkoutLoading}
+                                    asChild
                                     className="mt-6 h-12 w-full rounded-sm bg-primary text-sm font-semibold uppercase tracking-[0.14em] text-[#1f2937] hover:bg-primary/90"
                                 >
-                                    {checkoutLoading
-                                        ? "Preparing Checkout..."
-                                        : "Proceed to Checkout"}
+                                    <Link href="/checkout">
+                                        Proceed to Checkout
+                                    </Link>
                                 </Button>
                             )}
 

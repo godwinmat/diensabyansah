@@ -1,10 +1,32 @@
 import { ContactForm } from "@/components/contact-form";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+    getCompanyMapEmbedUrl,
+    getCompanyProfile,
+} from "@/lib/company-profile";
 import { Clock, MapPin, Phone } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 
-export default function ContactPage() {
+export const dynamic = "force-dynamic";
+
+function renderBusinessHours(hours: string) {
+    return hours
+        .split(/\n+/)
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0)
+        .map((line, index) => (
+            <span key={`${line}-${index}`}>
+                {line}
+                <br />
+            </span>
+        ));
+}
+
+export default async function ContactPage() {
+    const profile = await getCompanyProfile();
+    const mapEmbedUrl = getCompanyMapEmbedUrl(profile);
+
     return (
         <div className="bg-[#f4f4f3]">
             <section className="mx-auto w-full max-w-7xl px-3 pb-8 pt-6 sm:px-5 lg:px-10 lg:pb-10 lg:pt-8 reveal-up">
@@ -46,7 +68,7 @@ export default function ContactPage() {
                                 Visit Us
                             </p>
                             <h3 className="mt-4 border-l-2 border-primary pl-4 text-3xl font-semibold leading-none text-[#1e293b] sm:text-4xl md:text-5xl">
-                                Douala Headquarters
+                                {profile.city} Headquarters
                             </h3>
 
                             <div className="mt-6 space-y-6 sm:mt-7 sm:space-y-7">
@@ -63,12 +85,13 @@ export default function ContactPage() {
                                             Location
                                         </Badge>
                                         <p className="mt-2 text-base leading-7 text-[#64748b] sm:text-lg sm:leading-8">
-                                            Avenue de l&apos;Indépendance,
-                                            Bonanjo
+                                            {profile.addressLine1}
                                             <br />
-                                            Douala, Littoral Region
+                                            {profile.addressLine2
+                                                ? `${profile.addressLine2}`
+                                                : `${profile.city}, ${profile.stateRegion}`}
                                             <br />
-                                            Cameroon
+                                            {profile.country}
                                         </p>
                                     </div>
                                 </div>
@@ -86,15 +109,9 @@ export default function ContactPage() {
                                             Business Hours
                                         </Badge>
                                         <p className="mt-2 text-base leading-7 text-[#64748b] sm:text-lg sm:leading-8">
-                                            Mon -
-                                            Fri:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00
-                                            AM - 06:00 PM
-                                            <br />
-                                            Saturday:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:00
-                                            AM - 04:00 PM
-                                            <br />
-                                            Sunday:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By
-                                            Appointment Only
+                                            {renderBusinessHours(
+                                                profile.businessHours,
+                                            )}
                                         </p>
                                     </div>
                                 </div>
@@ -112,9 +129,16 @@ export default function ContactPage() {
                                             Contact Details
                                         </Badge>
                                         <p className="mt-2 text-base leading-7 text-[#64748b] sm:text-lg sm:leading-8">
-                                            Concierge: +237 233 44 55 66
+                                            Concierge: {profile.phonePrimary}
                                             <br />
-                                            General: hello@diensa-ansah.cm
+                                            General: {profile.supportEmail}
+                                            {profile.phoneSecondary ? (
+                                                <>
+                                                    <br />
+                                                    Alternate:{" "}
+                                                    {profile.phoneSecondary}
+                                                </>
+                                            ) : null}
                                         </p>
                                     </div>
                                 </div>
@@ -122,15 +146,18 @@ export default function ContactPage() {
                         </CardContent>
                     </Card>
 
-                    <div className="overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white shadow-[0_18px_60px_-36px_rgba(15,23,42,0.45)]">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3979.982926805878!2d9.704553400000002!3d4.0238909000000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x106112b8beb14df9%3A0xddc83e225dade421!2sAv.%20de%20l&#39;Ind%C3%A9pendance%2C%20Douala%2C%20Cameroon!5e0!3m2!1sen!2sng!4v1774890018125!5m2!1sen!2sng"
-                            width="600"
-                            height="450"
-                            loading="lazy"
-                            className="h-72 w-full sm:h-96"
-                        />
-                    </div>
+                    {mapEmbedUrl.length ? (
+                        <div className="overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white shadow-[0_18px_60px_-36px_rgba(15,23,42,0.45)]">
+                            <iframe
+                                src={mapEmbedUrl}
+                                width="600"
+                                height="450"
+                                loading="lazy"
+                                className="h-72 w-full sm:h-96"
+                                title="Company location map"
+                            />
+                        </div>
+                    ) : null}
                 </div>
             </section>
         </div>

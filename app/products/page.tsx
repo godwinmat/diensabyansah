@@ -1,7 +1,7 @@
 import { ProductsRefreshButton } from "@/components/products-refresh-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { getWooCommerceProducts } from "@/lib/woocommerce";
+import { getCatalogProducts } from "@/lib/catalog";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -35,7 +35,7 @@ export default async function ProductsPage({
         resolvedSearchParams?.page ?? "1",
         10,
     );
-    const products = await getWooCommerceProducts();
+    const products = await getCatalogProducts();
 
     const collectionOptions = Array.from(
         new Set(products.flatMap((product) => product.collections)),
@@ -114,21 +114,20 @@ export default async function ProductsPage({
         filteredProducts.length,
     );
 
-    // Get random collection with products and its most recent product
+    // Select a stable hero collection and its most recent product.
     const collectionsWithProducts = collectionOptions.filter(
         (collection) =>
             products.filter((p) => p.collections.includes(collection)).length >
             0,
     );
-    const randomCollection =
-        collectionsWithProducts.length > 0
-            ? collectionsWithProducts[
-                  Math.floor(Math.random() * collectionsWithProducts.length)
-              ]
-            : null;
-    const heroProduct = randomCollection
+    const heroCollection =
+        selectedCollection.length > 0 &&
+        collectionsWithProducts.includes(selectedCollection)
+            ? selectedCollection
+            : collectionsWithProducts[0] ?? null;
+    const heroProduct = heroCollection
         ? products
-              .filter((p) => p.collections.includes(randomCollection))
+              .filter((p) => p.collections.includes(heroCollection))
               .sort(
                   (a, b) =>
                       (parseInt(String(b.id)) || 0) -
@@ -146,7 +145,7 @@ export default async function ProductsPage({
                     <div className="relative h-[32svh] min-h-64">
                         <Image
                             src={heroImage}
-                            alt={randomCollection || "Diensa collection"}
+                            alt={heroCollection || "Diensa collection"}
                             fill
                             priority
                             sizes="100vw"
@@ -159,7 +158,7 @@ export default async function ProductsPage({
                             New Season
                         </Badge>
                         <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-                            {randomCollection ||
+                            {heroCollection ||
                                 "2026 Industrial Indigo Series"}
                         </h1>
                         <p className="mt-3 max-w-3xl text-sm leading-6 text-white/85 lg:text-base lg:leading-7">

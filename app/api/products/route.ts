@@ -1,9 +1,9 @@
-import { getWooCommerceProducts } from "@/lib/woocommerce";
+import { getCatalogProducts } from "@/lib/catalog";
 import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const products = await getWooCommerceProducts();
+        const products = await getCatalogProducts();
 
         return NextResponse.json({
             success: true,

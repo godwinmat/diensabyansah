@@ -7,16 +7,6 @@ export function ScrollReveal() {
     const pathname = usePathname();
 
     useEffect(() => {
-        const elements = Array.from(
-            document.querySelectorAll<HTMLElement>(
-                ".reveal-up:not(.reveal-in)",
-            ),
-        );
-
-        if (!elements.length) {
-            return;
-        }
-
         const observer = new IntersectionObserver(
             (entries) => {
                 for (const entry of entries) {
@@ -32,11 +22,34 @@ export function ScrollReveal() {
             },
         );
 
-        for (const element of elements) {
-            observer.observe(element);
-        }
+        const observePending = () => {
+            const elements = Array.from(
+                document.querySelectorAll<HTMLElement>(
+                    ".reveal-up:not(.reveal-in):not([data-reveal-observed='true'])",
+                ),
+            );
 
-        return () => observer.disconnect();
+            for (const element of elements) {
+                element.dataset.revealObserved = "true";
+                observer.observe(element);
+            }
+        };
+
+        observePending();
+
+        const mutationObserver = new MutationObserver(() => {
+            observePending();
+        });
+
+        mutationObserver.observe(document.body, {
+            childList: true,
+            subtree: true,
+        });
+
+        return () => {
+            mutationObserver.disconnect();
+            observer.disconnect();
+        };
     }, [pathname]);
 
     return null;

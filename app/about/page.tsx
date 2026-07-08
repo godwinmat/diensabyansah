@@ -189,6 +189,37 @@ export default function AboutPage() {
             </section>
 
             <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
+                <div className="rounded-2xl border border-[#e2e8f0] bg-white px-4 py-8 shadow-[0_18px_60px_-36px_rgba(15,23,42,0.32)] sm:px-8 lg:px-10">
+                    <Badge className="h-auto bg-transparent px-0 text-xs font-semibold uppercase tracking-[0.28em] text-primary">
+                        Founder Bio
+                    </Badge>
+                    <h3 className="mt-2 text-4xl font-semibold tracking-tight text-[#0f172a] lg:text-5xl">
+                        Ansah Mbom Solange Niba
+                    </h3>
+                    <p className="mt-5 max-w-5xl text-lg leading-8 text-[#64748b]">
+                        Ansah Mbom Solange Niba is a fashion entrepreneur with
+                        over 10 years of experience in marketing and business
+                        management. She is the founder and creative director of
+                        DiensabyAnsah, a brand focused on designing and
+                        producing off-the-rack and custom-made outfits for local
+                        African and global markets.
+                    </p>
+                    <p className="mt-4 max-w-5xl text-lg leading-8 text-[#64748b]">
+                        DiensabyAnsah currently has a showroom in Douala,
+                        Bonapriso, Cameroon. Solange aspires to open business
+                        incubators for youth entrepreneurs in fashion and other
+                        sectors, creating apprenticeship pathways with industry
+                        experts who can mentor them into becoming creative
+                        designers, startup business owners, and managers.
+                    </p>
+                    <p className="mt-4 max-w-5xl text-lg leading-8 text-[#64748b]">
+                        Her business drive and vision remain clear: "Africa
+                        First" and "Made in Africa."
+                    </p>
+                </div>
+            </section>
+
+            <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {gallery.map((image, index) => (
                         <div

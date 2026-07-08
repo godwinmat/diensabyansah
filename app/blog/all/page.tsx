@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { getWordPressPosts } from "@/lib/wordpress-posts";
+import { getBlogPosts } from "@/lib/blog-posts";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -21,7 +21,7 @@ type BlogAllPageProps = {
 export default async function BlogAllPage({ searchParams }: BlogAllPageProps) {
     const resolvedSearchParams = await Promise.resolve(searchParams);
     const query = resolvedSearchParams?.q?.trim() ?? "";
-    const posts = await getWordPressPosts(50, query);
+    const posts = await getBlogPosts(50, query);
     const isSearching = query.length > 0;
 
     return (

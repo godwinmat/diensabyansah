@@ -102,8 +102,13 @@ export function AnimatedStats({ stats }: { stats: Stat[] }) {
         }
 
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-            setProgress(1);
-            return;
+            const timeout = window.setTimeout(() => {
+                setProgress(1);
+            }, 0);
+
+            return () => {
+                window.clearTimeout(timeout);
+            };
         }
 
         const duration = 1400;

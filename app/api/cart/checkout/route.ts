@@ -1,31 +1,23 @@
 import {
+    buildCartApiResponseForUser,
     getCartUserEmailFromToken,
-    getPersistedCartForUser,
 } from "@/lib/cart-store";
+import { createFlutterwavePaymentLink } from "@/lib/flutterwave";
+import { prisma } from "@/lib/prisma";
+import { DeliveryStatus, Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-function getWordPressApiUrl() {
-    return process.env.WORDPRESS_API_URL?.replace(/\/$/, "") ?? "";
-}
-
-function getWooAuthorizationHeader() {
-    const consumerKey = process.env.WOOCOMMERCE_CONSUMER_KEY?.trim();
-    const consumerSecret = process.env.WOOCOMMERCE_CONSUMER_SECRET?.trim();
-
-    if (!consumerKey || !consumerSecret) {
-        return "";
-    }
-
-    return `Basic ${Buffer.from(`${consumerKey}:${consumerSecret}`).toString("base64")}`;
-}
-
-function getCheckoutUrl(orderId: number, orderKey: string) {
-    const siteUrl =
-        process.env.WORDPRESS_SITE_URL?.replace(/\/$/, "") ??
-        "https://diensabyansah.com";
-
-    return `${siteUrl}/checkout/order-pay/${orderId}/?pay_for_order=true&key=${encodeURIComponent(orderKey)}`;
-}
+type CheckoutRequestBody = {
+    deliveryContactName?: string;
+    deliveryPhone?: string;
+    deliveryAddressLine1?: string;
+    deliveryAddressLine2?: string;
+    deliveryCity?: string;
+    deliveryState?: string;
+    deliveryPostalCode?: string;
+    deliveryCountry?: string;
+    deliveryNotes?: string;
+};
 
 function getDefaultNameParts(email: string) {
     const local = email.split("@")[0] ?? "Customer";
@@ -41,118 +33,6 @@ function getDefaultNameParts(email: string) {
     return { firstName, lastName };
 }
 
-async function createWooOrder(options: {
-    email: string;
-    lineItems: Array<{
-        product_id: number;
-        quantity: number;
-        meta_data?: Array<{ key: string; value: string }>;
-    }>;
-}) {
-    const wordpressApiUrl = getWordPressApiUrl();
-    const authorization = getWooAuthorizationHeader();
-
-    if (!wordpressApiUrl) {
-        throw new Error("WORDPRESS_API_URL not configured");
-    }
-
-    if (!authorization) {
-        throw new Error(
-            "WooCommerce API credentials are missing. Set WOOCOMMERCE_CONSUMER_KEY and WOOCOMMERCE_CONSUMER_SECRET.",
-        );
-    }
-
-    const billingCountry =
-        process.env.WOOCOMMERCE_DEFAULT_BILLING_COUNTRY?.trim().toUpperCase() ||
-        process.env.WOOCOMMERCE_DEFAULT_COUNTRY?.trim().toUpperCase() ||
-        "GH";
-    const shippingCountry =
-        process.env.WOOCOMMERCE_DEFAULT_SHIPPING_COUNTRY?.trim().toUpperCase() ||
-        billingCountry;
-    const { firstName, lastName } = getDefaultNameParts(options.email);
-    const defaultAddress1 =
-        process.env.WOOCOMMERCE_DEFAULT_ADDRESS_1?.trim() || "Accra";
-    const defaultCity = process.env.WOOCOMMERCE_DEFAULT_CITY?.trim() || "Accra";
-    const defaultState =
-        process.env.WOOCOMMERCE_DEFAULT_STATE?.trim() || "Greater Accra";
-    const defaultPostcode =
-        process.env.WOOCOMMERCE_DEFAULT_POSTCODE?.trim() || "00000";
-    const defaultPhone =
-        process.env.WOOCOMMERCE_DEFAULT_PHONE?.trim() || "0000000000";
-
-    const orderPayload = {
-        billing: {
-            first_name: firstName,
-            last_name: lastName,
-            email: options.email,
-            phone: defaultPhone,
-            address_1: defaultAddress1,
-            city: defaultCity,
-            state: defaultState,
-            postcode: defaultPostcode,
-            country: billingCountry,
-        },
-        shipping: {
-            first_name: firstName,
-            last_name: lastName,
-            address_1: defaultAddress1,
-            city: defaultCity,
-            state: defaultState,
-            postcode: defaultPostcode,
-            email: options.email,
-            country: shippingCountry,
-        },
-        line_items: options.lineItems,
-        status: "pending",
-    };
-
-    console.log("[checkout] Creating WooCommerce order:", orderPayload);
-
-    const response = await fetch(`${wordpressApiUrl}/wc/v3/orders`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: authorization,
-        },
-        body: JSON.stringify(orderPayload),
-        cache: "no-store",
-    });
-
-    const data = (await response.json().catch(() => null)) as {
-        id?: number;
-        order_key?: string;
-        checkout_payment_url?: string;
-        message?: string;
-        code?: string;
-    } | null;
-
-    if (!response.ok) {
-        console.error(
-            "[checkout] Failed to create order:",
-            response.status,
-            data,
-        );
-        if (response.status === 401 || response.status === 403) {
-            throw new Error(
-                "WooCommerce rejected order creation. Verify API keys permissions (Read/Write) and REST API access.",
-            );
-        }
-        throw new Error(
-            data?.message || `Failed to create order (${response.status})`,
-        );
-    }
-
-    if (!data?.id || !data.order_key) {
-        throw new Error("Order created but missing order ID/key");
-    }
-
-    return {
-        id: data.id,
-        orderKey: data.order_key,
-        paymentUrl: data.checkout_payment_url,
-    };
-}
-
 export async function POST(request: NextRequest) {
     const authToken = request.cookies.get("auth_token")?.value;
     const userEmail = getCartUserEmailFromToken(authToken);
@@ -165,7 +45,86 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    const cart = await getPersistedCartForUser(userEmail);
+    const body = (await request
+        .json()
+        .catch(() => null)) as CheckoutRequestBody | null;
+
+    const deliveryContactNameInput = body?.deliveryContactName?.trim() ?? "";
+    const deliveryPhoneInput = body?.deliveryPhone?.trim() ?? "";
+    const deliveryAddressLine1Input = body?.deliveryAddressLine1?.trim() ?? "";
+    const deliveryAddressLine2Input = body?.deliveryAddressLine2?.trim() ?? "";
+    const deliveryCityInput = body?.deliveryCity?.trim() ?? "";
+    const deliveryStateInput = body?.deliveryState?.trim() ?? "";
+    const deliveryPostalCodeInput = body?.deliveryPostalCode?.trim() ?? "";
+    const deliveryCountryInput = body?.deliveryCountry?.trim() ?? "";
+    const deliveryNotesInput = body?.deliveryNotes?.trim() ?? "";
+
+    const userDefaults = await prisma.user.findUnique({
+        where: { email: userEmail },
+        select: {
+            deliveryDefaultContactName: true,
+            deliveryDefaultPhone: true,
+            deliveryDefaultAddress: true,
+            deliveryDefaultNotes: true,
+        },
+    });
+
+    const defaultAddress =
+        userDefaults?.deliveryDefaultAddress &&
+        typeof userDefaults.deliveryDefaultAddress === "object" &&
+        !Array.isArray(userDefaults.deliveryDefaultAddress)
+            ? (userDefaults.deliveryDefaultAddress as Record<string, unknown>)
+            : null;
+
+    const deliveryContactName =
+        deliveryContactNameInput ||
+        userDefaults?.deliveryDefaultContactName ||
+        "";
+    const deliveryPhone =
+        deliveryPhoneInput || userDefaults?.deliveryDefaultPhone || "";
+    const deliveryAddressLine1 =
+        deliveryAddressLine1Input ||
+        (typeof defaultAddress?.line1 === "string" ? defaultAddress.line1 : "");
+    const deliveryAddressLine2 =
+        deliveryAddressLine2Input ||
+        (typeof defaultAddress?.line2 === "string" ? defaultAddress.line2 : "");
+    const deliveryCity =
+        deliveryCityInput ||
+        (typeof defaultAddress?.city === "string" ? defaultAddress.city : "");
+    const deliveryState =
+        deliveryStateInput ||
+        (typeof defaultAddress?.state === "string" ? defaultAddress.state : "");
+    const deliveryPostalCode =
+        deliveryPostalCodeInput ||
+        (typeof defaultAddress?.postalCode === "string"
+            ? defaultAddress.postalCode
+            : "");
+    const deliveryCountry =
+        deliveryCountryInput ||
+        (typeof defaultAddress?.country === "string"
+            ? defaultAddress.country
+            : "");
+    const deliveryNotes =
+        deliveryNotesInput || userDefaults?.deliveryDefaultNotes || "";
+
+    if (
+        !deliveryContactName ||
+        !deliveryPhone ||
+        !deliveryAddressLine1 ||
+        !deliveryCity ||
+        !deliveryCountry
+    ) {
+        return NextResponse.json(
+            {
+                success: false,
+                message:
+                    "Delivery contact name, phone, address line 1, city, and country are required.",
+            },
+            { status: 400 },
+        );
+    }
+
+    const cart = await buildCartApiResponseForUser(userEmail);
 
     if (cart.items.length === 0) {
         console.error("[checkout] Cart is empty for user:", userEmail);
@@ -176,40 +135,122 @@ export async function POST(request: NextRequest) {
     }
 
     try {
+        const user = await prisma.user.findUnique({
+            where: { email: userEmail },
+            select: {
+                id: true,
+            },
+        });
+
+        const totalMinor = Number(cart.totals.total_price ?? 0);
+        const currency = cart.totals.currency_code ?? "USD";
+        const amount = totalMinor / 100;
+        const { firstName, lastName } = getDefaultNameParts(userEmail);
+        const reference = `ds-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+            throw new Error("Unable to calculate a valid checkout amount");
+        }
+
         console.log(
-            "[checkout] Creating order for user:",
+            "[checkout] Creating Flutterwave payment session for user:",
             userEmail,
             "items:",
             cart.items.length,
+            "amount:",
+            amount,
+            currency,
         );
 
-        // Convert Prisma cart items to WooCommerce line items format
-        const lineItems = cart.items.map((item) => ({
-            product_id: item.productId,
-            quantity: item.quantity,
-            ...(item.size
-                ? {
-                      meta_data: [{ key: "Size", value: item.size }],
-                  }
-                : {}),
-        }));
+        const checkoutSummary = cart.items
+            .map(
+                (item) =>
+                    `${item.quantity}x ${item.name}${item.item_data?.[0]?.value ? ` (${item.item_data[0].value})` : ""}`,
+            )
+            .join(", ");
 
-        // Create order via WooCommerce Orders API
-        const order = await createWooOrder({
+        const { checkoutUrl } = await createFlutterwavePaymentLink({
             email: userEmail,
-            lineItems,
+            name: `${firstName} ${lastName}`.trim(),
+            amount,
+            currency,
+            reference,
+            description:
+                checkoutSummary || `Checkout for ${cart.items.length} item(s)`,
         });
 
-        console.log("[checkout] Order created with ID:", order.id);
+        const order = await prisma.$transaction(async (tx) => {
+            await tx.user.updateMany({
+                where: { email: userEmail },
+                data: {
+                    deliveryDefaultContactName: deliveryContactName || null,
+                    deliveryDefaultPhone: deliveryPhone || null,
+                    deliveryDefaultAddress: {
+                        line1: deliveryAddressLine1,
+                        line2: deliveryAddressLine2 || null,
+                        city: deliveryCity,
+                        state: deliveryState || null,
+                        postalCode: deliveryPostalCode || null,
+                        country: deliveryCountry,
+                    },
+                    deliveryDefaultNotes: deliveryNotes || null,
+                    deliveryDefaultUpdatedAt: new Date(),
+                },
+            });
 
-        const checkoutUrl =
-            order.paymentUrl || getCheckoutUrl(order.id, order.orderKey);
+            const createdOrder = await tx.order.create({
+                data: {
+                    reference,
+                    userId: user?.id ?? null,
+                    userEmail,
+                    deliveryStatus: DeliveryStatus.AWAITING_PAYMENT,
+                    deliveryContactName,
+                    deliveryPhone,
+                    deliveryAddress: {
+                        line1: deliveryAddressLine1,
+                        line2: deliveryAddressLine2 || null,
+                        city: deliveryCity,
+                        state: deliveryState || null,
+                        postalCode: deliveryPostalCode || null,
+                        country: deliveryCountry,
+                    },
+                    deliveryNotes: deliveryNotes || null,
+                    deliveryUpdatedAt: new Date(),
+                    currency,
+                    subtotal: Number(cart.totals.total_items ?? totalMinor),
+                    total: totalMinor,
+                    items: cart.items as Prisma.InputJsonValue,
+                },
+                select: {
+                    id: true,
+                    reference: true,
+                },
+            });
+
+            await tx.payment.create({
+                data: {
+                    orderId: createdOrder.id,
+                    provider: "flutterwave",
+                    providerReference: reference,
+                    amount: totalMinor,
+                    currency,
+                    checkoutUrl,
+                },
+            });
+
+            return createdOrder;
+        });
+
         console.log("[checkout] Redirecting to:", checkoutUrl);
 
         return NextResponse.json({
             success: true,
             checkoutUrl,
             orderId: order.id,
+            reference,
+            amount,
+            currency,
+            provider: "flutterwave",
         });
     } catch (error) {
         const message =

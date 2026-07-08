@@ -35,19 +35,20 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-## WordPress auth integration
+## Local auth integration
 
 This project proxies auth requests through Next.js API routes:
 
-- `POST /api/auth/signup` → WordPress `POST /simple-jwt-login/v1/users`
-- `POST /api/auth/signin` → WordPress JWT (`/simple-jwt-login/v1/auth`)
-- `GET /api/auth/session` → returns `{ authenticated: boolean }` based on saved JWT cookie
-- `POST /api/auth/logout` → WordPress JWT revoke (`/simple-jwt-login/v1/auth/revoke`) and clears auth cookie
+- `POST /api/auth/signup` → creates a local Prisma user and issues a signed session cookie
+- `POST /api/auth/signin` → validates local Prisma credentials and issues a signed session cookie
+- `GET /api/auth/session` → returns `{ authenticated: boolean }` from the signed auth cookie
+- `POST /api/auth/logout` → clears the auth cookie
+- `POST /api/auth/send-reset-code` → emails a password reset code (SMTP required)
+- `POST /api/auth/change-password` → validates reset code and updates password
 
 Copy `.env.example` to `.env.local` and set values.
 
 Notes:
 
-- `signup` defaults to Simple JWT Login register endpoint. If you switch back to `/wp/v2/users`, admin Application Password credentials are required.
-- `signin` is Simple JWT only and uses `WORDPRESS_JWT_TOKEN_PATH`.
-- `logout` uses `WORDPRESS_JWT_REVOKE_PATH` and sends `{ JWT, AUTH_CODE? }`.
+- Set `AUTH_SECRET` to a long random value in production.
+- Password reset and contact email endpoints use SMTP configuration.

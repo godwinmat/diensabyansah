@@ -40,11 +40,7 @@ export function SiteHeader() {
     const [authChecked, setAuthChecked] = useState(false);
     const [authLoading, setAuthLoading] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-    const [productSearch, setProductSearch] = useState("");
-
-    useEffect(() => {
-        setProductSearch(searchParams.get("q")?.trim() ?? "");
-    }, [pathname, searchParams]);
+    const initialProductSearch = searchParams.get("q")?.trim() ?? "";
 
     useEffect(() => {
         const syncCartCount = async () => {
@@ -151,10 +147,6 @@ export function SiteHeader() {
         };
     }, []);
 
-    useEffect(() => {
-        setIsUserMenuOpen(false);
-    }, [pathname]);
-
     const closeMobileMenu = () => {
         if (mobileMenuRef.current) {
             mobileMenuRef.current.checked = false;
@@ -189,8 +181,8 @@ export function SiteHeader() {
 
     const handleProductSearch = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
-        const value = productSearch.trim();
+        const formData = new FormData(event.currentTarget);
+        const value = String(formData.get("q") ?? "").trim();
         const params = new URLSearchParams(
             pathname.startsWith("/products") ? searchParams.toString() : "",
         );
@@ -261,10 +253,9 @@ export function SiteHeader() {
                                 <MagnifyingGlass size={18} weight="regular" />
                             </button>
                             <Input
-                                value={productSearch}
-                                onChange={(event) =>
-                                    setProductSearch(event.target.value)
-                                }
+                                key={`${pathname}:${searchParams.toString()}`}
+                                name="q"
+                                defaultValue={initialProductSearch}
                                 aria-label="Search products"
                                 placeholder="Search"
                                 className="ml-2 h-8 border-0 bg-transparent p-0 text-base shadow-none transition-none focus-visible:border-0 focus-visible:bg-transparent focus-visible:shadow-none focus-visible:ring-0"
@@ -303,9 +294,19 @@ export function SiteHeader() {
                                             </p>
 
                                             <Button
-                                                type="button"
+                                                asChild
                                                 variant="outline"
                                                 className="mt-3 h-9 w-full border-[#e2e8f0] text-xs font-semibold uppercase tracking-widest text-[#111827]"
+                                            >
+                                                <Link href="/account/profile">
+                                                    View Profile
+                                                </Link>
+                                            </Button>
+
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                className="mt-2 h-9 w-full border-[#e2e8f0] text-xs font-semibold uppercase tracking-widest text-[#111827]"
                                                 onClick={handleLogout}
                                                 disabled={authLoading}
                                             >
@@ -444,6 +445,21 @@ export function SiteHeader() {
                                     {user?.email || "No email available"}
                                 </p>
                             </div>
+                        ) : null}
+
+                        {authChecked && isAuthenticated ? (
+                            <Button
+                                asChild
+                                variant="outline"
+                                className="h-10 border-[#e2e8f0] text-sm font-semibold uppercase tracking-[0.08em] text-[#111827]"
+                            >
+                                <Link
+                                    href="/account/profile"
+                                    onClick={closeMobileMenu}
+                                >
+                                    Profile
+                                </Link>
+                            </Button>
                         ) : null}
 
                         {authChecked ? (

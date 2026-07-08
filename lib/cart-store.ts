@@ -1,10 +1,7 @@
 import { getAuthEmailFromToken } from "@/lib/auth-token";
+import { getCatalogProducts, type CatalogProduct } from "@/lib/catalog";
 import { parsePrice } from "@/lib/cart";
 import { prisma } from "@/lib/prisma";
-import {
-    getWooCommerceProducts,
-    type WooCommerceProduct,
-} from "@/lib/woocommerce";
 
 export type PersistedCartItem = {
     productId: number;
@@ -180,20 +177,20 @@ export async function removePersistedCartItemForUser(
     return nextItems;
 }
 
-function getProductPriceMinorUnits(product?: WooCommerceProduct) {
+function getProductPriceMinorUnits(product?: CatalogProduct) {
     const price = parsePrice(product?.price ?? "");
 
     return Math.max(0, Math.round(price * 100));
 }
 
-function findProduct(products: WooCommerceProduct[], productId: number) {
+function findProduct(products: CatalogProduct[], productId: number) {
     return products.find((product) => product.productId === productId) ?? null;
 }
 
 export async function buildCartApiResponseForUser(userEmail: string) {
     const [cart, products] = await Promise.all([
         getCartRecord(userEmail),
-        getWooCommerceProducts(),
+        getCatalogProducts(),
     ]);
 
     const items = cart.items.map((entry) => {

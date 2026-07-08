@@ -4,14 +4,218 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
-  url = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Cart {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   userEmail String   @unique
   items     Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  CANCELLED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESSFUL
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum DeliveryStatus {
+  AWAITING_PAYMENT
+  PROCESSING
+  SHIPPED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  RETURNED
+  CANCELLED
+}
+
+enum TestimonialType {
+  TEXT
+  VIDEO
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  reference   String      @unique
+  userId      String?
+  userEmail   String
+  status      OrderStatus @default(PENDING)
+  deliveryStatus DeliveryStatus @default(AWAITING_PAYMENT)
+  deliveryContactName String?
+  deliveryPhone String?
+  deliveryAddress Json?
+  deliveryNotes String?
+  deliveryUpdatedAt DateTime?
+  currency    String
+  subtotal    Int
+  total       Int
+  items       Json
+  checkedOutAt DateTime   @default(now())
+  paidAt      DateTime?
+  payments    Payment[]
+  user        User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([userEmail])
+  @@index([status])
+  @@index([deliveryStatus])
+  @@index([checkedOutAt])
+}
+
+model Payment {
+  id                String        @id @default(cuid())
+  orderId           String
+  provider          String
+  providerReference String        @unique
+  status            PaymentStatus @default(PENDING)
+  amount            Int
+  currency          String
+  checkoutUrl       String?
+  paidAt            DateTime?
+  rawPayload        Json?
+  order             Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@index([orderId])
+  @@index([provider])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model User {
+  id                 String   @id @default(cuid())
+  name               String
+  email              String   @unique
+  passwordHash       String
+  deliveryDefaultContactName String?
+  deliveryDefaultPhone String?
+  deliveryDefaultAddress Json?
+  deliveryDefaultNotes String?
+  deliveryDefaultUpdatedAt DateTime?
+  resetCode          String?
+  resetCodeExpiresAt DateTime?
+  orders             Order[]
+  testimonials       Testimonial[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Testimonial {
+  id          String          @id @default(cuid())
+  userId      String
+  type        TestimonialType
+  text        String?
+  videoUrl    String?
+  videoPath   String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model CompanyProfile {
+  id            String   @id @default("default")
+  companyName   String   @default("Diensa by Ansah")
+  contactEmail  String?
+  supportEmail  String?
+  phonePrimary  String?
+  phoneSecondary String?
+  addressLine1  String?
+  addressLine2  String?
+  city          String?
+  stateRegion   String?
+  postalCode    String?
+  country       String?
+  businessHours String?
+  mapEmbedUrl   String?
+  craftedInLabel String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model AdminAccount {
+  id           String   @id @default("default")
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Product {
+  id               String              @id @default(cuid())
+  externalId       Int                 @unique
+  slug             String              @unique
+  name             String
+  price            String
+  imageUrl         String
+  sourceImageUrl   String?
+  galleryImageUrls String[]            @default([])
+  note             String
+  description      String
+  origin           String
+  material         String
+  permalink        String?
+  sizes            String[]            @default([])
+  collections      ProductCollection[]
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+}
+
+model Collection {
+  id             String              @id @default(cuid())
+  externalId     Int?                @unique
+  slug           String              @unique
+  name           String
+  description    String
+  imageUrl       String
+  sourceImageUrl String?
+  productCount   Int                 @default(0)
+  featured       Boolean             @default(false)
+  products       ProductCollection[]
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+}
+
+model ProductCollection {
+  productId    String
+  collectionId String
+  product      Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@id([productId, collectionId])
+}
+
+model BlogPost {
+  id             String   @id @default(cuid())
+  externalId     Int      @unique
+  slug           String   @unique
+  title          String
+  excerpt        String
+  content        String
+  imageUrl       String
+  sourceImageUrl String?
+  categories     String[] @default([])
+  publishedAt    DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }

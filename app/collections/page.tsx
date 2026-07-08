@@ -2,17 +2,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-    getWooCommerceCollections,
-    getWooCommerceProducts,
-} from "@/lib/woocommerce";
+    getCatalogCollections,
+    getCatalogProducts,
+} from "@/lib/catalog";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function CollectionsPage() {
     const [collections, products] = await Promise.all([
-        getWooCommerceCollections(),
-        getWooCommerceProducts(),
+        getCatalogCollections(),
+        getCatalogProducts(),
     ]);
 
     const nonEmptyCollections = collections
@@ -54,7 +54,7 @@ export default async function CollectionsPage() {
                         </h1>
                         <p className="mt-3 max-w-3xl text-sm text-white/85 lg:text-base">
                             Browse all available categories curated from our
-                            latest WordPress catalog.
+                            latest catalog.
                         </p>
                     </div>
                 </div>
@@ -86,8 +86,7 @@ export default async function CollectionsPage() {
                             No collections available yet.
                         </p>
                         <p className="mt-2 text-sm">
-                            Add product categories in WordPress to populate this
-                            page.
+                            Add product categories to populate this page.
                         </p>
                     </div>
                 ) : (

@@ -3,10 +3,7 @@ import { HeroVideo } from "@/components/hero-video";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-    getWooCommerceCollections,
-    getWooCommerceProducts,
-} from "@/lib/woocommerce";
+import { getCatalogCollections, getCatalogProducts } from "@/lib/catalog";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
@@ -151,6 +148,12 @@ export default function Home() {
                     table of global luxury, backed by the power of sustainable
                     industrialization.
                 </p>
+                <p className="mx-auto mt-4 max-w-4xl text-sm leading-7 text-[#64748b] sm:text-base sm:leading-8">
+                    Led by founder and creative director Ansah Mbom Solange
+                    Niba, the brand reflects over a decade of marketing and
+                    business leadership, anchored by an "Africa First" and "Made
+                    in Africa" vision.
+                </p>
 
                 <AnimatedStats stats={stats} />
             </section>
@@ -189,8 +192,8 @@ export default function Home() {
 
 async function FeaturedCollectionSection() {
     const [products, collections] = await Promise.all([
-        getWooCommerceProducts({ limit: 40 }),
-        getWooCommerceCollections(),
+        getCatalogProducts({ limit: 40 }),
+        getCatalogCollections(),
     ]);
 
     const featuredCollection =

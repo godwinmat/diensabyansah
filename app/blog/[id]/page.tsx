@@ -1,9 +1,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-    getWordPressPostBySlug,
-    getWordPressPosts,
-} from "@/lib/wordpress-posts";
+    getBlogPostBySlug,
+    getBlogPosts,
+} from "@/lib/blog-posts";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -15,14 +15,14 @@ type BlogDetailPageProps = {
 };
 
 export async function generateStaticParams() {
-    const posts = await getWordPressPosts(20);
+    const posts = await getBlogPosts(20);
 
     return posts.map((post) => ({ id: post.slug }));
 }
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     const { id } = await params;
-    const story = await getWordPressPostBySlug(id);
+    const story = await getBlogPostBySlug(id);
 
     if (!story) {
         notFound();
