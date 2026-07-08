@@ -9,6 +9,8 @@ import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function CollectionsPage() {
     const [collections, products] = await Promise.all([
         getCatalogCollections(),
