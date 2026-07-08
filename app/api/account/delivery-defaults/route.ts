@@ -1,5 +1,6 @@
 import { getAuthEmailFromRequest } from "@/lib/auth-token";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 type DeliveryDefaultsRequestBody = {
@@ -110,7 +111,7 @@ export async function PATCH(request: NextRequest) {
                       postalCode: deliveryPostalCode || null,
                       country: deliveryCountry || null,
                   }
-                : null,
+                : Prisma.DbNull,
             deliveryDefaultNotes: deliveryNotes || null,
             deliveryDefaultUpdatedAt: new Date(),
         },

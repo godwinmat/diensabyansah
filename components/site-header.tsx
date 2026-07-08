@@ -173,7 +173,7 @@ export function SiteHeader() {
 
     const isActivePath = (href: string) => {
         if (href === "/testimonials") {
-            return pathname === "/testimonials" || pathname === "/testimonial";
+            return pathname === "/testimonials";
         }
 
         return pathname === href || pathname.startsWith(`${href}/`);

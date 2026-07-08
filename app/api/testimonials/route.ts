@@ -59,10 +59,11 @@ async function ensureBucketExists() {
         return { ok: true, supabase, bucket } as const;
     }
 
+    const bucketStatusCode = Number(getBucketError?.statusCode ?? 0);
     const isMissingBucket =
         (getBucketError?.message ?? "")
             .toLowerCase()
-            .includes("bucket not found") || getBucketError?.statusCode === 404;
+            .includes("bucket not found") || bucketStatusCode === 404;
 
     if (!isMissingBucket) {
         return {

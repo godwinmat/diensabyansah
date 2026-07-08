@@ -52,7 +52,6 @@ export function proxy(request: NextRequest) {
         pathname === "/about" ||
         pathname === "/contact" ||
         pathname === "/blog" ||
-        pathname === "/testimonial" ||
         pathname === "/testimonials" ||
         pathname === "/products" ||
         pathname.startsWith("/products/") ||
@@ -111,7 +110,6 @@ export const config = {
         "/about",
         "/contact",
         "/blog/:path*",
-        "/testimonial",
         "/testimonials",
         "/products/:path*",
         "/cart",

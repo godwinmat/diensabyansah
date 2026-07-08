@@ -79,7 +79,9 @@ export default function CheckoutPage() {
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState("");
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
-    const [totals, setTotals] = useState<CartPayload["cart"]["totals"]>();
+    const [totals, setTotals] = useState<
+        NonNullable<CartPayload["cart"]>["totals"]
+    >();
 
     const [deliveryContactName, setDeliveryContactName] = useState("");
     const [deliveryPhone, setDeliveryPhone] = useState("");

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type TestimonialsSubmissionFormProps = {
     authenticated: boolean;
@@ -17,6 +17,7 @@ export function TestimonialsSubmissionForm({
     authenticated,
 }: TestimonialsSubmissionFormProps) {
     const router = useRouter();
+    const videoInputRef = useRef<HTMLInputElement | null>(null);
     const [type, setType] = useState<SubmissionType>("TEXT");
     const [text, setText] = useState("");
     const [videoFile, setVideoFile] = useState<File | null>(null);
@@ -68,6 +69,9 @@ export function TestimonialsSubmissionForm({
 
             setText("");
             setVideoFile(null);
+            if (videoInputRef.current) {
+                videoInputRef.current.value = "";
+            }
             setFeedback({
                 type: "success",
                 text: data?.message ?? "Your testimony has been submitted.",
@@ -138,6 +142,7 @@ export function TestimonialsSubmissionForm({
                         Upload Video (Max 10MB)
                     </Label>
                     <Input
+                        ref={videoInputRef}
                         id="testimonial-video"
                         type="file"
                         accept="video/mp4,video/quicktime,video/webm"

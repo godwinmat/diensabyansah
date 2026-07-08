@@ -163,6 +163,9 @@ export default async function TestimonialsPage() {
                                     <video
                                         src={video.videoUrl}
                                         controls
+                                        controlsList="nodownload"
+                                        muted={false}
+                                        disablePictureInPicture
                                         preload="metadata"
                                         className="h-52 w-full object-cover sm:h-64"
                                     />
