@@ -7,12 +7,14 @@ export function ScrollReveal() {
     const pathname = usePathname();
 
     useEffect(() => {
+        const observed = new WeakSet<Element>();
         const observer = new IntersectionObserver(
             (entries) => {
                 for (const entry of entries) {
                     if (entry.isIntersecting) {
                         entry.target.classList.add("reveal-in");
                         observer.unobserve(entry.target);
+                        observed.delete(entry.target);
                     }
                 }
             },
@@ -25,17 +27,41 @@ export function ScrollReveal() {
         const observePending = () => {
             const elements = Array.from(
                 document.querySelectorAll<HTMLElement>(
-                    ".reveal-up:not(.reveal-in):not([data-reveal-observed='true'])",
+                    ".reveal-up:not(.reveal-in)",
                 ),
             );
 
             for (const element of elements) {
-                element.dataset.revealObserved = "true";
+                if (observed.has(element)) {
+                    continue;
+                }
+
+                observed.add(element);
                 observer.observe(element);
             }
         };
 
-        observePending();
+        const resetAndObserve = () => {
+            const elements = Array.from(
+                document.querySelectorAll<HTMLElement>(".reveal-up"),
+            );
+
+            for (const element of elements) {
+                element.classList.remove("reveal-in");
+            }
+
+            observePending();
+        };
+
+        resetAndObserve();
+
+        const rafId = requestAnimationFrame(() => {
+            observePending();
+        });
+
+        const timeoutId = window.setTimeout(() => {
+            observePending();
+        }, 120);
 
         const mutationObserver = new MutationObserver(() => {
             observePending();
@@ -47,6 +73,8 @@ export function ScrollReveal() {
         });
 
         return () => {
+            window.clearTimeout(timeoutId);
+            cancelAnimationFrame(rafId);
             mutationObserver.disconnect();
             observer.disconnect();
         };
