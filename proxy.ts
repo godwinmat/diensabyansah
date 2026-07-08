@@ -60,8 +60,7 @@ export function proxy(request: NextRequest) {
     const isProtectedPage = pathname === "/cart";
     const isAdminLoginPage = pathname === "/admin-panel/login";
     const isAdminPanelPage =
-        pathname === "/admin-panel" ||
-        pathname.startsWith("/admin-panel/");
+        pathname === "/admin-panel" || pathname.startsWith("/admin-panel/");
     const isAdminAuthenticated = Boolean(adminToken);
 
     const isLoggedOutOnlyPage =
