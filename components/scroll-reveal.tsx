@@ -7,6 +7,8 @@ export function ScrollReveal() {
     const pathname = usePathname();
 
     useEffect(() => {
+        let hasStarted = false;
+        let onLoadHandler: (() => void) | null = null;
         const observed = new WeakSet<Element>();
         const observer = new IntersectionObserver(
             (entries) => {
@@ -64,15 +66,49 @@ export function ScrollReveal() {
         }, 120);
 
         const mutationObserver = new MutationObserver(() => {
-            observePending();
+            if (hasStarted) {
+                observePending();
+            }
         });
 
-        mutationObserver.observe(document.body, {
-            childList: true,
-            subtree: true,
-        });
+        const startRevealObservers = () => {
+            if (hasStarted) {
+                return;
+            }
+
+            hasStarted = true;
+            resetAndObserve();
+
+            mutationObserver.observe(document.body, {
+                childList: true,
+                subtree: true,
+            });
+        };
+
+        // Delay reveal class mutations until the page has fully loaded so
+        // streamed SSR content can hydrate without DOM/class interference.
+        const startDelayId = window.setTimeout(() => {
+            if (document.readyState === "complete") {
+                startRevealObservers();
+            } else {
+                onLoadHandler = () => {
+                    startRevealObservers();
+                    if (onLoadHandler) {
+                        window.removeEventListener("load", onLoadHandler);
+                        onLoadHandler = null;
+                    }
+                };
+
+                window.addEventListener("load", onLoadHandler);
+            }
+        }, 180);
 
         return () => {
+            hasStarted = false;
+            window.clearTimeout(startDelayId);
+            if (onLoadHandler) {
+                window.removeEventListener("load", onLoadHandler);
+            }
             window.clearTimeout(timeoutId);
             cancelAnimationFrame(rafId);
             mutationObserver.disconnect();

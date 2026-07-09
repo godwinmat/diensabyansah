@@ -1,67 +1,73 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import Link from "next/link";
 
 const pillars = [
     {
-        title: "Our Factory",
+        title: "Industrial Precision",
         description:
-            "Industrial scale meets artisanal precision in our state-of-the-art facility.",
-        cta: "Discover Scale",
-        image: "/pillar-1.png",
+            "Our Douala facility blends rigorous process controls with hand-finished excellence.",
+        cta: "See Our Standards",
+        image: "/diensa-images/958A1913.jpeg",
     },
     {
-        title: "Ethical Sourcing",
+        title: "Ethical Ecosystem",
         description:
-            "Honoring the land through transparent and responsible supply chains.",
-        cta: "Our Partners",
-        image: "/pillar-2.png",
+            "We source through trusted regional partners and invest directly in artisan communities.",
+        cta: "Meet Our Network",
+        image: "/diensa-images/958A2416.jpeg",
     },
     {
-        title: "Skilled Craft",
+        title: "Craft Leadership",
         description:
-            "Mastery passed down through generations, refined for the modern age.",
-        cta: "Meet Artisans",
-        image: "/pillar-3.png",
+            "Female-led teams elevate traditional techniques into globally competitive products.",
+        cta: "Meet The Team",
+        image: "/diensa-images/IMG_7618.jpeg",
     },
 ];
 
 const gallery = [
+    "/diensa-images/958A1769.jpeg",
+    "/diensa-images/958A2292.jpeg",
+    "/diensa-images/958A2307.jpeg",
     "/diensa-images/IMG_3560.jpeg",
     "/diensa-images/IMG_6827.jpeg",
     "/diensa-images/IMG_6642.jpeg",
     "/diensa-images/IMG_6429.jpeg",
+    "/diensa-images/IMG_7616.jpeg",
 ];
 
 export default function AboutPage() {
     return (
         <div className="bg-white">
-            <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 pt-6 lg:px-10 lg:pt-8 reveal-up">
+            <section className="mx-auto w-full max-w-7xl px-3 pt-6 sm:px-5 lg:px-10 lg:pt-8 reveal-up">
                 <div className="relative overflow-hidden rounded-2xl image-zoom shadow-[0_18px_60px_-30px_rgba(15,23,42,0.45)]">
-                    <div className="relative h-[40svh] min-h-80">
+                    <div className="relative h-[44svh] min-h-80 sm:h-[56svh]">
                         <Image
-                            src="/diensa-images/IMG_0619.jpeg"
-                            alt="Manufacturing and heritage"
+                            src="/diensa-images/958A1729.jpeg"
+                            alt="Diensa production floor"
                             fill
                             sizes="100vw"
                             priority
-                            className="object-cover object-[50%_30%]"
+                            className="object-cover object-[50%_15%]"
                         />
                     </div>
                     <div className="absolute inset-0 bg-[#0f2f44]/55" />
-                    <div className="absolute inset-x-6 bottom-6 text-white lg:inset-x-10 lg:bottom-10">
+                    <div className="absolute inset-x-4 bottom-6 text-white sm:inset-x-6 lg:inset-x-10 lg:bottom-10">
                         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary">
                             Industrial Luxury
                         </p>
-                        <h1 className="mt-2 text-5xl font-semibold leading-[0.95] tracking-tight lg:text-7xl">
-                            Manufacturing
-                            <br />
-                            &amp; Heritage
+                        <h1 className="mt-2 max-w-4xl text-4xl font-semibold leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+                            Building Africa&apos;s Next Fashion Manufacturing
+                            Standard
                         </h1>
+                        <p className="mt-4 max-w-2xl text-sm text-white/85 sm:text-base">
+                            We pair heritage craft with scalable systems to
+                            deliver premium products from Cameroon to the world.
+                        </p>
                     </div>
                 </div>
             </section>
@@ -69,29 +75,30 @@ export default function AboutPage() {
             <section className="mx-auto grid w-full max-w-7xl gap-8 px-3 py-12 sm:px-5 lg:grid-cols-[1.1fr_1fr] lg:px-10 lg:py-16 reveal-up">
                 <div>
                     <h2 className="text-4xl font-bold leading-[1.05] tracking-tight text-[#0f172a] lg:text-6xl">
-                        Made-in-Africa:
+                        Made in Africa:
                         <br />
-                        <span className="text-primary">The New Standard.</span>
+                        <span className="text-primary">
+                            Scaled with Purpose.
+                        </span>
                     </h2>
                     <p className="mt-5 max-w-2xl text-xl leading-9 text-[#64748b]">
-                        Redefining industrial luxury through female-led
-                        leadership and African excellence. Our facility is a
-                        testament to the continent&apos;s rising manufacturing
-                        prowess.
+                        Diensa by Ansah is a female-led manufacturing company
+                        transforming African fashion into a globally trusted
+                        supply and design force.
                     </p>
                     <div className="mt-8 flex flex-wrap gap-3">
                         <Button
                             asChild
                             className="h-12 rounded-sm bg-primary px-7 text-sm font-semibold uppercase tracking-[0.16em] text-[#1f2937]"
                         >
-                            <Link href="/contact">Explore The Hub</Link>
+                            <Link href="/contact">Book A Factory Visit</Link>
                         </Button>
                         <Button
                             asChild
                             variant="outline"
                             className="h-12 rounded-sm border-[#d6dce5] px-7 text-sm font-semibold uppercase tracking-[0.16em] text-[#0f172a]"
                         >
-                            <Link href="/blog">View Process</Link>
+                            <Link href="/gallery">View Full Gallery</Link>
                         </Button>
                     </div>
                 </div>
@@ -99,20 +106,20 @@ export default function AboutPage() {
                 <div className="grid gap-3 sm:grid-cols-2">
                     <div className="image-zoom relative h-72 overflow-hidden rounded-2xl shadow-[0_14px_40px_-28px_rgba(15,23,42,0.45)]">
                         <Image
-                            src="/explore-1.png"
-                            alt="Factory interior"
+                            src="/diensa-images/958A2307.jpeg"
+                            alt="Factory operations"
                             fill
                             sizes="(min-width: 1024px) 24vw, 100vw"
-                            className="object-cover"
+                            className="object-cover object-[50%_38%]"
                         />
                     </div>
                     <div className="image-zoom relative h-72 overflow-hidden rounded-2xl shadow-[0_14px_40px_-28px_rgba(15,23,42,0.45)]">
                         <Image
-                            src="/explore-2.png"
+                            src="/diensa-images/IMG_0616.jpeg"
                             alt="Design and production"
                             fill
                             sizes="(min-width: 1024px) 24vw, 100vw"
-                            className="object-cover"
+                            className="object-cover object-top"
                         />
                     </div>
                 </div>
@@ -136,30 +143,21 @@ export default function AboutPage() {
                                     alt={pillar.title}
                                     fill
                                     sizes="(min-width: 768px) 31vw, 100vw"
-                                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                                    className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
                                 />
                             </div>
                             <h4 className="px-4 pt-1 text-3xl font-semibold text-[#0f172a]">
                                 {pillar.title}
                             </h4>
-                            <p className="px-4 text-lg leading-8 text-[#94a3b8]">
+                            <p className="p-4  text-lg leading-8 text-[#94a3b8]">
                                 {pillar.description}
                             </p>
-                            <CardContent className="mt-1 px-4 pb-4">
-                                <Button
-                                    asChild
-                                    variant="link"
-                                    className="h-auto p-0 text-sm font-semibold uppercase tracking-[0.15em] text-primary no-underline hover:no-underline"
-                                >
-                                    <Link href="/contact">{pillar.cta} →</Link>
-                                </Button>
-                            </CardContent>
                         </Card>
                     ))}
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
+            <section className="mx-auto w-full max-w-7xl px-3 py-10 sm:px-5 lg:px-10 lg:py-12 reveal-up">
                 <div className="glass-panel relative overflow-hidden rounded-2xl border border-[#ece6d8] bg-[#f7f5ee]/88 px-3 py-10 shadow-[0_18px_60px_-36px_rgba(15,23,42,0.45)] sm:px-8 lg:px-14 lg:py-14">
                     <div className="absolute -right-6 -top-14 text-[16rem] font-black leading-none text-[#ece9dd]">
                         DA
@@ -181,7 +179,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
+            <section className="mx-auto w-full max-w-7xl px-3 py-10 sm:px-5 lg:px-10 lg:py-12 reveal-up">
                 <div className="rounded-2xl border border-[#e2e8f0] bg-white px-4 py-8 shadow-[0_18px_60px_-36px_rgba(15,23,42,0.32)] sm:px-8 lg:px-10">
                     <Badge className="h-auto bg-transparent px-0 text-xs font-semibold uppercase tracking-[0.28em] text-primary">
                         Founder Bio
@@ -212,7 +210,19 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 py-5 lg:px-10 lg:py-12 reveal-up">
+            <section className="mx-auto w-full max-w-7xl px-3 py-5 sm:px-5 lg:px-10 lg:py-12 reveal-up">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                    <h3 className="text-2xl font-semibold tracking-tight text-[#0f172a] sm:text-3xl">
+                        Company Moments
+                    </h3>
+                    <Button
+                        asChild
+                        variant="link"
+                        className="h-auto p-0 text-sm font-semibold uppercase tracking-[0.2em] text-primary no-underline hover:text-[#9d7f14] hover:no-underline"
+                    >
+                        <Link href="/gallery">Open Gallery</Link>
+                    </Button>
+                </div>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {gallery.map((image, index) => (
                         <div
@@ -231,28 +241,30 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 pb-16 pt-8 lg:px-10 lg:pb-20 lg:pt-10 reveal-up">
+            <section className="mx-auto w-full max-w-7xl px-3 pb-16 pt-8 sm:px-5 lg:px-10 lg:pb-20 lg:pt-10 reveal-up">
                 <div className="rounded-2xl border border-[#e2e8f0] bg-[#fcfcfb] px-4 pb-10 pt-12 text-center shadow-[0_18px_60px_-36px_rgba(15,23,42,0.32)] sm:px-8 sm:pb-12">
-                    <h3 className="text-5xl font-semibold tracking-tight text-[#0f172a]">
-                        Partner with the Future
+                    <h3 className="text-4xl font-semibold tracking-tight text-[#0f172a] sm:text-5xl">
+                        Partner with the Future of African Luxury
                     </h3>
                     <p className="mx-auto mt-4 max-w-3xl text-lg text-[#94a3b8]">
                         Inquiries regarding industrial partnerships, wholesale,
                         and factory visits are handled by our concierge team.
                     </p>
-                    <form className="mx-auto mt-7 flex max-w-xl flex-col gap-3 sm:flex-row">
-                        <Input
-                            type="email"
-                            placeholder="Email address"
-                            className="h-12 flex-1 rounded-sm border border-[#e2e8f0] px-4 text-base"
-                        />
+                    <div className="mx-auto mt-7 flex max-w-xl flex-col gap-3 sm:flex-row sm:justify-center">
                         <Button
-                            type="submit"
+                            asChild
                             className="inline-flex h-12 items-center justify-center rounded-sm bg-[#0f172a] px-8 text-sm font-semibold uppercase tracking-[0.14em] text-white hover:bg-[#162544]"
                         >
-                            Request Info
+                            <Link href="/contact">Request Info</Link>
                         </Button>
-                    </form>
+                        <Button
+                            asChild
+                            variant="outline"
+                            className="inline-flex h-12 items-center justify-center rounded-sm border-[#d6dce5] px-8 text-sm font-semibold uppercase tracking-[0.14em] text-[#0f172a]"
+                        >
+                            <Link href="/gallery">Explore Gallery</Link>
+                        </Button>
+                    </div>
                 </div>
             </section>
         </div>

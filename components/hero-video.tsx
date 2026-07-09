@@ -20,12 +20,12 @@ export function HeroVideo({ playbackRate = 0.75 }: HeroVideoProps) {
     return (
         <video
             ref={videoRef}
-            className="absolute inset-0 h-full w-full object-cover object-center"
+            className="absolute inset-0 h-full w-full object-cover object-[50%_35%]"
             autoPlay
             loop
             muted
             playsInline
-            poster="/hero.jpg"
+            poster="/diensa-images/IMG_0609.jpeg"
             preload="metadata"
             aria-label="Diensa hero"
         >

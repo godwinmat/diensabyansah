@@ -21,6 +21,7 @@ const navigation = [
     { href: "/products", label: "Shop" },
     { href: "/collections", label: "Collections" },
     { href: "/about", label: "About Diensa" },
+    { href: "/gallery", label: "Gallery" },
     { href: "/testimonials", label: "Testimonials" },
     { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
@@ -214,11 +215,8 @@ export function SiteHeader() {
                         href="/"
                         className="flex min-w-max items-center gap-3 transition-transform duration-300 hover:scale-[1.015]"
                     >
-                        <div className="grid h-8 w-8 place-items-center rounded-full bg-neutral-200 text-[9px] font-semibold text-neutral-700">
-                            DA
-                        </div>
                         <p className="text-[1.15rem] font-semibold uppercase leading-none tracking-tight text-[#111827] lg:text-[1.35rem]">
-                            Diensa{" "}
+                            Di:ensa{" "}
                             <span className="text-primary">by Ansah</span>
                         </p>
                     </Link>

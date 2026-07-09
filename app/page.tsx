@@ -29,7 +29,7 @@ const lookbookGallery = [
 export default function Home() {
     return (
         <div className="bg-white">
-            <section className="hero-in-view relative min-h-[78svh] overflow-hidden bg-[#0f172a] reveal-up sm:min-h-[88svh]">
+            <section className="hero-in-view relative min-h-[calc(100svh-4rem)] overflow-hidden bg-[#0f172a] reveal-up lg:min-h-[calc(100svh-5rem)]">
                 <HeroVideo playbackRate={0.5} />
                 <div className="absolute inset-0 bg-linear-to-b from-black/45 via-black/55 to-black/72" />
 
