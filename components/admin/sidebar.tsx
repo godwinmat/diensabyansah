@@ -5,6 +5,7 @@ import {
     Article,
     BuildingOffice,
     ChatsCircle,
+    ChatText,
     CreditCard,
     Folders,
     List,
@@ -30,6 +31,11 @@ const navLinks = [
         href: "/admin-panel/testimonials",
         label: "Testimonies",
         icon: ChatsCircle,
+    },
+    {
+        href: "/admin-panel/chat",
+        label: "Chat Inbox",
+        icon: ChatText,
     },
     { href: "/admin-panel/users", label: "Users", icon: Users },
     {

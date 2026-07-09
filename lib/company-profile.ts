@@ -15,6 +15,8 @@ export type CompanyProfileData = {
     businessHours: string;
     mapEmbedUrl: string;
     craftedInLabel: string;
+    currencyCode: string;
+    currencySymbol: string;
 };
 
 export const DEFAULT_COMPANY_PROFILE: CompanyProfileData = {
@@ -34,6 +36,8 @@ export const DEFAULT_COMPANY_PROFILE: CompanyProfileData = {
     mapEmbedUrl:
         "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3979.982926805878!2d9.704553400000002!3d4.0238909000000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x106112b8beb14df9%3A0xddc83e225dade421!2sAv.%20de%20l&#39;Ind%C3%A9pendance%2C%20Douala%2C%20Cameroon!5e0!3m2!1sen!2sng!4v1774890018125!5m2!1sen!2sng",
     craftedInLabel: "Crafted in Cameroon",
+    currencyCode: "XAF",
+    currencySymbol: "FCFA",
 };
 
 function toStringValue(value: unknown) {
@@ -108,6 +112,8 @@ export async function getCompanyProfile(): Promise<CompanyProfileData> {
             businessHours: true,
             mapEmbedUrl: true,
             craftedInLabel: true,
+            currencyCode: true,
+            currencySymbol: true,
         },
     });
 
@@ -151,5 +157,11 @@ export async function getCompanyProfile(): Promise<CompanyProfileData> {
         craftedInLabel:
             toStringValue(profile.craftedInLabel) ||
             DEFAULT_COMPANY_PROFILE.craftedInLabel,
+        currencyCode:
+            toStringValue(profile.currencyCode) ||
+            DEFAULT_COMPANY_PROFILE.currencyCode,
+        currencySymbol:
+            toStringValue(profile.currencySymbol) ||
+            DEFAULT_COMPANY_PROFILE.currencySymbol,
     };
 }

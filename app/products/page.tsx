@@ -42,7 +42,11 @@ export default async function ProductsPage({
     ).sort((a, b) => a.localeCompare(b));
 
     const sizeOptions = Array.from(
-        new Set(products.flatMap((product) => product.sizes)),
+        new Set(
+            products
+                .flatMap((product) => product.sizes)
+                .filter((size) => size.trim().toLowerCase() !== "one size"),
+        ),
     ).sort((a, b) => a.localeCompare(b));
 
     const filteredProducts = products.filter((product) => {
@@ -124,7 +128,7 @@ export default async function ProductsPage({
         selectedCollection.length > 0 &&
         collectionsWithProducts.includes(selectedCollection)
             ? selectedCollection
-            : collectionsWithProducts[0] ?? null;
+            : (collectionsWithProducts[0] ?? null);
     const heroProduct = heroCollection
         ? products
               .filter((p) => p.collections.includes(heroCollection))
@@ -134,22 +138,21 @@ export default async function ProductsPage({
                       (parseInt(String(a.id)) || 0),
               )[0]
         : null;
-    const heroImage =
-        heroProduct?.image ||
-        "https://images.unsplash.com/photo-1615212814093-4f4c0ca0d7f5?auto=format&fit=crop&w=1800&q=80";
+    const heroImage = "/diensa-images/IMG_3410.jpeg";
 
     return (
         <div className="bg-white">
             <section className="mx-auto w-full max-w-7xl px-3 pb-8 pt-6 sm:px-5 lg:px-10 lg:pt-8 reveal-up">
                 <div className="image-zoom relative overflow-hidden rounded-2xl shadow-[0_18px_60px_-30px_rgba(15,23,42,0.45)]">
-                    <div className="relative h-[32svh] min-h-64">
+                    <div className="relative h-[44svh] min-h-96 sm:h-[48svh]">
                         <Image
                             src={heroImage}
                             alt={heroCollection || "Diensa collection"}
                             fill
                             priority
+                            unoptimized
                             sizes="100vw"
-                            className="object-cover"
+                            className="object-cover object-top"
                         />
                     </div>
                     <div className="absolute inset-0 bg-[#0f2138]/55" />
@@ -158,8 +161,7 @@ export default async function ProductsPage({
                             New Season
                         </Badge>
                         <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-                            {heroCollection ||
-                                "2026 Industrial Indigo Series"}
+                            {heroCollection || "2026 Industrial Indigo Series"}
                         </h1>
                         <p className="mt-3 max-w-3xl text-sm leading-6 text-white/85 lg:text-base lg:leading-7">
                             A curated selection of structural silhouettes and

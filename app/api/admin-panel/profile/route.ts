@@ -22,6 +22,8 @@ type CompanyProfileBody = {
     businessHours?: string;
     mapEmbedUrl?: string;
     craftedInLabel?: string;
+    currencyCode?: string;
+    currencySymbol?: string;
 };
 
 function normalizeString(value: unknown) {
@@ -86,6 +88,12 @@ export async function PATCH(request: Request) {
     const craftedInLabel =
         normalizeString(body?.craftedInLabel) ||
         DEFAULT_COMPANY_PROFILE.craftedInLabel;
+    const currencyCode =
+        normalizeString(body?.currencyCode).toUpperCase() ||
+        DEFAULT_COMPANY_PROFILE.currencyCode;
+    const currencySymbol =
+        normalizeString(body?.currencySymbol) ||
+        DEFAULT_COMPANY_PROFILE.currencySymbol;
 
     const saved = await prisma.companyProfile.upsert({
         where: { id: "default" },
@@ -105,6 +113,8 @@ export async function PATCH(request: Request) {
             businessHours,
             mapEmbedUrl,
             craftedInLabel,
+            currencyCode,
+            currencySymbol,
         },
         update: {
             companyName,
@@ -121,6 +131,8 @@ export async function PATCH(request: Request) {
             businessHours,
             mapEmbedUrl,
             craftedInLabel,
+            currencyCode,
+            currencySymbol,
         },
         select: {
             companyName: true,
@@ -137,6 +149,8 @@ export async function PATCH(request: Request) {
             businessHours: true,
             mapEmbedUrl: true,
             craftedInLabel: true,
+            currencyCode: true,
+            currencySymbol: true,
         },
     });
 
@@ -165,6 +179,10 @@ export async function PATCH(request: Request) {
                 saved.mapEmbedUrl ?? DEFAULT_COMPANY_PROFILE.mapEmbedUrl,
             craftedInLabel:
                 saved.craftedInLabel ?? DEFAULT_COMPANY_PROFILE.craftedInLabel,
+            currencyCode:
+                saved.currencyCode ?? DEFAULT_COMPANY_PROFILE.currencyCode,
+            currencySymbol:
+                saved.currencySymbol ?? DEFAULT_COMPANY_PROFILE.currencySymbol,
         },
     });
 }

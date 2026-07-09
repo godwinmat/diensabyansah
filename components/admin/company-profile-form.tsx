@@ -152,6 +152,36 @@ export function CompanyProfileForm({
                             placeholder="Crafted in Cameroon"
                         />
                     </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="currencyCode">Currency Code</Label>
+                        <Input
+                            id="currencyCode"
+                            value={form.currencyCode}
+                            onChange={(event) =>
+                                handleChange(
+                                    "currencyCode",
+                                    event.target.value.toUpperCase(),
+                                )
+                            }
+                            placeholder="XAF"
+                            maxLength={3}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="currencySymbol">Currency Symbol</Label>
+                        <Input
+                            id="currencySymbol"
+                            value={form.currencySymbol}
+                            onChange={(event) =>
+                                handleChange(
+                                    "currencySymbol",
+                                    event.target.value,
+                                )
+                            }
+                            placeholder="FCFA"
+                            maxLength={6}
+                        />
+                    </div>
                 </CardContent>
             </Card>
 

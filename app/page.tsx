@@ -1,4 +1,5 @@
 import { AnimatedStats } from "@/components/animated-stats";
+import { CameroonFashionLogos } from "@/components/cameroon-fashion-logos";
 import { HeroVideo } from "@/components/hero-video";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,33 +16,55 @@ const stats = [
     { value: "250", label: "Artisans" },
 ];
 
+const lookbookGallery = [
+    "/diensa-images/IMG_0616.jpeg",
+
+    "/diensa-images/j.jpeg",
+    "/diensa-images/958A2292.jpeg",
+    "/diensa-images/IMG_0625.jpeg",
+    "/diensa-images/958A2461.jpeg",
+    "/diensa-images/IMG_0609.jpeg",
+];
+
 export default function Home() {
     return (
         <div className="bg-white">
-            <section className="relative min-h-[84svh] overflow-hidden bg-[#0f172a] reveal-up sm:min-h-[92svh]">
+            <section className="hero-in-view relative min-h-[78svh] overflow-hidden bg-[#0f172a] reveal-up sm:min-h-[88svh]">
                 <HeroVideo playbackRate={0.5} />
-                <div className="absolute inset-0 bg-black/55" />
+                <div className="absolute inset-0 bg-linear-to-b from-black/45 via-black/55 to-black/72" />
 
-                <div className="relative mx-auto flex w-full max-w-screen flex-col items-center px-3 py-16 text-center sm:px-5 sm:py-20 lg:px-10 lg:py-28">
+                <div className="relative mx-auto flex w-full max-w-screen flex-col items-center px-3 py-14 text-center sm:px-5 sm:py-20 lg:px-10 lg:py-28">
                     <div className="max-w-5xl">
-                        <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-primary">
+                        <p
+                            data-hero-item="1"
+                            className="mb-4 text-[10px] font-semibold uppercase tracking-[0.28em] text-primary sm:mb-5 sm:text-xs sm:tracking-[0.34em]"
+                        >
                             Luxury Redefined
                         </p>
-                        <h1 className="text-4xl font-semibold leading-[0.95] tracking-tight text-white sm:text-5xl md:text-7xl lg:text-8xl">
+                        <h1
+                            data-hero-item="2"
+                            className="text-[2.15rem] font-semibold leading-[0.95] tracking-tight text-white sm:text-5xl md:text-7xl lg:text-8xl"
+                        >
                             Contemporary Heritage.
                             <br />
                             <span className="text-primary">
                                 Industrial Ambition.
                             </span>
                         </h1>
-                        <p className="mx-auto mt-6 max-w-3xl text-base leading-7 text-white/80 sm:mt-8 sm:text-lg sm:leading-8 md:text-2xl md:leading-10">
+                        <p
+                            data-hero-item="3"
+                            className="mx-auto mt-5 max-w-3xl text-[15px] leading-6 text-white/80 sm:mt-8 sm:text-lg sm:leading-8 md:text-xl md:leading-9"
+                        >
                             Experience the modern evolution of traditional Adire
                             textiles through architectural silhouettes and
                             ethical precision.
                         </p>
                     </div>
 
-                    <div className="mt-8 flex w-full max-w-sm flex-wrap items-center justify-center gap-3 sm:mt-10 sm:max-w-none sm:gap-4">
+                    <div
+                        data-hero-item="3"
+                        className="mt-7 flex w-full max-w-sm flex-wrap items-center justify-center gap-3 sm:mt-10 sm:max-w-none sm:gap-4"
+                    >
                         <Button
                             asChild
                             className="h-12 w-full rounded-sm bg-primary px-7 text-sm font-semibold uppercase tracking-[0.15em] text-[#1f2937] hover:opacity-90 sm:w-auto"
@@ -59,20 +82,61 @@ export default function Home() {
                 </div>
             </section>
 
+            <CameroonFashionLogos />
+
             <Suspense fallback={<FeaturedCollectionFallback />}>
                 <FeaturedCollectionSection />
             </Suspense>
+
+            <section className="mx-auto w-full max-w-7xl px-3 pb-6 sm:px-5 sm:pb-8 lg:px-10 reveal-up">
+                <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                            Editorial Lookbook
+                        </p>
+                        <h2 className="mt-1 text-3xl font-semibold tracking-tight text-[#111827] sm:text-4xl">
+                            Diensa Frames
+                        </h2>
+                    </div>
+                    <p className="text-sm text-[#6b7280]">
+                        A curated visual story from recent collections.
+                    </p>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {lookbookGallery.map((image, index) => (
+                        <article
+                            key={image}
+                            className={`image-zoom overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white shadow-[0_14px_40px_-30px_rgba(15,23,42,0.55)] ${
+                                index % 3 === 0
+                                    ? "sm:col-span-2 lg:col-span-1"
+                                    : ""
+                            }`}
+                        >
+                            <div className="relative h-60 sm:h-96">
+                                <Image
+                                    src={image}
+                                    alt={`Diensa lookbook ${index + 1}`}
+                                    fill
+                                    sizes="(min-width: 1024px) 30vw, (min-width: 640px) 48vw, 100vw"
+                                    className="object-cover object-top"
+                                />
+                            </div>
+                        </article>
+                    ))}
+                </div>
+            </section>
 
             <section className="bg-[#f4f1e6] py-12 sm:py-16 lg:py-20 reveal-up">
                 <div className="mx-auto grid w-full max-w-7xl gap-8 px-3 sm:gap-10 sm:px-5 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:px-10">
                     <div className="relative">
                         <div className="image-zoom relative h-64 overflow-hidden rounded-2xl sm:h-96">
                             <Image
-                                src="/factory.jpg"
+                                src="/diensa-images/958A1913.jpeg"
                                 alt="Diensa factory"
                                 fill
                                 sizes="(min-width: 1024px) 44vw, 100vw"
-                                className="object-cover"
+                                className="object-cover object-[50%_30%]"
                             />
                         </div>
                         <div className="glass-panel hover-lift absolute -bottom-5 right-3 rounded-lg bg-primary/90 px-5 py-4 text-[#1f2937] shadow-lg sm:-bottom-6 sm:right-5 sm:px-8 sm:py-6">
@@ -133,14 +197,14 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-screen px-3 py-16 text-center sm:px-5 sm:py-24 lg:px-10 lg:py-32 reveal-up">
+            <section className="mx-auto w-full max-w-screen px-3 py-14 text-center sm:px-5 sm:py-20 lg:px-10 lg:py-28 reveal-up">
                 <p className="text-xs font-semibold uppercase tracking-[0.34em] text-primary">
                     The Diensa Story
                 </p>
-                <h2 className="mx-auto mt-4 max-w-4xl text-3xl font-semibold leading-[1.03] tracking-tight text-[#0f172a] sm:mt-5 sm:text-5xl md:text-7xl">
+                <h2 className="mx-auto mt-4 max-w-4xl text-3xl font-semibold leading-[1.03] tracking-tight text-[#0f172a] sm:mt-5 sm:text-5xl md:text-6xl">
                     From Boutique Charm to Industrial Scale
                 </h2>
-                <p className="mx-auto mt-6 max-w-4xl text-base leading-7 text-[#94a3b8] sm:mt-8 sm:text-xl sm:leading-9">
+                <p className="mx-auto mt-6 max-w-4xl text-[15px] leading-7 text-[#94a3b8] sm:mt-8 sm:text-lg sm:leading-8">
                     Founded with a vision to globalize West African aesthetics,
                     Diensa by Ansah has transitioned from a bespoke boutique to
                     an industrial-scale fashion house. Our journey is rooted in
@@ -148,7 +212,7 @@ export default function Home() {
                     table of global luxury, backed by the power of sustainable
                     industrialization.
                 </p>
-                <p className="mx-auto mt-4 max-w-4xl text-sm leading-7 text-[#64748b] sm:text-base sm:leading-8">
+                <p className="mx-auto mt-4 max-w-4xl text-sm leading-7 text-[#64748b] sm:text-[15px] sm:leading-8">
                     Led by founder and creative director Ansah Mbom Solange
                     Niba, the brand reflects over a decade of marketing and
                     business leadership, anchored by an "Africa First" and "Made

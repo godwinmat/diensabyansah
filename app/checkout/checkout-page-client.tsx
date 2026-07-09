@@ -267,14 +267,14 @@ export default function CheckoutPage() {
     }
 
     return (
-        <section className="mx-auto max-w-5xl px-5 py-10 reveal-up">
+        <section className="mx-auto max-w-5xl px-4 py-8 sm:px-5 sm:py-10 reveal-up">
             <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
                 <form onSubmit={handleCheckout} className="space-y-5">
                     <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
                             Checkout
                         </p>
-                        <h1 className="mt-2 text-4xl font-semibold text-[#1e293b]">
+                        <h1 className="mt-2 text-3xl font-semibold text-[#1e293b] sm:text-4xl">
                             Delivery Details
                         </h1>
                         <p className="mt-1 text-sm text-muted-foreground">

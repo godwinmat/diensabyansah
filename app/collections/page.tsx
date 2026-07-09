@@ -1,15 +1,18 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-    getCatalogCollections,
-    getCatalogProducts,
-} from "@/lib/catalog";
+import { getCatalogCollections, getCatalogProducts } from "@/lib/catalog";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
+
+const collectionStrip = [
+    "/diensa-images/958A1721.jpeg",
+    "/diensa-images/958A2307.jpeg",
+    "/diensa-images/IMG_7618.jpeg",
+];
 
 export default async function CollectionsPage() {
     const [collections, products] = await Promise.all([
@@ -38,12 +41,12 @@ export default async function CollectionsPage() {
                 <div className="image-zoom relative overflow-hidden rounded-2xl shadow-[0_18px_60px_-30px_rgba(15,23,42,0.45)]">
                     <div className="relative h-[30svh] min-h-56 sm:h-[36svh]">
                         <Image
-                            src="/collection.jpg"
+                            src="/diensa-images/958A1729.jpeg"
                             alt="Diensa collections"
                             fill
                             priority
                             sizes="100vw"
-                            className="object-cover"
+                            className="object-cover object-top"
                         />
                     </div>
                     <div className="absolute inset-0 bg-[#0f2138]/55" />
@@ -51,14 +54,33 @@ export default async function CollectionsPage() {
                         <Badge className="h-auto bg-primary px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-[#1f2937]">
                             Collections
                         </Badge>
-                        <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+                        <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
                             Explore Every Collection
                         </h1>
-                        <p className="mt-3 max-w-3xl text-sm text-white/85 lg:text-base">
+                        <p className="mt-2 max-w-3xl text-[13px] text-white/85 sm:text-sm lg:text-base">
                             Browse all available categories curated from our
                             latest catalog.
                         </p>
                     </div>
+                </div>
+            </section>
+
+            <section className="mx-auto w-full max-w-7xl px-3 pb-6 sm:px-5 lg:px-10 reveal-up">
+                <div className="grid gap-3 sm:grid-cols-3">
+                    {collectionStrip.map((image) => (
+                        <div
+                            key={image}
+                            className="image-zoom relative h-64 overflow-hidden rounded-2xl border border-[#e5e7eb]"
+                        >
+                            <Image
+                                src={image}
+                                alt="Diensa collection editorial"
+                                fill
+                                sizes="(min-width: 640px) 33vw, 100vw"
+                                className="object-cover object-top"
+                            />
+                        </div>
+                    ))}
                 </div>
             </section>
 

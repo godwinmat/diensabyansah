@@ -17,24 +17,6 @@ import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 
-const videos = [
-    {
-        title: "Global Textiles Group",
-        subtitle: "Manufacturing Excellence",
-        image: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=1200&q=80",
-    },
-    {
-        title: "Elena S.",
-        subtitle: "Private Client, Milan",
-        image: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200&q=80",
-    },
-    {
-        title: "Marcus T.",
-        subtitle: "Private Client, London",
-        image: "https://images.unsplash.com/photo-1533669955142-6a73332af4db?auto=format&fit=crop&w=1200&q=80",
-    },
-];
-
 const partnerRows = [
     {
         partner: "Global Textiles Group",
@@ -47,27 +29,6 @@ const partnerRows = [
         focus: "Ethical Production",
         testimonial:
             '"Their commitment to ethical sourcing and sustainable heritage techniques sets a new standard for modern luxury manufacturing. They don\'t just build clothes; they build legacies."',
-    },
-];
-
-const clients = [
-    {
-        quote: '"The way the silk moves is hypnotic. I\'ve never found a brand that balances traditional fabric weight with such a contemporary silhouette. The fit was impeccable from the first wear."',
-        name: "Elena S.",
-        location: "Milan, Italy",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=280&q=80",
-    },
-    {
-        quote: '"As someone who appreciates tailored heritage, Ansah\'s work is a revelation. The linen blend is breathable yet structured—perfect for high-end events in warmer climates."',
-        name: "Marcus T.",
-        location: "London, UK",
-        avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=280&q=80",
-    },
-    {
-        quote: '"An exceptional experience from consultation to delivery. The attention to detail in the embroidery is unlike anything else in my wardrobe. A true modern heirloom."',
-        name: "Sophie L.",
-        location: "Paris, France",
-        avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=280&q=80",
     },
 ];
 
@@ -117,11 +78,11 @@ export default async function TestimonialsPage() {
 
                 <div className="image-zoom overflow-hidden rounded-2xl shadow-[0_18px_60px_-30px_rgba(15,23,42,0.45)]">
                     <Image
-                        src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1100&q=80"
+                        src="/diensa-images/958A1729.jpeg"
                         alt="Model portrait"
                         width={920}
                         height={1120}
-                        className="h-auto w-full object-cover"
+                        className="h-auto w-full object-cover object-top"
                     />
                 </div>
             </section>
@@ -140,71 +101,52 @@ export default async function TestimonialsPage() {
                             their Diensa experience in their own words.
                         </p>
                     </div>
-                    <Button
-                        asChild
-                        variant="link"
-                        className="h-auto justify-start p-0 text-xs font-semibold uppercase tracking-[0.18em] text-primary no-underline hover:no-underline"
-                    >
-                        <Link href="#">View all stories →</Link>
-                    </Button>
                 </div>
 
                 <div className="grid gap-4 lg:grid-cols-3">
-                    {(videoTestimonials.length > 0
-                        ? videoTestimonials
-                        : videos
-                    ).map((video) => (
-                        <article
-                            key={"videoUrl" in video ? video.id : video.title}
-                            className="image-zoom relative overflow-hidden rounded-2xl shadow-[0_14px_40px_-28px_rgba(15,23,42,0.45)]"
-                        >
-                            {"videoUrl" in video ? (
-                                <>
-                                    <video
-                                        src={video.videoUrl}
-                                        controls
-                                        controlsList="nodownload"
-                                        muted={false}
-                                        disablePictureInPicture
-                                        preload="metadata"
-                                        className="h-52 w-full object-cover sm:h-64"
-                                    />
-                                    <div className="border-t border-[#e5e7eb] bg-white px-4 py-4">
-                                        <p className="text-sm font-semibold text-[#1f2937]">
-                                            {video.name}
-                                        </p>
-                                        <p className="text-[11px] uppercase tracking-[0.12em] text-[#94a3b8]">
-                                            Client Video Testimony
-                                        </p>
+                    {videoTestimonials.length > 0 ? (
+                        videoTestimonials.map((video) => (
+                            <article
+                                key={video.id}
+                                className="image-zoom relative overflow-hidden rounded-2xl shadow-[0_14px_40px_-28px_rgba(15,23,42,0.45)]"
+                            >
+                                <video
+                                    src={video.videoUrl}
+                                    controls
+                                    controlsList="nodownload"
+                                    muted={false}
+                                    disablePictureInPicture
+                                    preload="metadata"
+                                    className="h-52 w-full object-cover object-top sm:h-64"
+                                />
+                                <div className="pointer-events-none absolute inset-0 bg-black/30" />
+                                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                                    <div className="grid h-14 w-14 place-items-center rounded-xl border border-white/50 text-white">
+                                        ▶
                                     </div>
-                                </>
-                            ) : (
-                                <>
-                                    <Image
-                                        src={video.image}
-                                        alt={video.title}
-                                        width={920}
-                                        height={520}
-                                        className="h-52 w-full object-cover sm:h-64"
-                                    />
-                                    <div className="absolute inset-0 bg-black/30" />
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="grid h-14 w-14 place-items-center rounded-xl border border-white/50 text-white">
-                                            ▶
-                                        </div>
-                                    </div>
-                                    <div className="absolute inset-x-4 bottom-4 text-white">
-                                        <p className="text-sm font-semibold">
-                                            {video.title}
-                                        </p>
-                                        <p className="text-[11px] uppercase tracking-[0.12em] text-white/85">
-                                            {video.subtitle}
-                                        </p>
-                                    </div>
-                                </>
-                            )}
-                        </article>
-                    ))}
+                                </div>
+                                <div className="pointer-events-none absolute inset-x-4 bottom-4 text-white">
+                                    <p className="text-sm font-semibold">
+                                        {video.name}
+                                    </p>
+                                    <p className="text-[11px] uppercase tracking-[0.12em] text-white/85">
+                                        Client Video Testimony
+                                    </p>
+                                </div>
+                            </article>
+                        ))
+                    ) : (
+                        <Card className="gap-0 rounded-2xl border border-dashed border-[#d1d9e0] bg-white/80 py-0 lg:col-span-3">
+                            <CardContent className="px-5 py-10 text-center sm:px-8">
+                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                                    Video Stories
+                                </p>
+                                <p className="mt-3 text-base text-[#64748b] sm:text-lg">
+                                    There are no video testimonials added yet.
+                                </p>
+                            </CardContent>
+                        </Card>
+                    )}
                 </div>
             </section>
 
@@ -291,56 +233,50 @@ export default async function TestimonialsPage() {
                 </div>
 
                 <div className="grid gap-5 lg:grid-cols-3">
-                    {(textTestimonials.length > 0
-                        ? textTestimonials
-                        : clients
-                    ).map((client) => (
-                        <Card
-                            key={
-                                "quote" in client && "location" in client
-                                    ? client.name
-                                    : client.id
-                            }
-                            className="gap-0 rounded-2xl border border-[#e3e8ed] bg-white py-0 shadow-[0_10px_30px_-24px_rgba(15,23,42,0.35)]"
-                        >
-                            <CardContent className="p-5">
-                                <p className="text-primary">★★★★★</p>
-                                <p className="mt-4 text-lg leading-8 text-[#6b7280]">
-                                    {formatQuote(client.quote)}
-                                </p>
-                                <Separator className="mt-6 bg-[#e5e9ee]" />
-                                <div className="pt-4">
-                                    <div className="flex items-center gap-3">
-                                        {"avatar" in client ? (
-                                            <Image
-                                                src={client.avatar}
-                                                alt={client.name}
-                                                width={44}
-                                                height={44}
-                                                className="h-11 w-11 rounded-xl object-cover"
-                                            />
-                                        ) : (
+                    {textTestimonials.length > 0 ? (
+                        textTestimonials.map((client) => (
+                            <Card
+                                key={client.id}
+                                className="gap-0 rounded-2xl border border-[#e3e8ed] bg-white py-0 shadow-[0_10px_30px_-24px_rgba(15,23,42,0.35)]"
+                            >
+                                <CardContent className="p-5">
+                                    <p className="text-primary">★★★★★</p>
+                                    <p className="mt-4 text-lg leading-8 text-[#6b7280]">
+                                        {formatQuote(client.quote)}
+                                    </p>
+                                    <Separator className="mt-6 bg-[#e5e9ee]" />
+                                    <div className="pt-4">
+                                        <div className="flex items-center gap-3">
                                             <div className="grid h-11 w-11 place-items-center rounded-xl bg-[#f5edd0] text-sm font-semibold text-primary">
                                                 {client.name
                                                     .slice(0, 1)
                                                     .toUpperCase()}
                                             </div>
-                                        )}
-                                        <div>
-                                            <p className="text-xl font-semibold text-[#1f2937]">
-                                                {client.name}
-                                            </p>
-                                            <p className="text-xs uppercase tracking-widest text-[#94a3b8]">
-                                                {"location" in client
-                                                    ? client.location
-                                                    : "Private Client"}
-                                            </p>
+                                            <div>
+                                                <p className="text-xl font-semibold text-[#1f2937]">
+                                                    {client.name}
+                                                </p>
+                                                <p className="text-xs uppercase tracking-widest text-[#94a3b8]">
+                                                    Private Client
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </CardContent>
+                            </Card>
+                        ))
+                    ) : (
+                        <Card className="gap-0 rounded-2xl border border-dashed border-[#d1d9e0] bg-white/80 py-0 lg:col-span-3">
+                            <CardContent className="px-5 py-10 text-center sm:px-8">
+                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                                    Private Clientele
+                                </p>
+                                <p className="mt-3 text-base text-[#64748b] sm:text-lg">
+                                    There are no text testimonials added yet.
+                                </p>
                             </CardContent>
                         </Card>
-                    ))}
+                    )}
                 </div>
             </section>
 

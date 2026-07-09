@@ -1,19 +1,21 @@
+import { FloatingChatWidget } from "@/components/floating-chat-widget";
 import { NavigationLoadingIndicator } from "@/components/navigation-loading-indicator";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 
-const playfairDisplayHeading = Playfair_Display({
+const cormorantHeading = Cormorant_Garamond({
     subsets: ["latin"],
+    weight: ["500", "600", "700"],
     variable: "--font-heading",
 });
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
     title: "Diensa by Ansah",
@@ -32,8 +34,8 @@ export default function RootLayout({
                 "h-full",
                 "antialiased",
                 "font-sans",
-                inter.variable,
-                playfairDisplayHeading.variable,
+                manrope.variable,
+                cormorantHeading.variable,
             )}
         >
             <body className="min-h-full flex flex-col">
@@ -48,6 +50,7 @@ export default function RootLayout({
                     <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-56 bg-linear-to-b from-primary/8 to-transparent" />
                     {children}
                 </main>
+                <FloatingChatWidget />
                 <SiteFooter />
             </body>
         </html>

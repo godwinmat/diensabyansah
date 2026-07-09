@@ -60,9 +60,7 @@ export function ContactForm() {
             form.reset();
             setState({
                 status: "success",
-                message:
-                    data?.message ??
-                    "Your message has been sent. We will be in touch shortly.",
+                message: data?.message ?? "Your message has been received.",
             });
         } catch {
             setState({

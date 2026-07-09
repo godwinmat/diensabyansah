@@ -31,10 +31,10 @@ const pillars = [
 ];
 
 const gallery = [
-    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1528736235302-52922df5c122?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=800&q=80",
+    "/diensa-images/IMG_3560.jpeg",
+    "/diensa-images/IMG_6827.jpeg",
+    "/diensa-images/IMG_6642.jpeg",
+    "/diensa-images/IMG_6429.jpeg",
 ];
 
 export default function AboutPage() {
@@ -42,14 +42,14 @@ export default function AboutPage() {
         <div className="bg-white">
             <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 pt-6 lg:px-10 lg:pt-8 reveal-up">
                 <div className="relative overflow-hidden rounded-2xl image-zoom shadow-[0_18px_60px_-30px_rgba(15,23,42,0.45)]">
-                    <div className="relative h-[36svh] min-h-72">
+                    <div className="relative h-[40svh] min-h-80">
                         <Image
-                            src="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1900&q=80"
+                            src="/diensa-images/IMG_0619.jpeg"
                             alt="Manufacturing and heritage"
                             fill
                             sizes="100vw"
                             priority
-                            className="object-cover"
+                            className="object-cover object-[50%_30%]"
                         />
                     </div>
                     <div className="absolute inset-0 bg-[#0f2f44]/55" />
@@ -178,13 +178,6 @@ export default function AboutPage() {
                         where industrial efficiency never sacrifices the human
                         touch.
                     </p>
-                    <Button
-                        asChild
-                        variant="link"
-                        className="relative mt-8 inline-flex h-auto p-0 text-sm font-semibold uppercase tracking-[0.17em] text-[#0f172a] no-underline hover:no-underline"
-                    >
-                        <Link href="/blog">Read The Full Manifesto ⧉</Link>
-                    </Button>
                 </div>
             </section>
 
@@ -219,7 +212,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 py-10 lg:px-10 lg:py-12 reveal-up">
+            <section className="mx-auto w-full max-w-7xl px-3 sm:px-5 py-5 lg:px-10 lg:py-12 reveal-up">
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {gallery.map((image, index) => (
                         <div
@@ -231,7 +224,7 @@ export default function AboutPage() {
                                 alt={`Gallery ${index + 1}`}
                                 fill
                                 sizes="(min-width: 1024px) 23vw, (min-width: 640px) 48vw, 100vw"
-                                className="object-cover"
+                                className="object-cover object-top"
                             />
                         </div>
                     ))}

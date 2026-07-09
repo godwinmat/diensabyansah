@@ -217,13 +217,13 @@ export default function CartPage() {
 
     return (
         <div className="bg-[#f4f4f3]">
-            <section className="mx-auto w-full max-w-6xl px-5 pb-14 pt-8 md:px-8 lg:px-10 lg:pb-20 reveal-up">
+            <section className="mx-auto w-full max-w-6xl px-4 pb-12 pt-6 md:px-8 lg:px-10 lg:pb-20 reveal-up">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary">
                             Checkout
                         </p>
-                        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-[#1e293b]">
+                        <h1 className="mt-2 text-4xl font-semibold tracking-tight text-[#1e293b] sm:mt-3 sm:text-5xl">
                             Your Bag
                         </h1>
                         <p className="mt-2 text-sm text-[#94a3b8]">
@@ -299,10 +299,10 @@ export default function CartPage() {
                                     </div>
 
                                     <div>
-                                        <h2 className="mt-1 text-2xl font-semibold text-[#1e293b] sm:text-3xl">
+                                        <h2 className="mt-1 text-[1.45rem] font-semibold text-[#1e293b] sm:text-3xl">
                                             {item.name}
                                         </h2>
-                                        <p className="mt-1 text-base text-[#64748b]">
+                                        <p className="mt-1 text-sm text-[#64748b] sm:text-base">
                                             {stripHtml(
                                                 item.short_description ||
                                                     item.description ||
@@ -387,7 +387,7 @@ export default function CartPage() {
                                         >
                                             <X size={16} weight="bold" />
                                         </button>
-                                        <p className="pt-1 text-3xl font-semibold text-primary">
+                                        <p className="pt-1 text-2xl font-semibold text-primary sm:text-3xl">
                                             {money(
                                                 parseMinorUnitAmount(
                                                     item.totals?.line_total ??
@@ -414,7 +414,7 @@ export default function CartPage() {
 
                     <Card className="sticky top-8 gap-0 rounded-2xl border border-[#e2e8f0] bg-white/90 py-0 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.45)]">
                         <CardContent className="p-6 sm:p-7">
-                            <h3 className="text-3xl font-semibold text-[#1e293b]">
+                            <h3 className="text-2xl font-semibold text-[#1e293b] sm:text-3xl">
                                 Order Summary
                             </h3>
                             <p className="mt-2 text-sm text-[#94a3b8]">

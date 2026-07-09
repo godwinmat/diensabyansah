@@ -58,12 +58,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 <div className="relative overflow-hidden rounded-2xl shadow-[0_18px_60px_-30px_rgba(15,23,42,0.45)]">
                     <div className="image-zoom relative h-[56svh] min-h-120">
                         <Image
-                            src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1700&q=80"
+                            src="/diensa-images/958A1721.jpeg"
                             alt="Fashion editorial model"
                             fill
                             sizes="100vw"
                             priority
-                            className="object-cover"
+                            className="object-cover object-top"
                         />
                     </div>
                     <div className="absolute inset-0 bg-[#243447]/52" />
