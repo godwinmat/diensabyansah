@@ -10,40 +10,24 @@ type Brand = {
 
 const brands: Brand[] = [
     {
-        name: "Diensa by Ansah",
-        localMark: true,
+        name: "MaXhosa Africa",
+        domain: "maxhosa.africa",
     },
     {
-        name: "Kibonen NY",
-        domain: "kibonen.com",
-    },
-    {
-        name: "Eloli World",
-        domain: "eloliworld.com",
-    },
-    {
-        name: "Mimie Smith",
-        domain: "mimiesmith.com",
-    },
-    {
-        name: "Saker Couture",
-        domain: "sakercouture.com",
-    },
-    {
-        name: "Maison Ghys",
-        domain: "maisonghys.com",
-    },
-    {
-        name: "Margo's Mode",
-        domain: "margosmode.com",
+        name: "Rich Mnisi",
+        domain: "richmnisi.com",
     },
     {
         name: "Loza Maleombho",
         domain: "lozamaleombho.com",
     },
     {
-        name: "N'G Collection",
-        domain: "ngcollection.com",
+        name: "Kibonen NY",
+        domain: "kibonen.com",
+    },
+    {
+        name: "David Tlale",
+        domain: "davidtlale.com",
     },
 ];
 
