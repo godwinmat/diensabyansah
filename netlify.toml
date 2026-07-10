@@ -1,7 +1,7 @@
 [build.environment]
   # These values are operational config, not high-entropy secrets.
   # Omitting them prevents false positives in generated Next.js/Netlify artifacts.
-  SECRETS_SCAN_OMIT_KEYS = "APP_BASE_URL,SUPABASE_URL,SUPABASE_STORAGE_BUCKET,SMTP_HOST,ADMIN_PANEL_PASSWORD"
+  SECRETS_SCAN_OMIT_KEYS = "APP_BASE_URL,SUPABASE_URL,SUPABASE_STORAGE_BUCKET,SMTP_HOST,ADMIN_PANEL_PASSWORD,NEXT_PUBLIC_LOGO_DEV_PUBLISHABLE_KEY"
 
 [functions]
   included_files = [
