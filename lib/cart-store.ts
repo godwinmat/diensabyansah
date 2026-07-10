@@ -1,6 +1,7 @@
 import { getAuthEmailFromToken } from "@/lib/auth-token";
 import { getCatalogProducts, type CatalogProduct } from "@/lib/catalog";
 import { parsePrice } from "@/lib/cart";
+import { getCompanyProfile } from "@/lib/company-profile";
 import { prisma } from "@/lib/prisma";
 
 export type PersistedCartItem = {
@@ -188,10 +189,14 @@ function findProduct(products: CatalogProduct[], productId: number) {
 }
 
 export async function buildCartApiResponseForUser(userEmail: string) {
-    const [cart, products] = await Promise.all([
+    const [cart, products, profile] = await Promise.all([
         getCartRecord(userEmail),
         getCatalogProducts(),
+        getCompanyProfile(),
     ]);
+
+    const currencyCode = profile.currencyCode || "USD";
+    const currencySymbol = profile.currencySymbol || "$";
 
     const items = cart.items.map((entry) => {
         const product = findProduct(products, entry.productId);
@@ -223,15 +228,15 @@ export async function buildCartApiResponseForUser(userEmail: string) {
                 : [],
             prices: {
                 price: String(unitPriceMinor),
-                currency_code: "USD",
+                currency_code: currencyCode,
                 currency_minor_unit: 2,
-                currency_symbol: "$",
+                currency_symbol: currencySymbol,
             },
             totals: {
                 line_total: String(lineTotalMinor),
-                currency_code: "USD",
+                currency_code: currencyCode,
                 currency_minor_unit: 2,
-                currency_symbol: "$",
+                currency_symbol: currencySymbol,
             },
         };
     });
@@ -247,10 +252,10 @@ export async function buildCartApiResponseForUser(userEmail: string) {
             total_items: String(subtotalMinor),
             total_shipping: "0",
             total_price: String(subtotalMinor),
-            currency_code: "USD",
+            currency_code: currencyCode,
             currency_minor_unit: 2,
-            currency_symbol: "$",
-            currency_prefix: "$",
+            currency_symbol: currencySymbol,
+            currency_prefix: currencySymbol,
             currency_suffix: "",
         },
         shipping_rates: [],

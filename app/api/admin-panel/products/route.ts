@@ -40,6 +40,20 @@ async function getNextProductExternalId() {
     return (latest?.externalId ?? 0) + 1;
 }
 
+function normalizePrice(value: string) {
+    const cleaned = value.replace(/,/g, ".").replace(/[^0-9.]/g, "").trim();
+    if (!cleaned) {
+        return "";
+    }
+
+    const amount = Number(cleaned);
+    if (!Number.isFinite(amount) || amount < 0) {
+        return "";
+    }
+
+    return amount.toFixed(2);
+}
+
 export async function POST(request: Request) {
     if (!(await isAdminAuthenticated())) {
         return NextResponse.json(
@@ -58,7 +72,7 @@ export async function POST(request: Request) {
 
     const name = body?.name?.trim() ?? "";
     const slug = body?.slug?.trim() ?? "";
-    const price = body?.price?.trim() ?? "";
+    const price = normalizePrice(body?.price?.trim() ?? "");
     const imageUrl = body?.imageUrl?.trim() ?? "";
     const note = body?.note?.trim() ?? "";
     const description = body?.description?.trim() ?? "";
@@ -79,7 +93,7 @@ export async function POST(request: Request) {
         return NextResponse.json(
             {
                 message:
-                    "Name, slug, price, image URL, note, description, origin, and material are required.",
+                    "Name, slug, valid price, image URL, note, description, origin, and material are required.",
             },
             {
                 status: 400,

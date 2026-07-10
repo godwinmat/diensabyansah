@@ -2,6 +2,7 @@ import {
     buildCartApiResponseForUser,
     getCartUserEmailFromToken,
 } from "@/lib/cart-store";
+import { getCompanyProfile } from "@/lib/company-profile";
 import { createFlutterwavePaymentLink } from "@/lib/flutterwave";
 import { prisma } from "@/lib/prisma";
 import { DeliveryStatus, Prisma } from "@prisma/client";
@@ -142,8 +143,9 @@ export async function POST(request: NextRequest) {
             },
         });
 
+        const profile = await getCompanyProfile();
         const totalMinor = Number(cart.totals.total_price ?? 0);
-        const currency = cart.totals.currency_code ?? "USD";
+        const currency = cart.totals.currency_code ?? profile.currencyCode;
         const amount = totalMinor / 100;
         const { firstName, lastName } = getDefaultNameParts(userEmail);
         const reference = `ds-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;

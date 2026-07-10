@@ -22,6 +22,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
+import { formatDisplayPrice } from "@/lib/cart";
 import { useRouter } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
 
@@ -95,6 +96,35 @@ function formatDate(iso: string) {
     });
 }
 
+function sanitizePriceInput(value: string) {
+    const withoutCommas = value.replace(/,/g, ".");
+    const cleaned = withoutCommas.replace(/[^0-9.]/g, "");
+    const firstDot = cleaned.indexOf(".");
+
+    if (firstDot === -1) {
+        return cleaned;
+    }
+
+    const integerPart = cleaned.slice(0, firstDot + 1);
+    const decimalPart = cleaned.slice(firstDot + 1).replace(/\./g, "");
+    return `${integerPart}${decimalPart}`;
+}
+
+function normalizePriceForSave(value: string) {
+    const cleaned = sanitizePriceInput(value).trim();
+
+    if (!cleaned) {
+        return "";
+    }
+
+    const amount = Number(cleaned);
+    if (!Number.isFinite(amount) || amount < 0) {
+        return "";
+    }
+
+    return amount.toFixed(2);
+}
+
 function getStoragePathFromUrl(url: string) {
     const marker = "/storage/v1/object/public/";
     const markerIndex = url.indexOf(marker);
@@ -116,9 +146,11 @@ function getStoragePathFromUrl(url: string) {
 export function ProductsTable({
     initialProducts,
     availableCollections,
+    currencySymbol,
 }: {
     initialProducts: AdminProduct[];
     availableCollections: SlimCollection[];
+    currencySymbol: string;
 }) {
     const router = useRouter();
     const [products, setProducts] = useState(initialProducts);
@@ -263,6 +295,20 @@ export function ProductsTable({
         (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
             setForm((p) => ({ ...p, [key]: e.target.value }));
 
+    const handlePriceChange = (value: string) => {
+        setForm((prev) => ({
+            ...prev,
+            price: sanitizePriceInput(value),
+        }));
+    };
+
+    const handlePriceBlur = () => {
+        setForm((prev) => {
+            const normalized = normalizePriceForSave(prev.price);
+            return { ...prev, price: normalized || prev.price.trim() };
+        });
+    };
+
     const handleSizePick = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value.trim();
 
@@ -338,10 +384,20 @@ export function ProductsTable({
             return;
         }
 
+        const normalizedPrice = normalizePriceForSave(form.price);
+        if (!normalizedPrice) {
+            setFeedback({
+                ok: false,
+                msg: "Please enter a valid numeric price.",
+            });
+            setIsSubmitting(false);
+            return;
+        }
+
         const payload = {
             name: form.name,
             slug: form.slug,
-            price: form.price,
+            price: normalizedPrice,
             imageUrl: form.imageUrl,
             note: form.note,
             description: form.description,
@@ -516,13 +572,18 @@ export function ProductsTable({
                                     <TableCell className="font-mono text-xs text-muted-foreground">
                                         {product.externalId}
                                     </TableCell>
-                                    <TableCell className="max-w-[200px] truncate font-medium">
+                                    <TableCell className="max-w-50 truncate font-medium">
                                         {product.name}
                                     </TableCell>
-                                    <TableCell className="max-w-[160px] truncate font-mono text-xs text-muted-foreground">
+                                    <TableCell className="max-w-40 truncate font-mono text-xs text-muted-foreground">
                                         {product.slug}
                                     </TableCell>
-                                    <TableCell>{product.price}</TableCell>
+                                    <TableCell>
+                                        {formatDisplayPrice(
+                                            product.price,
+                                            currencySymbol,
+                                        )}
+                                    </TableCell>
                                     <TableCell>
                                         <div className="flex flex-wrap gap-1">
                                             {product.collections.length ===
@@ -666,9 +727,17 @@ export function ProductsTable({
                                     id="product-price"
                                     required
                                     value={form.price}
-                                    onChange={f("price")}
-                                    placeholder="$120.00"
+                                    onChange={(e) =>
+                                        handlePriceChange(e.target.value)
+                                    }
+                                    onBlur={handlePriceBlur}
+                                    inputMode="decimal"
+                                    placeholder="120.00"
                                 />
+                                <p className="text-xs text-muted-foreground">
+                                    Enter amount only. Currency sign is added
+                                    automatically where needed.
+                                </p>
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="product-external-id">

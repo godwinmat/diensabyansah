@@ -1,3 +1,5 @@
+import { formatDisplayPrice } from "@/lib/cart";
+import { getCompanyProfile } from "@/lib/company-profile";
 import { prisma } from "@/lib/prisma";
 
 type ProductDelegate = {
@@ -78,7 +80,8 @@ function mapCollectionNames(
     );
 }
 
-function mapProduct(record: {
+function mapProduct(
+    record: {
     slug: string;
     externalId: number;
     name: string;
@@ -96,7 +99,9 @@ function mapProduct(record: {
             name: string;
         };
     }>;
-}): CatalogProduct {
+},
+    currencySymbol: string,
+): CatalogProduct {
     const galleryImages = Array.from(
         new Set(
             record.galleryImageUrls
@@ -109,7 +114,7 @@ function mapProduct(record: {
         id: record.slug,
         productId: record.externalId,
         name: record.name,
-        price: record.price,
+        price: formatDisplayPrice(record.price, currencySymbol),
         image: record.imageUrl || DEFAULT_IMAGE,
         galleryImages,
         note: record.note,
@@ -160,7 +165,8 @@ export async function getCatalogProducts(options?: GetCatalogProductsOptions) {
             ? Math.floor(options.limit)
             : undefined;
 
-    const records = (await productDelegate.findMany({
+    const [records, profile] = await Promise.all([
+        productDelegate.findMany({
         include: {
             collections: {
                 include: {
@@ -176,7 +182,11 @@ export async function getCatalogProducts(options?: GetCatalogProductsOptions) {
             externalId: "desc",
         },
         ...(take ? { take } : {}),
-    })) as Array<{
+    }),
+        getCompanyProfile(),
+    ]);
+
+    const typedRecords = records as Array<{
         slug: string;
         externalId: number;
         name: string;
@@ -196,7 +206,9 @@ export async function getCatalogProducts(options?: GetCatalogProductsOptions) {
         }>;
     }>;
 
-    return records.map(mapProduct);
+    return typedRecords.map((record) =>
+        mapProduct(record, profile.currencySymbol),
+    );
 }
 
 export async function getCatalogCollections() {
@@ -246,7 +258,8 @@ export async function getCatalogProductById(id: string) {
 
     const externalId = Number(normalizedId);
 
-    const record = (await productDelegate.findFirst({
+    const [record, profile] = await Promise.all([
+        productDelegate.findFirst({
         where: {
             OR: [
                 {
@@ -272,7 +285,11 @@ export async function getCatalogProductById(id: string) {
                 },
             },
         },
-    })) as {
+    }),
+        getCompanyProfile(),
+    ]);
+
+    const typedRecord = record as {
         slug: string;
         externalId: number;
         name: string;
@@ -292,5 +309,7 @@ export async function getCatalogProductById(id: string) {
         }>;
     } | null;
 
-    return record ? mapProduct(record) : undefined;
+    return typedRecord
+        ? mapProduct(typedRecord, profile.currencySymbol)
+        : undefined;
 }

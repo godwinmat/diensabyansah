@@ -12,6 +12,20 @@ async function requireAdmin() {
     return Boolean(verifyAdminSessionToken(token));
 }
 
+function normalizePrice(value: string) {
+    const cleaned = value.replace(/,/g, ".").replace(/[^0-9.]/g, "").trim();
+    if (!cleaned) {
+        return "";
+    }
+
+    const amount = Number(cleaned);
+    if (!Number.isFinite(amount) || amount < 0) {
+        return "";
+    }
+
+    return amount.toFixed(2);
+}
+
 export async function PATCH(request: Request, { params }: RouteContext) {
     if (!(await requireAdmin())) {
         return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
@@ -47,8 +61,16 @@ export async function PATCH(request: Request, { params }: RouteContext) {
         productData.name = body.name.trim();
     if (typeof body.slug === "string" && body.slug.trim())
         productData.slug = body.slug.trim();
-    if (typeof body.price === "string" && body.price.trim())
-        productData.price = body.price.trim();
+    if (typeof body.price === "string" && body.price.trim()) {
+        const normalizedPrice = normalizePrice(body.price);
+        if (!normalizedPrice) {
+            return NextResponse.json(
+                { message: "Price must be a valid number." },
+                { status: 400 },
+            );
+        }
+        productData.price = normalizedPrice;
+    }
     if (typeof body.imageUrl === "string" && body.imageUrl.trim())
         productData.imageUrl = body.imageUrl.trim();
     if (typeof body.note === "string" && body.note.trim())

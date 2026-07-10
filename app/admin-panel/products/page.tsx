@@ -8,6 +8,7 @@ import {
     getAdminLoginPath,
     verifyAdminSessionToken,
 } from "@/lib/admin-auth";
+import { getCompanyProfile } from "@/lib/company-profile";
 import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -23,7 +24,7 @@ export default async function AdminProductsPage() {
         redirect(getAdminLoginPath());
     }
 
-    const [products, allCollections] = await Promise.all([
+    const [products, allCollections, profile] = await Promise.all([
         prisma.product.findMany({
             orderBy: { externalId: "desc" },
             select: {
@@ -53,6 +54,7 @@ export default async function AdminProductsPage() {
             orderBy: { name: "asc" },
             select: { id: true, name: true, slug: true },
         }),
+        getCompanyProfile(),
     ]);
 
     const serialized: AdminProduct[] = products.map((product) => ({
@@ -78,6 +80,7 @@ export default async function AdminProductsPage() {
             <ProductsTable
                 initialProducts={serialized}
                 availableCollections={availableCollections}
+                currencySymbol={profile.currencySymbol}
             />
         </div>
     );

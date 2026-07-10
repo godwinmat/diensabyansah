@@ -45,7 +45,7 @@ export function AdminPanelShell({ children }: AdminPanelShellProps) {
                 onOpen={() => setSidebarOpen(true)}
                 onClose={() => setSidebarOpen(false)}
             />
-            <main className="min-w-0 flex-1 overflow-y-auto pt-16 md:pt-0">
+            <main className="admin-panel-typography min-w-0 flex-1 overflow-y-auto pt-16 md:pt-0">
                 {children}
             </main>
         </div>

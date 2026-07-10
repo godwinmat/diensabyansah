@@ -12,6 +12,8 @@ import {
     getAdminLoginPath,
     verifyAdminSessionToken,
 } from "@/lib/admin-auth";
+import { formatDisplayPrice } from "@/lib/cart";
+import { getCompanyProfile } from "@/lib/company-profile";
 import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -72,6 +74,7 @@ export default async function AdminDashboardPage() {
         recentProducts,
         recentOrders,
         recentPayments,
+        profile,
     ] = await prisma.$transaction([
         prisma.blogPost.count(),
         prisma.collection.count(),
@@ -125,7 +128,15 @@ export default async function AdminDashboardPage() {
                 },
             },
         }),
+        prisma.companyProfile.findUnique({
+            where: { id: "default" },
+            select: { currencySymbol: true },
+        }),
     ]);
+
+    const currencySymbol =
+        profile?.currencySymbol?.trim() ||
+        (await getCompanyProfile()).currencySymbol;
 
     return (
         <div className="mx-auto max-w-6xl px-4 py-8">
@@ -262,7 +273,10 @@ export default async function AdminDashboardPage() {
                                             </p>
                                         </div>
                                         <Badge className="ml-4 shrink-0">
-                                            {product.price}
+                                            {formatDisplayPrice(
+                                                product.price,
+                                                currencySymbol,
+                                            )}
                                         </Badge>
                                     </li>
                                 ))}
