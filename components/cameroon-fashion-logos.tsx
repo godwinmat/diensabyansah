@@ -54,7 +54,11 @@ export function CameroonFashionLogos() {
     const [failedLogos, setFailedLogos] = useState<Record<string, boolean>>({});
 
     const repeatedBrandsWithKeys = useMemo(
-        () => repeatedBrands.map((brand, index) => ({ ...brand, key: `${brand.name}-${index}` })),
+        () =>
+            repeatedBrands.map((brand, index) => ({
+                ...brand,
+                key: `${brand.name}-${index}`,
+            })),
         [],
     );
 
@@ -86,40 +90,42 @@ export function CameroonFashionLogos() {
                                     }
                                 >
                                     {brand.localMark ? (
-                                    <>
-                                        <div className="grid h-8 w-8 place-items-center rounded-full bg-[#0f2138] text-[10px] font-semibold uppercase tracking-[0.16em] text-white sm:h-9 sm:w-9">
-                                            DA
-                                        </div>
-                                        <div className="leading-tight">
-                                            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#0f2138] sm:text-xs">
-                                                Diensa by Ansah
-                                            </p>
-                                            <p className="text-[9px] uppercase tracking-[0.18em] text-[#7a7f87]">
-                                                Official Logo
-                                            </p>
-                                        </div>
-                                    </>
-                                ) : logoUrl && !logoFailed ? (
-                                    <img
-                                        src={logoUrl}
-                                        alt={`${brand.name} logo`}
-                                        className="h-7 w-auto max-w-34 object-contain sm:h-8"
-                                        loading="lazy"
-                                        decoding="async"
-                                        onError={() => {
-                                            if (brand.domain) {
-                                                setFailedLogos((current) => ({
-                                                    ...current,
-                                                    [brand.domain as string]: true,
-                                                }));
-                                            }
-                                        }}
-                                    />
-                                ) : (
-                                    <span className="text-xs font-semibold uppercase tracking-[0.12em] text-[#2f3540] sm:text-[13px]">
-                                        {brand.name}
-                                    </span>
-                                )}
+                                        <>
+                                            <div className="grid h-8 w-8 place-items-center rounded-full bg-[#0f2138] text-[10px] font-semibold uppercase tracking-[0.16em] text-white sm:h-9 sm:w-9">
+                                                DA
+                                            </div>
+                                            <div className="leading-tight">
+                                                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#0f2138] sm:text-xs">
+                                                    Diensa by Ansah
+                                                </p>
+                                                <p className="text-[9px] uppercase tracking-[0.18em] text-[#7a7f87]">
+                                                    Official Logo
+                                                </p>
+                                            </div>
+                                        </>
+                                    ) : logoUrl && !logoFailed ? (
+                                        <img
+                                            src={logoUrl}
+                                            alt={`${brand.name} logo`}
+                                            className="h-7 w-auto max-w-34 object-contain sm:h-8"
+                                            loading="lazy"
+                                            decoding="async"
+                                            onError={() => {
+                                                if (brand.domain) {
+                                                    setFailedLogos(
+                                                        (current) => ({
+                                                            ...current,
+                                                            [brand.domain as string]: true,
+                                                        }),
+                                                    );
+                                                }
+                                            }}
+                                        />
+                                    ) : (
+                                        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-[#2f3540] sm:text-[13px]">
+                                            {brand.name}
+                                        </span>
+                                    )}
                                 </div>
                             );
                         })}
